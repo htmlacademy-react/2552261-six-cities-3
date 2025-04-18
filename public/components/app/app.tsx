@@ -6,12 +6,16 @@ import LoginScreen from '../../pages/login-screen/login-screen.tsx';
 import OfferScreen from '../../pages/offer-screen/offer-screen.tsx';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
+import {Reviews} from '../../../src/types/reviews.ts';
+import {Offers} from '../../../src/types/offers.ts';
 
 type AppScreenProps = {
   offersCount: number;
+  reviews: Reviews;
+  offers: Offers;
 }
 
-function App({offersCount}: AppScreenProps): JSX.Element {
+function App({offersCount, reviews, offers}: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>

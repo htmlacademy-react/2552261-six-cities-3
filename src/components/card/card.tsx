@@ -1,4 +1,11 @@
-function Card(): JSX.Element {
+import {Reviews} from "../../../src/types/reviews.ts";
+import {Offers} from "../../../src/types/offers.ts";
+
+type CardScreenProps = {
+  offers: Offers;
+}
+
+function Card(prop: CardScreenProps): JSX.Element {
   return (
     <article className="cities__card place-card">
       <div className="place-card__mark">
