@@ -2,7 +2,7 @@ export type OfferHost = {
   id: number;
   title: string;
   avatar: string;
-  name: string;
+  userName: string;
   status: string;
   description: string[];
 }

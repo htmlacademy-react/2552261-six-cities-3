@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from '../public/components/app/app.tsx';
 import {reviews} from './mocks/reviews.ts';
 import {offers} from './mocks/offers.ts';
+import {offersHosts} from './mocks/offers-hosts.ts';
 
 const OFFERS_AMOUNT: number = 684;
 
@@ -12,6 +13,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App offersCount={OFFERS_AMOUNT} reviews={reviews} offers={offers}/>
+    <App offersCount={OFFERS_AMOUNT} reviews={reviews} offers={offers} offersHosts={offersHosts}/>
   </React.StrictMode>
 );

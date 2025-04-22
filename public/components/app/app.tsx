@@ -8,14 +8,16 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {Reviews} from '../../../src/types/reviews.ts';
 import {Offers} from '../../../src/types/offers.ts';
+import {OffersHosts} from "../../../src/types/offer-host.ts";
 
 type AppScreenProps = {
   offersCount: number;
   reviews: Reviews;
   offers: Offers;
+  offersHosts: OffersHosts;
 }
 
-function App({offersCount, reviews, offers}: AppScreenProps): JSX.Element {
+function App({offersCount, reviews, offers, offersHosts}: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
@@ -29,7 +31,7 @@ function App({offersCount, reviews, offers}: AppScreenProps): JSX.Element {
             </PrivateRoute>
           }
           />
-          <Route path={`${AppRoute.Offer}/:id`} element={<OfferScreen/>}/>
+          <Route path={`${AppRoute.Offer}/:id`} element={<OfferScreen offersHosts={offersHosts} offers={offers}/>}/>
         </Route>
         <Route path='*' element={<NotFoundScreen/>}/>
       </Routes>
