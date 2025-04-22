@@ -11,6 +11,11 @@ export type Offer = {
   href: string;
   hrefTitle: string;
   type: string;
+  bedRooms: number;
+  maxAdults: number;
+  offerHost: number;
+  isPremium: boolean;
+  reviews: number[];
 }
 
 export type SortOffers = {

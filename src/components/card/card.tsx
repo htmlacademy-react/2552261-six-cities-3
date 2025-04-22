@@ -1,9 +1,10 @@
 import {Offer} from '../../../src/types/offers.ts';
 import {useState} from 'react';
+import {Link} from 'react-router-dom';
 
 type CardScreenProps = {
   offer: Offer;
-  isFavorite: boolean;
+  isFavorite?: boolean;
 }
 
 function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
@@ -18,15 +19,15 @@ function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
     <article className={`${isFavorite ? 'favorites__card place-card' : 'cities__card '} place-card ${isActive ? 'cities__card_active' : ''}`}
       onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}
     >
-      <div className={`place-card__mark ${isFavorite ? 'visually-hidden' : ''}`}>
+      <div className={`place-card__mark ${offer.isPremium ? '' : 'visually-hidden'}`}>
         <span>Premium</span>
       </div>
       <div className={`${isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}`}>
-        <a href="#">
+        <Link to={`offer/${offer.id}`}>
           <img className="place-card__image" src={`${offer.image}`} width={isFavorite ? '150' : '260'} height={isFavorite ? '110' : '200'}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className={`${isFavorite ? 'favorites__card-info' : ''} place-card__info`}>
         <div className="place-card__price-wrapper">

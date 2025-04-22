@@ -11,7 +11,12 @@ export const offers: Offers = [
     rating: 1,
     href: '#',
     hrefTitle: 'Beautiful & luxurious apartment at great location',
-    type: 'Apartment'
+    type: 'Apartment',
+    bedRooms: 3,
+    maxAdults: 4,
+    offerHost: 0,
+    isPremium: false,
+    reviews: []
   },
   {
     id: 2,
@@ -23,7 +28,12 @@ export const offers: Offers = [
     rating: 4,
     href: '#',
     hrefTitle: 'Wood and stone place',
-    type: 'Room'
+    type: 'Room',
+    bedRooms: 3,
+    maxAdults: 4,
+    offerHost: 0,
+    isPremium: true,
+    reviews: []
   },
   {
     id: 3,
@@ -35,7 +45,12 @@ export const offers: Offers = [
     rating: 3,
     href: '#',
     hrefTitle: 'Canal View Prinsengracht',
-    type: 'Apartment'
+    type: 'Apartment',
+    bedRooms: 3,
+    maxAdults: 4,
+    offerHost: 0,
+    isPremium: false,
+    reviews: []
   },
   {
     id: 4,
@@ -47,6 +62,11 @@ export const offers: Offers = [
     rating: 5,
     href: '#',
     hrefTitle: 'Nice, cozy, warm big bed apartment',
-    type: 'Apartment'
+    type: 'Apartment',
+    bedRooms: 3,
+    maxAdults: 4,
+    offerHost: 0,
+    isPremium: false,
+    reviews: []
   }
 ];
