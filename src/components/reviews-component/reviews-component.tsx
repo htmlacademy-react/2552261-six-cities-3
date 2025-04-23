@@ -27,7 +27,7 @@ export function ReviewsComponent({review}: ReviewsComponentProps): JSX.Element {
         <p className="reviews__text">
           {review.text}
         </p>
-        <time className="reviews__time" dateTime="2019-04-24">{review.dateTime}</time> //TODO date time
+        <time className="reviews__time" dateTime="2019-04-24">{review.dateTime}</time>
       </div>
     </li>
   );

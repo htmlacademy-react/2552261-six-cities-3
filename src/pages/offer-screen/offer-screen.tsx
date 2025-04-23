@@ -17,7 +17,7 @@ type OfferScreenProps = {
 function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
   const currentOffer = offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0);
-  const[reviewsState, setreviewsState] = useState({currentReviews: reviews.currentReviews.filter((review: Review) => currentOffer?.reviews.some((offerReview: string)=>
+  const[reviewsState, setReviewsState] = useState({currentReviews: reviews.currentReviews.filter((review: Review) => currentOffer?.reviews.some((offerReview: string)=>
     offerReview.localeCompare(review.id) === 0))});
 
   if (currentOffer) {
@@ -83,7 +83,7 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                 </div>
                 <div className="offer__name-wrapper">
                   <h1 className="offer__name">
-                    Beautiful &amp; luxurious studio at great location
+                    {currentOffer.hrefTitle}
                   </h1>
                   <button className="offer__bookmark-button button" type="button">
                     <svg className="offer__bookmark-icon" width="31" height="33">
@@ -94,10 +94,10 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                 </div>
                 <div className="offer__rating rating">
                   <div className="offer__stars rating__stars">
-                    <span style={{width: '80%'}}></span>
+                    <span style={{width: `${currentOffer.rating * 20}%`}}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
-                  <span className="offer__rating-value rating__value">4.8</span>
+                  <span className="offer__rating-value rating__value">{currentOffer.rating}</span>
                 </div>
                 <ul className="offer__features">
                   <li className="offer__feature offer__feature--entire">
@@ -111,8 +111,8 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                   </li>
                 </ul>
                 <div className="offer__price">
-                  <b className="offer__price-value">&euro;120</b>
-                  <span className="offer__price-text">&nbsp;night</span>
+                  <b className="offer__price-value">&euro;{currentOffer.price}</b>
+                  <span className="offer__price-text">&nbsp;{currentOffer.priceText}</span>
                 </div>
                 <div className="offer__inside">
                   <h2 className="offer__inside-title">What&apos;s inside</h2>
@@ -152,7 +152,7 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                 <OfferHostComponent currentOffer={currentOffer} offersHosts={offersHosts}/>
                 <section className="offer__reviews reviews">
                   <ReviewsList reviews={reviewsState}/>
-                  <ReviewsForm setReviewsState={setreviewsState}/>
+                  <ReviewsForm setReviewsState={setReviewsState} currentReviews={reviewsState}/>
                 </section>
               </div>
             </div>
