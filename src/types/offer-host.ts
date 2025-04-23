@@ -1,5 +1,5 @@
 export type OfferHost = {
-  id: number;
+  id: string;
   title: string;
   avatar: string;
   userName: string;

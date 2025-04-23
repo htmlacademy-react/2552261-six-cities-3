@@ -1,16 +1,15 @@
-import {OfferHost, OffersHosts} from '../../../src/types/offer-host';
-import {Offer, Offers} from '../../../src/types/offers.ts';
+import {OfferHost, OffersHosts} from '../../types/offer-host.ts';
+import {Offer} from '../../types/offers.ts';
 
 type OfferHostProps = {
-  currentOfferId: number;
-  offers: Offers;
+  currentOffer: Offer;
   offersHosts: OffersHosts;
 }
 
-export function OfferHostComponent({currentOfferId, offers, offersHosts}: OfferHostProps): JSX.Element {
-  const currentOffer = offers.find((offer: Offer) => offer.id === currentOfferId);
-  const offerHost: OfferHost | undefined = offersHosts.find((offersHost: OfferHost) => offersHost.id === Number(offerHostId));
-  console.log(offerHost);
+export function OfferHostComponent({currentOffer, offersHosts}: OfferHostProps): JSX.Element {
+
+  const offerHost: OfferHost | undefined = offersHosts.find((offersHost: OfferHost) => currentOffer?.offerHost.localeCompare(offersHost.id) === 0);
+
   if (offerHost) {
     return (
       <div className="offer__host">
@@ -40,7 +39,7 @@ export function OfferHostComponent({currentOfferId, offers, offersHosts}: OfferH
         </div>
       </div>
     );
+  } else {
+    return <div/>;
   }
-  return (<div/>);
-
 }

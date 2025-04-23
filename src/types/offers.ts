@@ -1,7 +1,7 @@
 import {City} from './city.ts';
 
 export type Offer = {
-  id: number;
+  id: string;
   city: City;
   image: string;
   price: number;
@@ -13,9 +13,9 @@ export type Offer = {
   type: string;
   bedRooms: number;
   maxAdults: number;
-  offerHost: number;
+  offerHost: string;
   isPremium: boolean;
-  reviews: number[];
+  reviews: string[];
 }
 
 export type SortOffers = {

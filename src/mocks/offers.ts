@@ -2,7 +2,7 @@ import {Offers} from '../types/offers.ts';
 
 export const offers: Offers = [
   {
-    id: 1,
+    id: '1',
     city: 'Brussels',
     image: 'img/apartment-01.jpg',
     price: 120,
@@ -14,12 +14,12 @@ export const offers: Offers = [
     type: 'Apartment',
     bedRooms: 3,
     maxAdults: 4,
-    offerHost: 0,
+    offerHost: '1',
     isPremium: false,
-    reviews: []
+    reviews: ['0b']
   },
   {
-    id: 2,
+    id: '2',
     city: 'Amsterdam',
     image: 'img/room.jpg',
     price: 80,
@@ -31,12 +31,12 @@ export const offers: Offers = [
     type: 'Room',
     bedRooms: 3,
     maxAdults: 4,
-    offerHost: 0,
+    offerHost: '0a',
     isPremium: true,
-    reviews: []
+    reviews: ['0b', '0bc']
   },
   {
-    id: 3,
+    id: '3',
     city: 'Amsterdam',
     image: 'img/apartment-02.jpg',
     price: 132,
@@ -48,12 +48,12 @@ export const offers: Offers = [
     type: 'Apartment',
     bedRooms: 3,
     maxAdults: 4,
-    offerHost: 0,
+    offerHost: '0a',
     isPremium: false,
-    reviews: []
+    reviews: ['0bc']
   },
   {
-    id: 4,
+    id: '4',
     city: 'Paris',
     image: 'img/apartment-03.jpg',
     price: 180,
@@ -65,7 +65,7 @@ export const offers: Offers = [
     type: 'Apartment',
     bedRooms: 3,
     maxAdults: 4,
-    offerHost: 0,
+    offerHost: '0a',
     isPremium: false,
     reviews: []
   }

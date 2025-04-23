@@ -1,6 +1,6 @@
 export const offersHosts = [
   {
-    id: 0,
+    id: '0a',
     title: 'Meet the host',
     avatar: 'img/avatar-angelina.jpg',
     userName: 'Angelina',

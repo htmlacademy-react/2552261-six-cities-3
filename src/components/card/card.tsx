@@ -1,4 +1,4 @@
-import {Offer} from '../../../src/types/offers.ts';
+import {Offer} from '../../types/offers.ts';
 import {useState} from 'react';
 import {Link} from 'react-router-dom';
 
