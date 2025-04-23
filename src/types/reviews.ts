@@ -7,4 +7,6 @@ export type Review = {
   dateTime: string;
 }
 
-export type Reviews = Review[];
+export type Reviews = {
+  currentReviews: Review[];
+};

@@ -4,8 +4,9 @@ import {OffersHosts} from '../../types/offer-host.ts';
 import {Offer, Offers} from '../../types/offers.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
-import {Reviews} from '../../types/reviews.ts';
-import {ReviewsForm} from "../../components/reviews-form/reviews-form.tsx";
+import {Review, Reviews} from '../../types/reviews.ts';
+import {ReviewsForm} from '../../components/reviews-form/reviews-form.tsx';
+import {useState} from 'react';
 
 type OfferScreenProps = {
   offersHosts: OffersHosts;
@@ -16,6 +17,8 @@ type OfferScreenProps = {
 function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
   const currentOffer = offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0);
+  const[reviewsState, setreviewsState] = useState({currentReviews: reviews.currentReviews.filter((review: Review) => currentOffer?.reviews.some((offerReview: string)=>
+    offerReview.localeCompare(review.id) === 0))});
 
   if (currentOffer) {
     return (
@@ -148,8 +151,8 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                 </div>
                 <OfferHostComponent currentOffer={currentOffer} offersHosts={offersHosts}/>
                 <section className="offer__reviews reviews">
-                  <ReviewsList reviews={reviews} currentOffer={currentOffer}/>
-                  <ReviewsForm/>
+                  <ReviewsList reviews={reviewsState}/>
+                  <ReviewsForm setReviewsState={setreviewsState}/>
                 </section>
               </div>
             </div>
@@ -172,7 +175,7 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                         <span className="place-card__price-text">&#47;&nbsp;night</span>
                       </div>
                       <button className="place-card__bookmark-button place-card__bookmark-button--active button"
-                              type="button"
+                        type="button"
                       >
                         <svg className="place-card__bookmark-icon" width="18" height="19">
                           <use xlinkHref="#icon-bookmark"></use>
@@ -197,7 +200,7 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                   <div className="near-places__image-wrapper place-card__image-wrapper">
                     <a href="#">
                       <img className="place-card__image" src="img/apartment-02.jpg" width="260" height="200"
-                           alt="Place image"
+                        alt="Place image"
                       />
                     </a>
                   </div>
@@ -234,7 +237,7 @@ function OfferScreen({offersHosts, reviews, offers}: OfferScreenProps): JSX.Elem
                   <div className="near-places__image-wrapper place-card__image-wrapper">
                     <a href="#">
                       <img className="place-card__image" src="img/apartment-03.jpg" width="260" height="200"
-                           alt="Place image"
+                        alt="Place image"
                       />
                     </a>
                   </div>

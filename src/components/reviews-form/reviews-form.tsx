@@ -1,4 +1,11 @@
-export function ReviewsForm(): JSX.Element {
+import {Dispatch, SetStateAction} from 'react';
+import {Reviews} from '../../types/reviews.ts';
+
+type ReviewsListProps = {
+  setReviewsState: Dispatch<SetStateAction<Reviews>>;
+}
+
+export function ReviewsForm({setReviewsState}: ReviewsListProps): JSX.Element {
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
