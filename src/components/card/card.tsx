@@ -9,12 +9,19 @@ type CardScreenProps = {
 
 function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [isBookMarked, setBookMarked] = useState<boolean>(offer.isBookMarked);
+
   const mouseEnterHandler = () => {
     setIsActive(true);
   };
   const mouseLeaveHandler = () => {
     setIsActive(false);
   };
+
+  const bookMarkedHandler = () => {
+    setBookMarked(!isBookMarked);
+  };
+
   return (
     <article className={`${isFavorite ? 'favorites__card place-card' : 'cities__card '} place-card ${isActive ? 'cities__card_active' : ''}`}
       onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}
@@ -36,7 +43,7 @@ function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;{offer.priceText}</span>
           </div>
           <button
-            className={`place-card__bookmark-button button ${offer.isBookMarked ? 'place-card__bookmark-button--active' : ''}`}
+            onClick={bookMarkedHandler} className={`place-card__bookmark-button button ${isBookMarked ? 'place-card__bookmark-button--active' : ''}`}
             type="button"
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">

@@ -15,6 +15,7 @@ export type Offer = {
   maxAdults: number;
   offerHost: string;
   isPremium: boolean;
+  hotelAmenities: string[];
   reviews: string[];
 }
 
@@ -23,3 +24,4 @@ export type SortOffers = {
 }
 
 export type Offers = Offer[];
+export type SetOffers = Set<Offer>;

@@ -16,6 +16,7 @@ export const offers: Offers = [
     maxAdults: 4,
     offerHost: '1',
     isPremium: false,
+    hotelAmenities: ['1', '2', '5', '10'],
     reviews: ['0b']
   },
   {
@@ -33,6 +34,7 @@ export const offers: Offers = [
     maxAdults: 4,
     offerHost: '0a',
     isPremium: true,
+    hotelAmenities: ['6', '7', '3', '5', '10'],
     reviews: ['0b', '0bc']
   },
   {
@@ -50,6 +52,7 @@ export const offers: Offers = [
     maxAdults: 4,
     offerHost: '0a',
     isPremium: false,
+    hotelAmenities: ['3', '2', '8', '10'],
     reviews: ['0bc']
   },
   {
@@ -67,6 +70,7 @@ export const offers: Offers = [
     maxAdults: 4,
     offerHost: '0a',
     isPremium: false,
+    hotelAmenities: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     reviews: []
   }
 ];

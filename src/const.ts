@@ -18,3 +18,5 @@ export enum RatingStar {
   Four = 4,
   Five = 5,
 }
+
+export const OTHER_PLACES_LIST_LENGTH = 3;
