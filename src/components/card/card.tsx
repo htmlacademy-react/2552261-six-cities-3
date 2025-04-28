@@ -31,7 +31,7 @@ function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
       </div>
       <div className={`${isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}`}>
         <Link to={`offer/${offer.id}`}>
-          <img className="place-card__image" src={`${offer.image}`} width={isFavorite ? '150' : '260'} height={isFavorite ? '110' : '200'}
+          <img className="place-card__image" src={`${offer.image[0]}`} width={isFavorite ? '150' : '260'} height={isFavorite ? '110' : '200'}
             alt="Place image"
           />
         </Link>

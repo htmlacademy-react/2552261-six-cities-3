@@ -3,7 +3,7 @@ import {City} from './city.ts';
 export type Offer = {
   id: string;
   city: City;
-  image: string;
+  image: string[];
   price: number;
   priceText: string;
   isBookMarked: boolean;

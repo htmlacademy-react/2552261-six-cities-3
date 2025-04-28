@@ -1,20 +1,23 @@
 import {Offer} from '../../types/offers.ts';
 import {Link} from 'react-router-dom';
+import {Dispatch, SetStateAction} from 'react';
 
 type OtherPlacesItemProps = {
   offer: Offer;
+  setCurrentOffer: Dispatch<SetStateAction<Offer | undefined>>;
 }
 
-export function OtherPlacesItem({offer}: OtherPlacesItemProps): JSX.Element {
+export function OtherPlacesItem({offer, setCurrentOffer}: OtherPlacesItemProps): JSX.Element {
   const linkClickHandler = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentOffer({...offer});
+    window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
   return (
     <article className="near-places__card place-card">
       <div className="near-places__image-wrapper place-card__image-wrapper">
         <Link onClick={linkClickHandler } to={`/offer/${offer.id}`}>
-          <img className="place-card__image" src={offer.image} width="260" height="200" alt="Place image"/>
+          <img className="place-card__image" src={offer.image[0]} width="260" height="200" alt="Place image"/>
         </Link>
       </div>
       <div className="place-card__info">

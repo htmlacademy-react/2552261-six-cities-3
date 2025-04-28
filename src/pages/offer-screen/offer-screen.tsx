@@ -10,7 +10,8 @@ import {useState} from 'react';
 import {HotelAmenities} from '../../types/hotel-amenities.ts';
 import {OfferAmenitiesList} from '../../components/offer-amentities-list/offer-amenities-list.tsx';
 import {OtherPlacesList} from '../../components/other-places-list/other-places-list.tsx';
-import {Header} from "../header/header.tsx";
+import {Header} from '../header/header.tsx';
+import {OfferGallery} from '../../components/offer-gallery/offer-gallery.tsx';
 
 type OfferScreenProps = {
   offersHosts: OffersHosts;
@@ -21,7 +22,7 @@ type OfferScreenProps = {
 
 function OfferScreen({offersHosts, reviews, offers, hotelAmenities}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
-  const currentOffer = offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0);
+  const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0));
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isBookMarked);
   const[reviewsState, setReviewsState] = useState({currentReviews: reviews.currentReviews.filter((review: Review) => currentOffer?.reviews.some((offerReview: string)=>
     offerReview.localeCompare(review.id) === 0))});
@@ -30,33 +31,14 @@ function OfferScreen({offersHosts, reviews, offers, hotelAmenities}: OfferScreen
     setBookMarked(!isBookMarked);
   };
 
-  if (currentOffer) {
+  if (currentOffer && reviewsState) {
     return (
       <div className="page">
         <Header offers={offers}/>
         <main className="page__main page__main--offer">
           <section className="offer">
             <div className="offer__gallery-container container">
-              <div className="offer__gallery">
-                <div className="offer__image-wrapper">
-                  <img className="offer__image" src="img/room.jpg" alt="Photo studio"/>
-                </div>
-                <div className="offer__image-wrapper">
-                  <img className="offer__image" src="img/apartment-01.jpg" alt="Photo studio"/>
-                </div>
-                <div className="offer__image-wrapper">
-                  <img className="offer__image" src="img/apartment-02.jpg" alt="Photo studio"/>
-                </div>
-                <div className="offer__image-wrapper">
-                  <img className="offer__image" src="img/apartment-03.jpg" alt="Photo studio"/>
-                </div>
-                <div className="offer__image-wrapper">
-                  <img className="offer__image" src="img/studio-01.jpg" alt="Photo studio"/>
-                </div>
-                <div className="offer__image-wrapper">
-                  <img className="offer__image" src="img/apartment-01.jpg" alt="Photo studio"/>
-                </div>
-              </div>
+              <OfferGallery currentOffer={currentOffer} />
             </div>
             <div className="offer__container container">
               <div className="offer__wrapper">
@@ -113,7 +95,7 @@ function OfferScreen({offersHosts, reviews, offers, hotelAmenities}: OfferScreen
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                <OtherPlacesList offers={offers} currentOffer={currentOffer}/>
+                <OtherPlacesList offers={offers} currentOffer={currentOffer} setCurrentOffer={setCurrentOffer}/>
               </div>
             </section>
           </div>

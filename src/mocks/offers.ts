@@ -4,7 +4,7 @@ export const offers: Offers = [
   {
     id: '1',
     city: 'Brussels',
-    image: 'img/apartment-01.jpg',
+    image: ['img/apartment-01.jpg', 'img/room.jpg', 'img/apartment-02.jpg', 'img/apartment-03.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
     price: 120,
     priceText: 'night',
     isBookMarked: true,
@@ -22,7 +22,7 @@ export const offers: Offers = [
   {
     id: '2',
     city: 'Amsterdam',
-    image: 'img/room.jpg',
+    image: ['img/room.jpg', 'img/apartment-01.jpg', 'img/apartment-02.jpg', 'img/apartment-03.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
     price: 80,
     priceText: 'night',
     isBookMarked: true,
@@ -40,7 +40,7 @@ export const offers: Offers = [
   {
     id: '3',
     city: 'Amsterdam',
-    image: 'img/apartment-02.jpg',
+    image: ['img/apartment-02.jpg', 'img/room.jpg', 'img/apartment-02.jpg', 'img/apartment-03.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
     price: 132,
     priceText: 'night',
     isBookMarked: false,
@@ -58,7 +58,7 @@ export const offers: Offers = [
   {
     id: '4',
     city: 'Paris',
-    image: 'img/apartment-03.jpg',
+    image: ['img/apartment-03.jpg', 'img/room.jpg', 'img/apartment-01.jpg', 'img/apartment-02.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
     price: 180,
     priceText: 'night',
     isBookMarked: true,
