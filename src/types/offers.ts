@@ -8,7 +8,6 @@ export type Offer = {
   priceText: string;
   isBookMarked: boolean;
   rating: number;
-  href: string;
   hrefTitle: string;
   type: string;
   bedRooms: number;

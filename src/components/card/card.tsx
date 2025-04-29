@@ -1,13 +1,16 @@
 import {Offer} from '../../types/offers.ts';
-import {useState} from 'react';
+import {Dispatch, SetStateAction, useState} from 'react';
 import {Link} from 'react-router-dom';
+import {AppRoute} from '../../const.ts';
 
 type CardScreenProps = {
   offer: Offer;
   isFavorite?: boolean;
+  isOtherPlacesSection?: boolean;
+  setCurrentOffer?: Dispatch<SetStateAction<Offer | undefined>>;
 }
 
-function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
+function Card({offer, isFavorite = false, isOtherPlacesSection = false, setCurrentOffer}: CardScreenProps): JSX.Element {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isBookMarked);
 
@@ -22,15 +25,27 @@ function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
     setBookMarked(!isBookMarked);
   };
 
+  const linkClickHandler = () => {
+    if (setCurrentOffer && isOtherPlacesSection) {
+      setCurrentOffer({...offer});
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  };
+
   return (
-    <article className={`${isFavorite ? 'favorites__card place-card' : 'cities__card '} place-card ${isActive ? 'cities__card_active' : ''}`}
-      onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}
+    <article className={`${isFavorite ? 'favorites__card place-card' : 'cities__card'}
+    ${isOtherPlacesSection ? 'near-places__card' : ''}
+    ${isActive ? 'cities__card_active' : ''} place-card`}
+    onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}
     >
       <div className={`place-card__mark ${offer.isPremium ? '' : 'visually-hidden'}`}>
         <span>Premium</span>
       </div>
-      <div className={`${isFavorite ? 'favorites__image-wrapper place-card__image-wrapper' : 'cities__image-wrapper place-card__image-wrapper'}`}>
-        <Link to={`offer/${offer.id}`}>
+      <div className={`${isFavorite ? 'favorites__image-wrapper' : 'cities__image-wrapper'}
+     ${isOtherPlacesSection ? 'near-places__image-wrapper' : ''}
+      place-card__image-wrapper`}
+      >
+        <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>
           <img className="place-card__image" src={`${offer.image[0]}`} width={isFavorite ? '150' : '260'} height={isFavorite ? '110' : '200'}
             alt="Place image"
           />
@@ -59,7 +74,7 @@ function Card({offer, isFavorite = false}: CardScreenProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{offer.hrefTitle}</a>
+          <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>{offer.hrefTitle}</Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>

@@ -12,7 +12,7 @@ type ReviewsListProps = {
 export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
   const [newReview, setNewReview] = useState<Review>({
     id: '',
-    avatar: 'img/avatar-max.jpg',
+    avatar: '',
     name: '',
     rating: 0,
     text: '',
@@ -21,13 +21,13 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    const reviewWithId = { ...newReview, id: nanoid(), dateTime: dayjs(Date.now()).format('MMMM YYYY')};
+    const reviewWithId = { ...newReview, id: nanoid(), avatar: 'img/avatar-max.jpg', name: 'Jon', dateTime: dayjs(Date.now()).format('MMMM YYYY')};
     const newArr = Array.from(currentReviews.currentReviews);
     newArr.push(reviewWithId);
     setReviewsState({currentReviews: newArr});
     setNewReview({
       id: '',
-      avatar: 'img/avatar-max.jpg',
+      avatar: '',
       name: '',
       rating: 0,
       text: '',
