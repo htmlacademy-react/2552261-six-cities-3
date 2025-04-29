@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from '../public/components/app/app.tsx';
+import App from './components/app/app.tsx';
 
 const OFFERS_AMOUNT: number = 684;
 

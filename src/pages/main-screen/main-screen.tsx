@@ -1,4 +1,4 @@
-import Card from '../../components/card/card';
+import Card from '../../components/card/card.tsx';
 
 type MainScreenProps = {
   offersCount: number;
