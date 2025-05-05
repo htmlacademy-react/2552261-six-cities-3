@@ -22,7 +22,7 @@ function Card({
   setActiveCard
 }: CardScreenProps): JSX.Element {
 
-  const [isBookMarked, setBookMarked] = useState<boolean>(offer.isBookMarked);
+  const [isBookMarked, setBookMarked] = useState<boolean>(offer.isFavorite);
 
   const mouseEnterHandler = () => {
     if (setActiveCard) {
@@ -65,7 +65,7 @@ function Card({
         'place-card__image-wrapper')}
       >
         <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>
-          <img className="place-card__image" src={`${offer.image[0]}`} width={isFavorite ? '150' : '260'}
+          <img className="place-card__image" src={`${offer.images[0]}`} width={isFavorite ? '150' : '260'}
             height={isFavorite ? '110' : '200'}
             alt="Place image"
           />
@@ -75,7 +75,7 @@ function Card({
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{offer.price}</b>
-            <span className="place-card__price-text">&#47;&nbsp;{offer.priceText}</span>
+            <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
             onClick={bookMarkedHandler}
@@ -95,7 +95,7 @@ function Card({
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>{offer.hrefTitle}</Link>
+          <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>

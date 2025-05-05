@@ -6,13 +6,9 @@ import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Review} from '../../types/reviews.ts';
 import {ReviewsForm} from '../../components/reviews-form/reviews-form.tsx';
 import {useState} from 'react';
-import {OfferAmenitiesList} from '../../components/offer-amentities-list/offer-amenities-list.tsx';
 import {OtherPlacesList} from '../../components/other-places-list/other-places-list.tsx';
 import {Header} from '../header/header.tsx';
-import {OfferGallery} from '../../components/offer-gallery/offer-gallery.tsx';
 import {reviews} from '../../mocks/reviews.ts';
-import {offersHosts} from '../../mocks/offers-hosts.ts';
-import {hotelAmenitiesMock} from '../../mocks/hotel-amenities-mock.ts';
 
 type OfferScreenProps = {
   offers: Offers;
@@ -21,7 +17,7 @@ type OfferScreenProps = {
 function OfferScreen({offers}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0));
-  const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isBookMarked);
+  const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
   const[reviewsState, setReviewsState] = useState({currentReviews: reviews.currentReviews.filter((review: Review) => currentOffer?.reviews.some((offerReview: string)=>
     offerReview.localeCompare(review.id) === 0))});
 
@@ -36,7 +32,9 @@ function OfferScreen({offers}: OfferScreenProps): JSX.Element {
         <main className="page__main page__main--offer">
           <section className="offer">
             <div className="offer__gallery-container container">
-              <OfferGallery currentOffer={currentOffer} />
+              <div className="offer__gallery">
+                {currentOffer.images.map((image) => <div key={image} className="offer__image-wrapper"><img className="offer__image" src={image} alt="Photo studio"/></div>)}
+              </div>
             </div>
             <div className="offer__container container">
               <div className="offer__wrapper">
@@ -45,7 +43,7 @@ function OfferScreen({offers}: OfferScreenProps): JSX.Element {
                 </div>
                 <div className="offer__name-wrapper">
                   <h1 className="offer__name">
-                    {currentOffer.hrefTitle}
+                    {currentOffer.title}
                   </h1>
                   <button onClick={bookMarkedHandler} className={`offer__bookmark-button button ${isBookMarked ? 'offer__bookmark-button--active' : ''}`} type="button">
                     <svg className="offer__bookmark-icon" width="31" height="33">
@@ -63,24 +61,25 @@ function OfferScreen({offers}: OfferScreenProps): JSX.Element {
                 </div>
                 <ul className="offer__features">
                   <li className="offer__feature offer__feature--entire">
-                    Apartment
+                    {currentOffer.type}
                   </li>
                   <li className="offer__feature offer__feature--bedrooms">
-                    3 Bedrooms
+                    {`${currentOffer.bedRooms} Bedrooms`}
                   </li>
                   <li className="offer__feature offer__feature--adults">
-                    Max 4 adults
+                    {`Max ${currentOffer.maxAdults} adults`}
                   </li>
                 </ul>
                 <div className="offer__price">
                   <b className="offer__price-value">&euro;{currentOffer.price}</b>
-                  <span className="offer__price-text">&nbsp;{currentOffer.priceText}</span>
+                  <span className="offer__price-text">&nbsp;night</span>
                 </div>
                 <div className="offer__inside">
                   <h2 className="offer__inside-title">What&apos;s inside</h2>
-                  <OfferAmenitiesList currentOffer={currentOffer} amenities={hotelAmenitiesMock}/>
+                  <ul className="offer__inside-list">{currentOffer.goods.map((good) => (<li key={good} className="offer__inside-item">{good}</li>))}</ul>
+
                 </div>
-                <OfferHostComponent currentOffer={currentOffer} offersHosts={offersHosts}/>
+                <OfferHostComponent currentOffer={currentOffer}/>
                 <section className="offer__reviews reviews">
                   <ReviewsList reviews={reviewsState}/>
                   <ReviewsForm setReviewsState={setReviewsState} currentReviews={reviewsState}/>

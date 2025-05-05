@@ -7,7 +7,7 @@ type HeaderProps = {
 }
 
 export function Header({offers}: HeaderProps): JSX.Element {
-  const favoritesCount = offers?.filter((offer: Offer) => offer.isBookMarked);
+  const favoritesCount = offers?.filter((offer: Offer) => offer.isFavorite);
 
   return (
     <header className="header">

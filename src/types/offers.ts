@@ -2,26 +2,29 @@ import {City} from './city.ts';
 
 export type Offer = {
   id: string;
-  city: 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf';
-  image: string[];
-  price: number;
-  priceText: string;
-  isBookMarked: boolean;
-  rating: number;
-  hrefTitle: string;
+  title: string;
   type: string;
-  bedRooms: number;
-  maxAdults: number;
-  offerHost: string;
-  isPremium: boolean;
-  hotelAmenities: string[];
-  reviews: string[];
+  price: number;
+  city: City;
   location: {
     latitude: number;
     longitude: number;
     zoom: number;
   };
-  cityy: City;
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  description: string;
+  bedRooms: number;
+  goods: string[];
+  host: {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
+  images: string[];
+  maxAdults: number;
+  reviews: string[];
 }
 
 export type SortOffers = {

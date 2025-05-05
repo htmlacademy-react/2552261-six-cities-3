@@ -6,3 +6,5 @@ export type City = {
     zoom: number;
   };
 }
+
+export type Cities = City[];

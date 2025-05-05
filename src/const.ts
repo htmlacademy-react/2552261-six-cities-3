@@ -1,3 +1,5 @@
+import {Cities} from './types/city.ts';
+
 export enum AppRoute {
   Root = '/',
   Login = '/login',
@@ -18,6 +20,25 @@ export enum RatingStar {
   Two = 2,
   One = 1,
 }
+
+export const CITY_LOCATIONS: Cities = [
+  {
+    name: 'Amsterdam',
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+      zoom: 10
+    }
+  },
+  {
+    name: 'Paris',
+    location: {
+      latitude: 48.8534,
+      longitude: 2.3488,
+      zoom: 10
+    }
+  }
+];
 
 export const OTHER_PLACES_LIST_LENGTH = 3;
 

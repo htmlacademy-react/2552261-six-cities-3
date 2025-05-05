@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import {Offer, Offers} from '../../types/offers.ts';
 
 type MapProps = {
-  city: City;
+  city: City | undefined;
   points: Offers;
   activeCard: Offer | undefined | null;
 };
@@ -26,7 +26,6 @@ const currentCustomIcon = new Icon({
 
 function Map(props: MapProps): JSX.Element {
   const {city, points, activeCard} = props;
-
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 

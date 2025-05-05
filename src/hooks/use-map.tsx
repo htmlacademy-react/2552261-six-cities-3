@@ -4,17 +4,16 @@ import {City} from '../types/city.ts';
 
 function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
-  city: City
+  city: City | undefined,
 ): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
-
   useEffect(() => {
     if (mapRef.current !== null && !isRenderedRef.current) {
       const instance = new Map(mapRef.current, {
         center: {
-          lat: city.location.latitude,
-          lng: city.location.longitude
+          lat: city?.location.latitude ? city.location.latitude : 0,
+          lng: city?.location.longitude ? city.location.longitude : 0
         },
         zoom: 10
       });
@@ -31,6 +30,8 @@ function useMap(
 
       setMap(instance);
       isRenderedRef.current = true;
+    } else if (map && city?.location.latitude && city?.location.longitude) {
+      map.setView([city.location.latitude, city.location.longitude], map.getZoom());
     }
   }, [mapRef, city]);
 
