@@ -2,7 +2,7 @@ import {City} from './city.ts';
 
 export type Offer = {
   id: string;
-  city: City;
+  city: 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf';
   image: string[];
   price: number;
   priceText: string;
@@ -16,10 +16,16 @@ export type Offer = {
   isPremium: boolean;
   hotelAmenities: string[];
   reviews: string[];
+  location: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+  cityy: City;
 }
 
 export type SortOffers = {
-  [K in City]: Offers;
+  [K in 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf']: Offers;
 }
 
 export type Offers = Offer[];

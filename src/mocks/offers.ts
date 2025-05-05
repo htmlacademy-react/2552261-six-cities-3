@@ -16,7 +16,20 @@ export const offers: Offers = [
     offerHost: '1',
     isPremium: false,
     hotelAmenities: ['1', '2', '5', '10'],
-    reviews: ['0b']
+    reviews: ['0b'],
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    },
+    cityy: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.3909553943508,
+        longitude: 4.85309666406198,
+        zoom: 8
+      }
+    }
   },
   {
     id: '2',
@@ -33,7 +46,20 @@ export const offers: Offers = [
     offerHost: '0a',
     isPremium: true,
     hotelAmenities: ['6', '7', '3', '5', '10'],
-    reviews: ['0b', '0bc']
+    reviews: ['0b', '0bc'],
+    location: {
+      latitude: 52.3609553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    },
+    cityy: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.3609553943508,
+        longitude: 4.85309666406198,
+        zoom: 8
+      }
+    }
   },
   {
     id: '3',
@@ -50,7 +76,20 @@ export const offers: Offers = [
     offerHost: '0a',
     isPremium: false,
     hotelAmenities: ['3', '2', '8', '10'],
-    reviews: ['0bc']
+    reviews: ['0bc'],
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.929309666406198,
+      zoom: 8
+    },
+    cityy: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.3909553943508,
+        longitude: 4.929309666406198,
+        zoom: 8
+      }
+    }
   },
   {
     id: '4',
@@ -67,6 +106,19 @@ export const offers: Offers = [
     offerHost: '0a',
     isPremium: false,
     hotelAmenities: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    reviews: []
+    reviews: [],
+    location: {
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
+      zoom: 8
+    },
+    cityy: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.3809553943508,
+        longitude: 4.939309666406198,
+        zoom: 8
+      }
+    }
   }
 ];
