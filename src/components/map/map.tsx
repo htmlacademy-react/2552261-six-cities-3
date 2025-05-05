@@ -9,7 +9,7 @@ import {Offer, Offers} from '../../types/offers.ts';
 type MapProps = {
   city: City;
   points: Offers;
-  selectedPoint: Offer | undefined;
+  activeCard: Offer | undefined | null;
 };
 
 const defaultCustomIcon = new Icon({
@@ -25,7 +25,7 @@ const currentCustomIcon = new Icon({
 });
 
 function Map(props: MapProps): JSX.Element {
-  const {city, points, selectedPoint} = props;
+  const {city, points, activeCard} = props;
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
@@ -41,7 +41,7 @@ function Map(props: MapProps): JSX.Element {
 
         marker
           .setIcon(
-            selectedPoint !== undefined && point.city === selectedPoint.city
+            activeCard !== undefined && point.location.latitude === activeCard?.location.latitude && point.location.longitude === activeCard?.location.longitude
               ? currentCustomIcon
               : defaultCustomIcon
           )
@@ -52,9 +52,9 @@ function Map(props: MapProps): JSX.Element {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, points, selectedPoint]);
+  }, [map, points, activeCard]);
 
-  return <section className="cities__map map" style={{height: '500px'}} ref={mapRef}></section>;
+  return <section className="cities__map map" ref={mapRef}></section>;
 }
 
 export default Map;

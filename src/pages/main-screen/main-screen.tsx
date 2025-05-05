@@ -1,13 +1,25 @@
-import {Offers} from '../../types/offers.ts';
+import {Offer, Offers} from '../../types/offers.ts';
 import {OffersList} from '../../components/offers-list/offers-list.tsx';
 import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
+import Map from '../../components/map/map.tsx';
+import {useState} from 'react';
+import {City} from '../../types/city.ts';
 
 type MainScreenProps = {
   offers: Offers;
 }
 
 function MainScreen({offers}: MainScreenProps): JSX.Element {
+  const [activeCard, setActiveCard] = useState<Offer | null>(null);
+  const [currentCity, setCurrentCity] = useState<City>({
+    name: 'Amsterdam',
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    }});
+
   return (
     <div className="page page--gray page--main">
       <Header offers={offers}/>
@@ -69,10 +81,10 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersList offers={offers}/>
+              <OffersList offers={offers} activeCard={activeCard} setActiveCard={setActiveCard} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map city={currentCity} points={offers} activeCard={activeCard}></Map>
             </div>
           </div>
         </div>
