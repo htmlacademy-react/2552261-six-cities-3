@@ -35,12 +35,9 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
     });
   }
 
-  function ratingHandler(evt: React.ChangeEvent<HTMLInputElement>) {
-    setNewReview({...newReview, rating: Number(evt.target.value)});
-  }
-
-  function inputTextHandler(evt: React.ChangeEvent<HTMLTextAreaElement>) {
-    setNewReview({...newReview, text: evt.target.value});
+  function inputHandler(evt: React.ChangeEvent<HTMLInputElement>| React.ChangeEvent<HTMLTextAreaElement>) {
+    const { name, value } = evt.target;
+    setNewReview({...newReview, [name === 'review' ? 'text' : 'rating']: name === 'rating' ? Number(value) : value});
   }
 
   return (
@@ -48,51 +45,51 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars"
-          type="radio" onChange={ratingHandler} checked={newReview.rating === RatingStar.Five as number}
+          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Five as number}
         />
         <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
           <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref="#icon-star"/>
           </svg>
         </label>
 
         <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars"
-          type="radio" onChange={ratingHandler} checked={newReview.rating === RatingStar.Four as number}
+          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Four as number}
         />
         <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
           <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref="#icon-star"/>
           </svg>
         </label>
 
         <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars"
-          type="radio" onChange={ratingHandler} checked={newReview.rating === RatingStar.Three as number}
+          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Three as number}
         />
         <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
           <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref="#icon-star"/>
           </svg>
         </label>
 
         <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars"
-          type="radio" onChange={ratingHandler} checked={newReview.rating === RatingStar.Two as number}
+          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Two as number}
         />
         <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
           <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref="#icon-star"/>
           </svg>
         </label>
 
         <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star"
-          type="radio" onChange={ratingHandler} checked={newReview.rating === RatingStar.One as number}
+          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.One as number}
         />
         <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
           <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref="#icon-star"/>
           </svg>
         </label>
       </div>
-      <textarea onChange={inputTextHandler} className="reviews__textarea form__textarea" id="review" name="review" value={newReview.text}
+      <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review" value={newReview.text}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>

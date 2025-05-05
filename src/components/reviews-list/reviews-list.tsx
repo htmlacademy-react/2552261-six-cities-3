@@ -8,13 +8,11 @@ type ReviewsListProps = {
 
 export function ReviewsList({reviews}: ReviewsListProps): JSX.Element {
 
-  const listItems = reviews.currentReviews.map((review: Review) => <ReviewsComponent key={review.id} review={review} />);
-
   return (
     <Fragment>
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.currentReviews.length}</span></h2>
       <ul className="reviews__list">
-        {listItems}
+        {reviews.currentReviews.map((review: Review) => <ReviewsComponent key={review.id} review={review} />)}
       </ul>
     </Fragment>
   );
