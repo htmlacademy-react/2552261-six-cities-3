@@ -8,9 +8,9 @@ type CardScreenProps = {
   offer: Offer;
   isFavorite?: boolean;
   isOtherPlacesSection?: boolean;
-  isActive: boolean;
+  isActive?: boolean;
   setCurrentOffer?: Dispatch<SetStateAction<Offer | undefined>>;
-  setActiveCardId: Dispatch<SetStateAction<string | null>>;
+  setActiveCardId?: Dispatch<SetStateAction<string | null>>;
 }
 
 function Card({
@@ -25,10 +25,15 @@ function Card({
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isBookMarked);
 
   const mouseEnterHandler = () => {
-    setActiveCardId(offer.id);
+    if (setActiveCardId) {
+      setActiveCardId(offer.id);
+    }
+
   };
   const mouseLeaveHandler = () => {
-    setActiveCardId(null);
+    if (setActiveCardId) {
+      setActiveCardId(null);
+    }
   };
 
   const bookMarkedHandler = () => {

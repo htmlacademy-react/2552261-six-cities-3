@@ -12,11 +12,11 @@ export enum AuthorizationStatus {
 }
 
 export enum RatingStar {
-  One = 1,
-  Two = 2,
-  Three = 3,
-  Four = 4,
   Five = 5,
+  Four = 4,
+  Three = 3,
+  Two = 2,
+  One = 1,
 }
 
 export const OTHER_PLACES_LIST_LENGTH = 3;

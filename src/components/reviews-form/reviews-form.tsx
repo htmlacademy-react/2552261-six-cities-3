@@ -10,6 +10,10 @@ type ReviewsListProps = {
 }
 
 export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
+  const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
+    typeof value === 'number' // фильтруем только числовые значения
+  );
+
   const [newReview, setNewReview] = useState<Review>({
     id: '',
     avatar: '',
@@ -21,7 +25,13 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    const reviewWithId = { ...newReview, id: nanoid(), avatar: 'img/avatar-max.jpg', name: 'Jon', dateTime: dayjs(Date.now()).format('MMMM YYYY')};
+    const reviewWithId = {
+      ...newReview,
+      id: nanoid(),
+      avatar: 'img/avatar-max.jpg',
+      name: 'Jon',
+      dateTime: dayjs(Date.now()).format('MMMM YYYY')
+    };
     const newArr = Array.from(currentReviews.currentReviews);
     newArr.push(reviewWithId);
     setReviewsState({currentReviews: newArr});
@@ -35,8 +45,8 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
     });
   }
 
-  function inputHandler(evt: React.ChangeEvent<HTMLInputElement>| React.ChangeEvent<HTMLTextAreaElement>) {
-    const { name, value } = evt.target;
+  function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+    const {name, value} = evt.target;
     setNewReview({...newReview, [name === 'review' ? 'text' : 'rating']: name === 'rating' ? Number(value) : value});
   }
 
@@ -44,52 +54,29 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
     <form onSubmit={submitHandler} className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars"
-          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Five as number}
-        />
-        <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"/>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars"
-          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Four as number}
-        />
-        <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"/>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars"
-          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Three as number}
-        />
-        <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"/>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars"
-          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.Two as number}
-        />
-        <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"/>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star"
-          type="radio" onChange={inputHandler} checked={newReview.rating === RatingStar.One as number}
-        />
-        <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"/>
-          </svg>
-        </label>
+        {ratingEntries.map(([key, value]) => (
+          <React.Fragment key={value}>
+            <input
+              className="form__rating-input visually-hidden"
+              name="rating"
+              value={value}
+              id={`${value}-stars`}
+              type="radio"
+              onChange={inputHandler}
+              checked={newReview.rating === Number(value)}
+            />
+            <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label"
+              title={key.toLowerCase()}
+            >
+              <svg className="form__star-image" width="37" height="33">
+                <use xlinkHref="#icon-star"/>
+              </svg>
+            </label>
+          </React.Fragment>
+        ))}
       </div>
-      <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review" value={newReview.text}
+      <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
+        value={newReview.text}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
