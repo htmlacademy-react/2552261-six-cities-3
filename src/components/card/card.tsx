@@ -1,23 +1,87 @@
-function Card(): JSX.Element {
+import {Offer} from '../../types/offers.ts';
+import {Dispatch, SetStateAction, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {AppRoute} from '../../const.ts';
+import classNames from 'classnames';
+
+type CardScreenProps = {
+  offer: Offer;
+  isFavorite?: boolean;
+  isOtherPlacesSection?: boolean;
+  isActive?: boolean;
+  setCurrentOffer?: Dispatch<SetStateAction<Offer | undefined>>;
+  setActiveCardId?: Dispatch<SetStateAction<string | null>>;
+}
+
+function Card({
+  offer,
+  isFavorite = false,
+  isActive,
+  isOtherPlacesSection = false,
+  setCurrentOffer,
+  setActiveCardId
+}: CardScreenProps): JSX.Element {
+
+  const [isBookMarked, setBookMarked] = useState<boolean>(offer.isBookMarked);
+
+  const mouseEnterHandler = () => {
+    if (setActiveCardId) {
+      setActiveCardId(offer.id);
+    }
+
+  };
+  const mouseLeaveHandler = () => {
+    if (setActiveCardId) {
+      setActiveCardId(null);
+    }
+  };
+
+  const bookMarkedHandler = () => {
+    setBookMarked(!isBookMarked);
+  };
+
+  const linkClickHandler = () => {
+    if (setCurrentOffer && isOtherPlacesSection) {
+      setCurrentOffer({...offer});
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  };
+
   return (
-    <article className="cities__card place-card">
-      <div className="place-card__mark">
+    <article className={classNames(
+      {'favorites__card': isFavorite},
+      {'near-places__card': isOtherPlacesSection},
+      {'cities__card_active': isActive},
+      {'cities__card': !isFavorite && !isOtherPlacesSection},
+      'place-card')}
+    onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}
+    >
+      <div className={classNames('place-card__mark', {'visually-hidden': !offer.isPremium})}>
         <span>Premium</span>
       </div>
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
-          <img className="place-card__image" src="img/apartment-01.jpg" width="260" height="200"
+      <div className={classNames({'cities__image-wrapper': !isFavorite && !isOtherPlacesSection},
+        {'favorites__image-wrapper': isFavorite},
+        {'near-places__image-wrapper': isOtherPlacesSection},
+        'place-card__image-wrapper')}
+      >
+        <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>
+          <img className="place-card__image" src={`${offer.image[0]}`} width={isFavorite ? '150' : '260'}
+            height={isFavorite ? '110' : '200'}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
-      <div className="place-card__info">
+      <div className={classNames({'favorites__card-info': isFavorite}, 'place-card__info')}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;120</b>
-            <span className="place-card__price-text">&#47;&nbsp;night</span>
+            <b className="place-card__price-value">&euro;{offer.price}</b>
+            <span className="place-card__price-text">&#47;&nbsp;{offer.priceText}</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button
+            onClick={bookMarkedHandler}
+            className={classNames('place-card__bookmark-button', 'button', {'place-card__bookmark-button--active': isBookMarked})}
+            type="button"
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
@@ -26,14 +90,14 @@ function Card(): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: '80%'}}></span>
+            <span style={{width: `${offer.rating * 20}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">Beautiful &amp; luxurious apartment at great location</a>
+          <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>{offer.hrefTitle}</Link>
         </h2>
-        <p className="place-card__type">Apartment</p>
+        <p className="place-card__type">{offer.type}</p>
       </div>
     </article>
   );

@@ -1,0 +1,93 @@
+import React, {Dispatch, SetStateAction, useState} from 'react';
+import {Review, Reviews} from '../../types/reviews.ts';
+import {nanoid} from 'nanoid';
+import {RatingStar} from '../../const.ts';
+import dayjs from 'dayjs';
+
+type ReviewsListProps = {
+  setReviewsState: Dispatch<SetStateAction<Reviews>>;
+  currentReviews: Reviews;
+}
+
+export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
+  const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
+    typeof value === 'number' // фильтруем только числовые значения
+  );
+
+  const [newReview, setNewReview] = useState<Review>({
+    id: '',
+    avatar: '',
+    name: '',
+    rating: 0,
+    text: '',
+    dateTime: '',
+  });
+
+  function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    const reviewWithId = {
+      ...newReview,
+      id: nanoid(),
+      avatar: 'img/avatar-max.jpg',
+      name: 'Jon',
+      dateTime: dayjs(Date.now()).format('MMMM YYYY')
+    };
+    const newArr = Array.from(currentReviews.currentReviews);
+    newArr.push(reviewWithId);
+    setReviewsState({currentReviews: newArr});
+    setNewReview({
+      id: '',
+      avatar: '',
+      name: '',
+      rating: 0,
+      text: '',
+      dateTime: ''
+    });
+  }
+
+  function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+    const {name, value} = evt.target;
+    setNewReview({...newReview, [name === 'review' ? 'text' : 'rating']: name === 'rating' ? Number(value) : value});
+  }
+
+  return (
+    <form onSubmit={submitHandler} className="reviews__form form" action="#" method="post">
+      <label className="reviews__label form__label" htmlFor="review">Your review</label>
+      <div className="reviews__rating-form form__rating">
+        {ratingEntries.map(([key, value]) => (
+          <React.Fragment key={value}>
+            <input
+              className="form__rating-input visually-hidden"
+              name="rating"
+              value={value}
+              id={`${value}-stars`}
+              type="radio"
+              onChange={inputHandler}
+              checked={newReview.rating === Number(value)}
+            />
+            <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label"
+              title={key.toLowerCase()}
+            >
+              <svg className="form__star-image" width="37" height="33">
+                <use xlinkHref="#icon-star"/>
+              </svg>
+            </label>
+          </React.Fragment>
+        ))}
+      </div>
+      <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
+        value={newReview.text}
+        placeholder="Tell how was your stay, what you like and what can be improved"
+      >
+      </textarea>
+      <div className="reviews__button-wrapper">
+        <p className="reviews__help">
+          To submit review please make sure to set <span className="reviews__star">rating</span> and
+          describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
+        </p>
+        <button className="reviews__submit form__submit button" type="submit" disabled={false}>Submit
+        </button>
+      </div>
+    </form>
+  );
+}
