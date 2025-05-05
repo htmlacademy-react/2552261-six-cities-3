@@ -1,26 +1,24 @@
 import {OfferHostComponent} from '../../components/offer-host-component/offer-host-component.tsx';
 import {useParams} from 'react-router-dom';
-import {OffersHosts} from '../../types/offer-host.ts';
 import {Offer, Offers} from '../../types/offers.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
-import {Review, Reviews} from '../../types/reviews.ts';
+import {Review} from '../../types/reviews.ts';
 import {ReviewsForm} from '../../components/reviews-form/reviews-form.tsx';
 import {useState} from 'react';
-import {HotelAmenities} from '../../types/hotel-amenities.ts';
 import {OfferAmenitiesList} from '../../components/offer-amentities-list/offer-amenities-list.tsx';
 import {OtherPlacesList} from '../../components/other-places-list/other-places-list.tsx';
 import {Header} from '../header/header.tsx';
 import {OfferGallery} from '../../components/offer-gallery/offer-gallery.tsx';
+import {reviews} from '../../mocks/reviews.ts';
+import {offersHosts} from '../../mocks/offers-hosts.ts';
+import {hotelAmenitiesMock} from '../../mocks/hotel-amenities-mock.ts';
 
 type OfferScreenProps = {
-  offersHosts: OffersHosts;
-  reviews: Reviews;
   offers: Offers;
-  hotelAmenities: HotelAmenities;
 }
 
-function OfferScreen({offersHosts, reviews, offers, hotelAmenities}: OfferScreenProps): JSX.Element {
+function OfferScreen({offers}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0));
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isBookMarked);
@@ -80,7 +78,7 @@ function OfferScreen({offersHosts, reviews, offers, hotelAmenities}: OfferScreen
                 </div>
                 <div className="offer__inside">
                   <h2 className="offer__inside-title">What&apos;s inside</h2>
-                  <OfferAmenitiesList currentOffer={currentOffer} amenities={hotelAmenities}/>
+                  <OfferAmenitiesList currentOffer={currentOffer} amenities={hotelAmenitiesMock}/>
                 </div>
                 <OfferHostComponent currentOffer={currentOffer} offersHosts={offersHosts}/>
                 <section className="offer__reviews reviews">

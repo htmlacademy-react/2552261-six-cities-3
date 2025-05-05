@@ -6,20 +6,14 @@ import LoginScreen from '../../pages/login-screen/login-screen.tsx';
 import OfferScreen from '../../pages/offer-screen/offer-screen.tsx';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {Reviews} from '../../types/reviews.ts';
 import {Offers} from '../../types/offers.ts';
-import {OffersHosts} from '../../types/offer-host.ts';
-import {HotelAmenities} from '../../types/hotel-amenities.ts';
 
 type AppScreenProps = {
   offersCount: number;
-  reviews: Reviews;
   offers: Offers;
-  offersHosts: OffersHosts;
-  hotelAmenities: HotelAmenities;
 }
 
-function App({offersCount, reviews, offers, hotelAmenities, offersHosts}: AppScreenProps): JSX.Element {
+function App({offersCount, offers}: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
@@ -33,7 +27,7 @@ function App({offersCount, reviews, offers, hotelAmenities, offersHosts}: AppScr
             </PrivateRoute>
           }
           />
-          <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offersHosts={offersHosts} reviews={reviews} offers={offers} hotelAmenities={hotelAmenities}/>}/>
+          <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offers={offers}/>}/>
         </Route>
         <Route path='*' element={<NotFoundScreen/>}/>
       </Routes>
