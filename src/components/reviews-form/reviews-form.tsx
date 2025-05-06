@@ -1,26 +1,24 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {Review, Reviews} from '../../types/reviews.ts';
+import {Reviews} from '../../types/reviews.ts';
 import {nanoid} from 'nanoid';
 import {RatingStar} from '../../const.ts';
 import dayjs from 'dayjs';
+import {User} from '../../types/user.ts';
 
 type ReviewsListProps = {
   setReviewsState: Dispatch<SetStateAction<Reviews>>;
   currentReviews: Reviews;
+  user: User;
 }
 
-export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
+export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsListProps): JSX.Element {
   const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
-    typeof value === 'number' // фильтруем только числовые значения
+    typeof value === 'number'
   );
 
-  const [newReview, setNewReview] = useState<Review>({
-    id: '',
-    avatar: '',
-    name: '',
+  const [newReview, setNewReview] = useState({
     rating: 0,
     text: '',
-    dateTime: '',
   });
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
@@ -28,20 +26,16 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
     const reviewWithId = {
       ...newReview,
       id: nanoid(),
-      avatar: 'img/avatar-max.jpg',
-      name: 'Jon',
+      avatar: user.avatarUrl,
+      name: user.name,
       dateTime: dayjs(Date.now()).format('MMMM YYYY')
     };
     const newArr = Array.from(currentReviews.currentReviews);
     newArr.push(reviewWithId);
     setReviewsState({currentReviews: newArr});
     setNewReview({
-      id: '',
-      avatar: '',
-      name: '',
       rating: 0,
       text: '',
-      dateTime: ''
     });
   }
 

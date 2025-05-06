@@ -28,8 +28,9 @@ export type Offer = {
 }
 
 export type SortOffers = {
-  [K in 'Paris' | 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf']: Offers;
+[key: string]: Offers;
 }
+
 
 export type Offers = Offer[];
 export type SetOffers = Set<Offer>;

@@ -6,20 +6,14 @@ type FavoritesListProps = {
 }
 
 export function FavoritesList({offers}: FavoritesListProps): JSX.Element {
-  const favoritesOffers: Offers = offers.filter((offer: Offer) => offer.isBookMarked);
-  const sortFavoritesOffers: SortOffers = {
-    'Paris': [],
-    'Cologne': [],
-    'Brussels': [],
-    'Amsterdam': [],
-    'Hamburg': [],
-    'Dusseldorf': []
-  };
+  const favoritesOffers: Offers = offers.filter((offer: Offer) => offer.isFavorite);
+  const sortFavoritesOffers: SortOffers = {};
+
   favoritesOffers.forEach((offer: Offer) => {
-    if (offer.city in sortFavoritesOffers) {
-      sortFavoritesOffers[offer.city].push(offer);
+    if (offer.city.name in sortFavoritesOffers) {
+      sortFavoritesOffers[offer.city.name].push(offer);
     } else {
-      sortFavoritesOffers[offer.city] = [offer];
+      sortFavoritesOffers[offer.city.name] = [offer];
     }
   });
 

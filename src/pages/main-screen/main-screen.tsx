@@ -7,12 +7,14 @@ import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 import {City} from '../../types/city.ts';
 import {CITY_LOCATIONS} from '../../const.ts';
+import {User} from '../../types/user.ts';
 
 type MainScreenProps = {
   offers: Offers;
+  user: User;
 }
 
-function MainScreen({offers}: MainScreenProps): JSX.Element {
+function MainScreen({offers, user}: MainScreenProps): JSX.Element {
   const [activeCard, setActiveCard] = useState<Offer | null>(null);
   const [currentOffers, setCurrentOffers] = useState<Offer[]>(offers.filter((offer: Offer) => offer.city.name === 'Amsterdam'));
   const [currentCity, setCurrentCity] = useState<City | undefined>({
@@ -52,7 +54,7 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header offers={currentOffers}/>
+      <Header offers={currentOffers} user={user} />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

@@ -1,12 +1,14 @@
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {Offer, Offers} from '../../types/offers.ts';
+import {User} from '../../types/user.ts';
 
 type HeaderProps = {
   offers?: Offers;
+  user: User;
 }
 
-export function Header({offers}: HeaderProps): JSX.Element {
+export function Header({offers, user}: HeaderProps): JSX.Element {
   const favoritesCount = offers?.filter((offer: Offer) => offer.isFavorite);
 
   return (
@@ -24,7 +26,7 @@ export function Header({offers}: HeaderProps): JSX.Element {
                 <Link className="header__nav-link header__nav-link--profile" to="#">
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
-                  <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                  <span className="header__user-name user__name">{user.email}</span>
                   <span className="header__favorite-count">{favoritesCount?.length}</span>
                 </Link>
               </li>

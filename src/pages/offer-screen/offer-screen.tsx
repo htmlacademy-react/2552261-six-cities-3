@@ -11,12 +11,14 @@ import {Header} from '../header/header.tsx';
 import {reviews} from '../../mocks/reviews.ts';
 import Map from '../../components/map/map.tsx';
 import {neighbourOffers} from '../../mocks/neighbour-offers.ts';
+import {User} from '../../types/user.ts';
 
 type OfferScreenProps = {
   offers: Offers;
+  user: User;
 }
 
-function OfferScreen({offers}: OfferScreenProps): JSX.Element {
+function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
   const [activeCard, setActiveCard] = useState<Offer | null>(null);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0));
@@ -31,7 +33,7 @@ function OfferScreen({offers}: OfferScreenProps): JSX.Element {
   if (currentOffer && reviewsState) {
     return (
       <div className="page">
-        <Header offers={offers}/>
+        <Header offers={offers} user={user} />
         <main className="page__main page__main--offer">
           <section className="offer">
             <div className="offer__gallery-container container">
@@ -85,7 +87,7 @@ function OfferScreen({offers}: OfferScreenProps): JSX.Element {
                 <OfferHostComponent currentOffer={currentOffer}/>
                 <section className="offer__reviews reviews">
                   <ReviewsList reviews={reviewsState}/>
-                  <ReviewsForm setReviewsState={setReviewsState} currentReviews={reviewsState}/>
+                  <ReviewsForm setReviewsState={setReviewsState} currentReviews={reviewsState} user={user}/>
                 </section>
               </div>
             </div>
