@@ -2,25 +2,35 @@ import {City} from './city.ts';
 
 export type Offer = {
   id: string;
-  city: City;
-  image: string[];
-  price: number;
-  priceText: string;
-  isBookMarked: boolean;
-  rating: number;
-  hrefTitle: string;
+  title: string;
   type: string;
-  bedRooms: number;
-  maxAdults: number;
-  offerHost: string;
+  price: number;
+  city: City;
+  location: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+  isFavorite: boolean;
   isPremium: boolean;
-  hotelAmenities: string[];
+  rating: number;
+  description: string;
+  bedRooms: number;
+  goods: string[];
+  host: {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
+  images: string[];
+  maxAdults: number;
   reviews: string[];
 }
 
 export type SortOffers = {
-  [K in City]: Offers;
+[key: string]: Offers;
 }
+
 
 export type Offers = Offer[];
 export type SetOffers = Set<Offer>;

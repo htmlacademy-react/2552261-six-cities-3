@@ -8,7 +8,7 @@ type FavoritesItemProps = {
 
 export function FavoritesItem({city, offers}: FavoritesItemProps): JSX.Element {
 
-  const itemsList = offers.map((offer: Offer) => <Card key={offer.city} offer={offer} isFavorite />);
+  const itemsList = offers.map((offer: Offer) => <Card key={offer.id} offer={offer} isFavorite />);
 
   return (
     <li className="favorites__locations-items">

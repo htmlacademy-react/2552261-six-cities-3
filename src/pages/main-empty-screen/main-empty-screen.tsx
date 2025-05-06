@@ -1,10 +1,15 @@
 import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
+import {User} from '../../types/user.ts';
 
-function MainEmptyScreen(): JSX.Element {
+type MainEmptyScreenProps = {
+  user: User;
+}
+
+function MainEmptyScreen({user}: MainEmptyScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
-      <Header/>
+      <Header user={user} />
       <main className="page__main page__main--index page__main--index-empty">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

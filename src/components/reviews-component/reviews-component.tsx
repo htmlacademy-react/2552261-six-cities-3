@@ -1,4 +1,5 @@
 import {Review} from '../../types/reviews.ts';
+import dayjs from 'dayjs';
 
 type ReviewsComponentProps = {
   review: Review;
@@ -9,12 +10,12 @@ export function ReviewsComponent({review}: ReviewsComponentProps): JSX.Element {
     <li className="reviews__item">
       <div className="reviews__user user">
         <div className="reviews__avatar-wrapper user__avatar-wrapper">
-          <img className="reviews__avatar user__avatar" src={`${review.avatar}`} width="54" height="54"
+          <img className="reviews__avatar user__avatar" src={`${review.user.avatarUrl}`} width="54" height="54"
             alt="Reviews avatar"
           />
         </div>
         <span className="reviews__user-name">
-          {review.name}
+          {review.user.name}
         </span>
       </div>
       <div className="reviews__info">
@@ -25,9 +26,9 @@ export function ReviewsComponent({review}: ReviewsComponentProps): JSX.Element {
           </div>
         </div>
         <p className="reviews__text">
-          {review.text}
+          {review.comment}
         </p>
-        <time className="reviews__time" dateTime="2019-04-24">{review.dateTime}</time>
+        <time className="reviews__time" dateTime="2019-04-24">{dayjs(review.date).format('MMMM YYYY')}</time>
       </div>
     </li>
   );

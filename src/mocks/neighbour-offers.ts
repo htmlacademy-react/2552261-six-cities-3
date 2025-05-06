@@ -1,6 +1,6 @@
 import {Offers} from '../types/offers.ts';
 
-export const offers: Offers = [
+export const neighbourOffers: Offers = [
   {
     id: '1',
     title: 'Beautiful & luxurious apartment at great location',
@@ -99,71 +99,5 @@ export const offers: Offers = [
     images: ['img/apartment-02.jpg', 'img/room.jpg', 'img/apartment-02.jpg', 'img/apartment-03.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
     maxAdults: 4,
     reviews: ['0bc'],
-  },
-  {
-    id: '4',
-    title: 'Nice, cozy, warm big bed apartment',
-    type: 'Apartment',
-    price: 182,
-    city: {
-      name: 'Amsterdam',
-      location: {
-        latitude: 52.3809553943508,
-        longitude: 4.939309666406198,
-        zoom: 8
-      }
-    },
-    location: {
-      latitude: 52.3809553943508,
-      longitude: 4.939309666406198,
-      zoom: 8
-    },
-    isFavorite: true,
-    isPremium: false,
-    rating: 5,
-    description: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
-    bedRooms: 3,
-    goods: ['Heating', 'Towels', 'Coffee machine'],
-    host: {
-      name: 'Angelina',
-      avatarUrl: 'img/avatar-angelina.jpg',
-      isPro: true
-    },
-    images: ['img/apartment-03.jpg', 'img/room.jpg', 'img/apartment-01.jpg', 'img/apartment-02.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
-    maxAdults: 4,
-    reviews: [],
-  },
-  {
-    id: '1',
-    title: 'Beautiful & luxurious apartment at great location',
-    type: 'Apartment',
-    price: 120,
-    city: {
-      name: 'Paris',
-      location: {
-        latitude: 48.8534,
-        longitude: 2.3488,
-        zoom: 8
-      }
-    },
-    location: {
-      latitude: 48.8534,
-      longitude: 2.3488,
-      zoom: 8
-    },
-    isFavorite: true,
-    isPremium: false,
-    rating: 1,
-    description: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
-    bedRooms: 30,
-    goods: ['Heating', 'Towels', 'Coffee machine'],
-    host: {
-      name: 'Angelina',
-      avatarUrl: 'img/avatar-angelina.jpg',
-      isPro: false
-    },
-    images: ['img/apartment-01.jpg', 'img/room.jpg', 'img/apartment-02.jpg', 'img/apartment-03.jpg', 'img/studio-01.jpg', 'img/apartment-01.jpg'],
-    maxAdults: 1,
-    reviews: ['0b'],
   }
 ];

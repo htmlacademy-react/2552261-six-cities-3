@@ -4,15 +4,17 @@ import {FavoritesList} from '../../components/favorites-list/favorites-list.tsx'
 import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
+import {User} from '../../types/user.ts';
 
 type FavoritesListScreenProps = {
   offers: Offers;
+  user: User;
 }
 
-function FavoritesScreen({offers}: FavoritesListScreenProps): JSX.Element {
+function FavoritesScreen({offers, user}: FavoritesListScreenProps): JSX.Element {
   return (
     <div className="page">
-      <Header offers={offers}/>
+      <Header offers={offers} user={user} />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">

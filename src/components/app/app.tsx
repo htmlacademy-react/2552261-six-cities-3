@@ -7,26 +7,28 @@ import OfferScreen from '../../pages/offer-screen/offer-screen.tsx';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {Offers} from '../../types/offers.ts';
+import {User} from '../../types/user.ts';
 
 type AppScreenProps = {
   offers: Offers;
+  user: User;
 }
 
-function App({offers}: AppScreenProps): JSX.Element {
+function App({offers, user}: AppScreenProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={AppRoute.Root}>
-          <Route index element={<MainScreen offers={offers}/>}/>
+          <Route index element={<MainScreen offers={offers} user={user}/>}/>
           <Route path={AppRoute.Login} element={<LoginScreen/>}/>
           <Route path={AppRoute.Favorites} element={
             <PrivateRoute
               authorizationStatus={AuthorizationStatus.Auth}
-            ><FavoritesScreen offers={offers}/>
+            ><FavoritesScreen offers={offers} user={user}/>
             </PrivateRoute>
           }
           />
-          <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offers={offers}/>}/>
+          <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offers={offers} user={user}/>}/>
         </Route>
         <Route path='*' element={<NotFoundScreen/>}/>
       </Routes>

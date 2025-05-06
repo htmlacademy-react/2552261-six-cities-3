@@ -1,26 +1,25 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {Review, Reviews} from '../../types/reviews.ts';
+import {Reviews} from '../../types/reviews.ts';
 import {nanoid} from 'nanoid';
 import {RatingStar} from '../../const.ts';
 import dayjs from 'dayjs';
+import {User} from '../../types/user.ts';
 
 type ReviewsListProps = {
   setReviewsState: Dispatch<SetStateAction<Reviews>>;
   currentReviews: Reviews;
+  user: User;
 }
 
-export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
+export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsListProps): JSX.Element {
   const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
-    typeof value === 'number' // фильтруем только числовые значения
+    typeof value === 'number'
   );
 
-  const [newReview, setNewReview] = useState<Review>({
-    id: '',
-    avatar: '',
-    name: '',
+  const [newReview, setNewReview] = useState({
     rating: 0,
-    text: '',
-    dateTime: '',
+    comment: '',
+    user: user,
   });
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
@@ -28,26 +27,21 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
     const reviewWithId = {
       ...newReview,
       id: nanoid(),
-      avatar: 'img/avatar-max.jpg',
-      name: 'Jon',
-      dateTime: dayjs(Date.now()).format('MMMM YYYY')
+      date: dayjs(Date.now()).format('MMMM YYYY')
     };
     const newArr = Array.from(currentReviews.currentReviews);
     newArr.push(reviewWithId);
     setReviewsState({currentReviews: newArr});
     setNewReview({
-      id: '',
-      avatar: '',
-      name: '',
       rating: 0,
-      text: '',
-      dateTime: ''
+      comment: '',
+      user: user,
     });
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
     const {name, value} = evt.target;
-    setNewReview({...newReview, [name === 'review' ? 'text' : 'rating']: name === 'rating' ? Number(value) : value});
+    setNewReview({...newReview, [name === 'review' ? 'comment' : 'rating']: name === 'rating' ? Number(value) : value});
   }
 
   return (
@@ -76,7 +70,7 @@ export function ReviewsForm({setReviewsState, currentReviews}: ReviewsListProps)
         ))}
       </div>
       <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
-        value={newReview.text}
+        value={newReview.comment}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
