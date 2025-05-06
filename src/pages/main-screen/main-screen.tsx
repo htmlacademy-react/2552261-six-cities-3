@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import Map from '../../components/map/map.tsx';
 import React, {useEffect, useState} from 'react';
 import {City} from '../../types/city.ts';
-import {CITY_LOCATIONS} from "../../const.ts";
+import {CITY_LOCATIONS} from '../../const.ts';
 
 type MainScreenProps = {
   offers: Offers;
