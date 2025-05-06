@@ -23,10 +23,24 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
       zoom: 8
     }});
 
+  const clickPlacesOptionHandler = () => {
+    const ulElement = document.querySelector('.places__options');
+    if (ulElement) {
+      ulElement.classList.toggle('places__options--opened');
+    }
+  };
+
+  const mousePlacesOptionHandler = () => {
+    const ulElement = document.querySelector('.places__options');
+    if (ulElement?.classList.contains('places__options--opened')) {
+      ulElement.classList.remove('places__options--opened');
+    }
+  };
+
   useEffect(() => {
     const newOffers = offers.filter((offer: Offer) => offer.city.name === currentCity?.name);
     setCurrentOffers(newOffers);
-  }, [currentCity]); // Зависимость - currentOffers
+  }, [currentCity]);
 
   const clickLocationHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
     const target = evt.target as HTMLElement;
@@ -54,7 +68,7 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{`${currentOffers.length} places to stay in ${currentCity?.name}`}</b>
-              <form className="places__sorting" action="#" method="get">
+              <form className="places__sorting" action="#" method="get" onClick={clickPlacesOptionHandler} onMouseLeave={mousePlacesOptionHandler}>
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
                   Popular
@@ -62,7 +76,7 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
                     <use xlinkHref="#icon-arrow-select"></use>
                   </svg>
                 </span>
-                <ul className="places__options places__options--custom places__options--opened">
+                <ul className="places__options places__options--custom" onMouseLeave={mousePlacesOptionHandler}>
                   <li className="places__option places__option--active" tabIndex={0}>Popular</li>
                   <li className="places__option" tabIndex={0}>Price: low to high</li>
                   <li className="places__option" tabIndex={0}>Price: high to low</li>
