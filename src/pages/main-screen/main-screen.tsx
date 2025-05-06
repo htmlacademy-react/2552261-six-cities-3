@@ -4,6 +4,7 @@ import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
 import Map from '../../components/map/map.tsx';
 import React, {useEffect, useState} from 'react';
+import classNames from 'classnames';
 import {City} from '../../types/city.ts';
 import {CITY_LOCATIONS} from '../../const.ts';
 
@@ -43,36 +44,8 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list" onClick={clickLocationHandler}>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="#">
-                  <span>Paris</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="#">
-                  <span>Cologne</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="#">
-                  <span>Brussels</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item tabs__item--active" to="#">
-                  <span>Amsterdam</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="#">
-                  <span>Hamburg</span>
-                </Link>
-              </li>
-              <li className="locations__item">
-                <Link className="locations__item-link tabs__item" to="#">
-                  <span>Dusseldorf</span>
-                </Link>
-              </li>
+              {CITY_LOCATIONS.map((city: City) =>
+                (<li key={city.name} className="locations__item"><Link className={classNames('locations__item-link', 'tabs__item', {'tabs__item--active': city.name === currentCity?.name})} to="#"><span>{city.name}</span></Link></li>))}
             </ul>
           </section>
         </div>
@@ -80,7 +53,7 @@ function MainScreen({offers}: MainScreenProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{currentOffers.length} places to stay in Amsterdam</b>
+              <b className="places__found">{`${currentOffers.length} places to stay in ${currentCity?.name}`}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
