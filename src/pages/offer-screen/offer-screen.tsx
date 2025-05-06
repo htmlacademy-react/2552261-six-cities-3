@@ -6,9 +6,11 @@ import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Review} from '../../types/reviews.ts';
 import {ReviewsForm} from '../../components/reviews-form/reviews-form.tsx';
 import {useState} from 'react';
-import {OtherPlacesList} from '../../components/other-places-list/other-places-list.tsx';
+import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import {Header} from '../header/header.tsx';
 import {reviews} from '../../mocks/reviews.ts';
+import Map from '../../components/map/map.tsx';
+import {neighbourOffers} from '../../mocks/neighbour-offers.ts';
 
 type OfferScreenProps = {
   offers: Offers;
@@ -16,6 +18,7 @@ type OfferScreenProps = {
 
 function OfferScreen({offers}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
+  const [activeCard, setActiveCard] = useState<Offer | null>(null);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0));
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
   const[reviewsState, setReviewsState] = useState({currentReviews: reviews.currentReviews.filter((review: Review) => currentOffer?.reviews.some((offerReview: string)=>
@@ -86,13 +89,13 @@ function OfferScreen({offers}: OfferScreenProps): JSX.Element {
                 </section>
               </div>
             </div>
-            <section className="offer__map map"></section>
+            <Map city={currentOffer.city} points={neighbourOffers} activeCard={activeCard} className={'offer__map'}></Map>
           </section>
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                <OtherPlacesList offers={offers} currentOffer={currentOffer} setCurrentOffer={setCurrentOffer}/>
+                <NeighbourOffersList setCurrentOffer={setCurrentOffer} setActiveCard={setActiveCard} activeCard={activeCard}/>
               </div>
             </section>
           </div>

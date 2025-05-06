@@ -10,6 +10,7 @@ type MapProps = {
   city: City | undefined;
   points: Offers;
   activeCard: Offer | undefined | null;
+  className: string;
 };
 
 const defaultCustomIcon = new Icon({
@@ -25,10 +26,9 @@ const currentCustomIcon = new Icon({
 });
 
 function Map(props: MapProps): JSX.Element {
-  const {city, points, activeCard} = props;
+  const {city, points, activeCard, className} = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
-
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
@@ -53,7 +53,7 @@ function Map(props: MapProps): JSX.Element {
     }
   }, [map, points, activeCard]);
 
-  return <section className="cities__map map" ref={mapRef}></section>;
+  return <section className={`${className} map`} ref={mapRef}></section>;
 }
 
 export default Map;
