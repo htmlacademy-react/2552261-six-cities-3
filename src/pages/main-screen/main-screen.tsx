@@ -54,7 +54,7 @@ function MainScreen({offers, user}: MainScreenProps): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header offers={currentOffers} user={user} />
+      <Header offers={currentOffers} user={user} currentCity={currentCity}/>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

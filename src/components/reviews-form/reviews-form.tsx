@@ -18,7 +18,8 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
 
   const [newReview, setNewReview] = useState({
     rating: 0,
-    text: '',
+    comment: '',
+    user: user,
   });
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
@@ -26,22 +27,21 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
     const reviewWithId = {
       ...newReview,
       id: nanoid(),
-      avatar: user.avatarUrl,
-      name: user.name,
-      dateTime: dayjs(Date.now()).format('MMMM YYYY')
+      date: dayjs(Date.now()).format('MMMM YYYY')
     };
     const newArr = Array.from(currentReviews.currentReviews);
     newArr.push(reviewWithId);
     setReviewsState({currentReviews: newArr});
     setNewReview({
       rating: 0,
-      text: '',
+      comment: '',
+      user: user,
     });
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
     const {name, value} = evt.target;
-    setNewReview({...newReview, [name === 'review' ? 'text' : 'rating']: name === 'rating' ? Number(value) : value});
+    setNewReview({...newReview, [name === 'review' ? 'comment' : 'rating']: name === 'rating' ? Number(value) : value});
   }
 
   return (
@@ -70,7 +70,7 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
         ))}
       </div>
       <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
-        value={newReview.text}
+        value={newReview.comment}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>

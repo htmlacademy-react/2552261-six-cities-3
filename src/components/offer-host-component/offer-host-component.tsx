@@ -24,7 +24,7 @@ export function OfferHostComponent({currentOffer}: OfferHostProps): JSX.Element 
           {currentOffer.host.name}
         </span>
         <span className="offer__user-status">
-          {currentOffer.host.isPro}
+          {currentOffer.host.isPro ? 'Pro' : ''}
         </span>
       </div>
       <div className="offer__description">

@@ -4,7 +4,7 @@ import {FavoritesList} from '../../components/favorites-list/favorites-list.tsx'
 import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {User} from "../../types/user.ts";
+import {User} from '../../types/user.ts';
 
 type FavoritesListScreenProps = {
   offers: Offers;

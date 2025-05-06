@@ -1,11 +1,16 @@
 import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
+import {User} from '../../types/user.ts';
 
-function FavoritesEmptyScreen(): JSX.Element {
+type FavoritesEmptyScreenProps = {
+  user: User;
+}
+
+function FavoritesEmptyScreen({user}: FavoritesEmptyScreenProps): JSX.Element {
   return (
     <div className="page page--favorites-empty">
-      <Header/>
+      <Header user={user}/>
       <main className="page__main page__main--favorites page__main--favorites-empty">
         <div className="page__favorites-container container">
           <section className="favorites favorites--empty">

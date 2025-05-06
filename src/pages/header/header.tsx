@@ -2,14 +2,17 @@ import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {Offer, Offers} from '../../types/offers.ts';
 import {User} from '../../types/user.ts';
+import {City} from '../../types/city.ts';
 
 type HeaderProps = {
   offers?: Offers;
-  user: User;
+  user?: User;
+  currentCity?: City | undefined;
+  currentOffer?: Offer | undefined;
 }
 
-export function Header({offers, user}: HeaderProps): JSX.Element {
-  const favoritesCount = offers?.filter((offer: Offer) => offer.isFavorite);
+export function Header({offers, user, currentCity, currentOffer}: HeaderProps): JSX.Element {
+  const favoritesCount = offers?.filter((offer: Offer) => (offer.city.name === currentCity?.name || offer.city.name === currentOffer?.city?.name) && offer.isFavorite);
 
   return (
     <header className="header">
@@ -26,7 +29,7 @@ export function Header({offers, user}: HeaderProps): JSX.Element {
                 <Link className="header__nav-link header__nav-link--profile" to="#">
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
-                  <span className="header__user-name user__name">{user.email}</span>
+                  <span className="header__user-name user__name">{user?.email}</span>
                   <span className="header__favorite-count">{favoritesCount?.length}</span>
                 </Link>
               </li>

@@ -12,6 +12,7 @@ import {reviews} from '../../mocks/reviews.ts';
 import Map from '../../components/map/map.tsx';
 import {neighbourOffers} from '../../mocks/neighbour-offers.ts';
 import {User} from '../../types/user.ts';
+import {nanoid} from 'nanoid';
 
 type OfferScreenProps = {
   offers: Offers;
@@ -33,12 +34,12 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
   if (currentOffer && reviewsState) {
     return (
       <div className="page">
-        <Header offers={offers} user={user} />
+        <Header offers={offers} user={user} currentOffer={currentOffer} />
         <main className="page__main page__main--offer">
           <section className="offer">
             <div className="offer__gallery-container container">
               <div className="offer__gallery">
-                {currentOffer.images.map((image) => <div key={image} className="offer__image-wrapper"><img className="offer__image" src={image} alt="Photo studio"/></div>)}
+                {currentOffer.images.map((image) => <div key={nanoid()} className="offer__image-wrapper"><img className="offer__image" src={image} alt="Photo studio"/></div>)}
               </div>
             </div>
             <div className="offer__container container">
@@ -91,7 +92,7 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
                 </section>
               </div>
             </div>
-            <Map city={currentOffer.city} points={neighbourOffers} activeCard={activeCard} className={'offer__map'}></Map>
+            <Map city={currentOffer.city} points={neighbourOffers} activeCard={activeCard} className={'offer__map'}/>
           </section>
           <div className="container">
             <section className="near-places places">
