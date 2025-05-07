@@ -3,8 +3,8 @@ import {Icon, Marker, layerGroup} from 'leaflet';
 import useMap from '../../hooks/use-map';
 import {City} from '../../types/city.ts';
 import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../const.ts';
-import 'leaflet/dist/leaflet.css';
 import {Offer, Offers} from '../../types/offers.ts';
+import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
   city: City | undefined;
