@@ -2,24 +2,23 @@ import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {Offer, Offers} from '../../types/offers.ts';
 import {User} from '../../types/user.ts';
-import {City} from '../../types/city.ts';
+import {useAppDispatch} from '../../hooks';
+import {resetCity} from '../../store/action.ts';
 
 type HeaderProps = {
-  offers?: Offers;
   user?: User;
-  currentCity?: City | undefined;
-  currentOffer?: Offer | undefined;
+  currentOffers?: Offers;
 }
 
-export function Header({offers, user, currentCity, currentOffer}: HeaderProps): JSX.Element {
-  const favoritesCount = offers?.filter((offer: Offer) => (offer.city.name === currentCity?.name || offer.city.name === currentOffer?.city?.name) && offer.isFavorite);
-
+export function Header({user, currentOffers}: HeaderProps): JSX.Element {
+  const favoritesCount = currentOffers?.filter((offer: Offer) => offer.isFavorite);
+  const dispatch = useAppDispatch();
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Link to={AppRoute.Root} className="header__logo-link header__logo-link--active">
+            <Link to={AppRoute.Root} className="header__logo-link header__logo-link--active" onClick={() => dispatch(resetCity())}>
               <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
             </Link>
           </div>
@@ -30,7 +29,7 @@ export function Header({offers, user, currentCity, currentOffer}: HeaderProps): 
                   <div className="header__avatar-wrapper user__avatar-wrapper">
                   </div>
                   <span className="header__user-name user__name">{user?.email}</span>
-                  <span className="header__favorite-count">{favoritesCount?.length}</span>
+                  <span className="header__favorite-count">{favoritesCount ? favoritesCount.length : 0}</span>
                 </Link>
               </li>
               <li className="header__nav-item">

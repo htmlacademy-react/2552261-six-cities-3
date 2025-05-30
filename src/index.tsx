@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app.tsx';
-import {offers} from './mocks/offers.ts';
 import {userMock} from './mocks/userMock.ts';
+import {store} from './store';
+import {Provider} from 'react-redux';
 
 const user = userMock;
 
@@ -12,6 +13,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App offers={offers} user={user} />
+    <Provider store={store}>
+      <App user={user}/>
+    </Provider>
+
   </React.StrictMode>
 );

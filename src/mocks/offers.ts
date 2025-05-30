@@ -134,7 +134,7 @@ export const offers: Offers = [
     reviews: [],
   },
   {
-    id: '1',
+    id: '5',
     title: 'Beautiful & luxurious apartment at great location',
     type: 'Apartment',
     price: 120,

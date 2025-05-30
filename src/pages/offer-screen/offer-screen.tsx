@@ -13,6 +13,7 @@ import Map from '../../components/map/map.tsx';
 import {neighbourOffers} from '../../mocks/neighbour-offers.ts';
 import {User} from '../../types/user.ts';
 import {nanoid} from 'nanoid';
+import {useAppSelector} from '../../hooks';
 
 type OfferScreenProps = {
   offers: Offers;
@@ -21,6 +22,8 @@ type OfferScreenProps = {
 
 function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
+  const currentCity = useAppSelector((state) => state.city);
+  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
   const [activeCard, setActiveCard] = useState<Offer | null>(null);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(offers.find((offer: Offer) => offerId?.localeCompare(offer.id) === 0));
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
@@ -34,7 +37,7 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
   if (currentOffer && reviewsState) {
     return (
       <div className="page">
-        <Header offers={offers} user={user} currentOffer={currentOffer} />
+        <Header user={user} currentOffers={currentOffers} />
         <main className="page__main page__main--offer">
           <section className="offer">
             <div className="offer__gallery-container container">

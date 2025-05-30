@@ -1,11 +1,9 @@
 import {Offer, Offers, SortOffers} from '../../types/offers.ts';
 import {FavoritesItem} from '../favorites-item/favorites-item.tsx';
+import {useAppSelector} from '../../hooks';
 
-type FavoritesListProps = {
-  offers: Offers;
-}
-
-export function FavoritesList({offers}: FavoritesListProps): JSX.Element {
+export function FavoritesList(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const favoritesOffers: Offers = offers.filter((offer: Offer) => offer.isFavorite);
   const sortFavoritesOffers: SortOffers = {};
 
