@@ -72,10 +72,17 @@ export const CITY_LOCATIONS: Cities = [
   }
 ];
 
+export enum SortType {
+  PriceLow = 'Price: low to high',
+  PriceHigh = 'Price: high to low',
+  Rated = 'Top rated first',
+  Popular = 'Popular',
+}
+
 export const OTHER_PLACES_LIST_LENGTH = 3;
 
 export const URL_MARKER_DEFAULT =
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
+  'markup/img/pin.svg';
 
 export const URL_MARKER_CURRENT =
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
+  'markup/img/pin-active.svg';

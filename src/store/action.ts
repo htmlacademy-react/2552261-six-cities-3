@@ -6,4 +6,3 @@ export const changeCity = createAction<City | undefined>('city/changeCity');
 export const resetCity = createAction('city/resetCity');
 export const fillOffersList = createAction<Offers>('offers/fillOffersList');
 export const changeFavoriteStatus = createAction<Offer>('offers/changeFavoriteStatus');
-
