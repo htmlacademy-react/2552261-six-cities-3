@@ -1,29 +1,23 @@
-import {Offer, Offers} from '../../types/offers.ts';
+import {Offer} from '../../types/offers.ts';
 import {OffersList} from '../../components/offers-list/offers-list.tsx';
 import {Header} from '../header/header.tsx';
-import {Link} from 'react-router-dom';
 import Map from '../../components/map/map.tsx';
-import React, {useEffect, useState} from 'react';
-import classNames from 'classnames';
-import {City} from '../../types/city.ts';
+import React, {useState} from 'react';
 import {CITY_LOCATIONS} from '../../const.ts';
 import {User} from '../../types/user.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {changeCity} from '../../store/action.ts';
+import {CitiesList} from '../../components/cities-list/cities-list.tsx';
 
 type MainScreenProps = {
-  offers: Offers;
   user: User;
 }
 
-function MainScreen({offers, user}: MainScreenProps): JSX.Element {
+function MainScreen({user}: MainScreenProps): JSX.Element {
   const [activeCard, setActiveCard] = useState<Offer | null>(null);
-  const [currentOffers, setCurrentOffers] = useState<Offer[]>(offers.filter((offer: Offer) => offer.city.name === 'Amsterdam'));
-  const [currentCity, setCurrentCity] = useState<City | undefined>({
-    name: 'Amsterdam',
-    location: {
-      latitude: 52.3909553943508,
-      longitude: 4.85309666406198,
-      zoom: 8
-    }});
+  const currentCity = useAppSelector((state) => state.city);
+  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
+  const dispatch = useAppDispatch();
 
   const clickPlacesOptionHandler = () => {
     const ulElement = document.querySelector('.places__options');
@@ -39,30 +33,22 @@ function MainScreen({offers, user}: MainScreenProps): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    const newOffers = offers.filter((offer: Offer) => offer.city.name === currentCity?.name);
-    setCurrentOffers(newOffers);
-  }, [currentCity]);
-
   const clickLocationHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
     const target = evt.target as HTMLElement;
     if (target.tagName === 'SPAN' || target.tagName === 'A') {
       const newLocation = CITY_LOCATIONS.find((city) => city.name === target.textContent);
-      setCurrentCity(newLocation);
+      dispatch(changeCity(newLocation));
     }
   };
 
   return (
     <div className="page page--gray page--main">
-      <Header offers={currentOffers} user={user} currentCity={currentCity}/>
+      <Header user={user} currentOffers={currentOffers}/>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <ul className="locations__list tabs__list" onClick={clickLocationHandler}>
-              {CITY_LOCATIONS.map((city: City) =>
-                (<li key={city.name} className="locations__item"><Link className={classNames('locations__item-link', 'tabs__item', {'tabs__item--active': city.name === currentCity?.name})} to="#"><span>{city.name}</span></Link></li>))}
-            </ul>
+            <CitiesList currentCity={currentCity} clickLocationHandler={clickLocationHandler}/>
           </section>
         </div>
         <div className="cities">
@@ -85,7 +71,7 @@ function MainScreen({offers, user}: MainScreenProps): JSX.Element {
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OffersList offers={currentOffers} activeCard={activeCard} setActiveCard={setActiveCard} />
+              <OffersList activeCard={activeCard} setActiveCard={setActiveCard} currentOffers={currentOffers} />
             </section>
             <div className="cities__right-section">
               <Map city={currentCity} points={currentOffers} activeCard={activeCard} className={'cities__map'}/>

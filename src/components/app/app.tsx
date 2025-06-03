@@ -6,25 +6,28 @@ import LoginScreen from '../../pages/login-screen/login-screen.tsx';
 import OfferScreen from '../../pages/offer-screen/offer-screen.tsx';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {Offers} from '../../types/offers.ts';
 import {User} from '../../types/user.ts';
+import {useAppDispatch} from '../../hooks';
+import {fillOffersList} from '../../store/action.ts';
+import {offers} from '../../mocks/offers.ts';
 
 type AppScreenProps = {
-  offers: Offers;
   user: User;
 }
 
-function App({offers, user}: AppScreenProps): JSX.Element {
+function App({user}: AppScreenProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  dispatch(fillOffersList(offers));
   return (
     <BrowserRouter>
       <Routes>
         <Route path={AppRoute.Root}>
-          <Route index element={<MainScreen offers={offers} user={user}/>}/>
+          <Route index element={<MainScreen user={user}/>}/>
           <Route path={AppRoute.Login} element={<LoginScreen/>}/>
           <Route path={AppRoute.Favorites} element={
             <PrivateRoute
               authorizationStatus={AuthorizationStatus.Auth}
-            ><FavoritesScreen offers={offers} user={user}/>
+            ><FavoritesScreen user={user}/>
             </PrivateRoute>
           }
           />

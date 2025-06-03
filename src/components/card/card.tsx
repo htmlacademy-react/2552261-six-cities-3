@@ -3,6 +3,8 @@ import {Dispatch, SetStateAction, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import classNames from 'classnames';
+import {useAppDispatch} from '../../hooks';
+import {changeFavoriteStatus} from '../../store/action.ts';
 
 type CardScreenProps = {
   offer: Offer;
@@ -23,6 +25,7 @@ function Card({
 }: CardScreenProps): JSX.Element {
 
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isFavorite);
+  const dispatch = useAppDispatch();
 
   const mouseEnterHandler = () => {
     if (setActiveCard) {
@@ -38,6 +41,7 @@ function Card({
 
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
+    dispatch(changeFavoriteStatus(offer));
   };
 
   const linkClickHandler = () => {
