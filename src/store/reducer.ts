@@ -43,7 +43,6 @@ const reducer = createReducer(initialState, (builder) => {
       };
     }).addCase(loadOffers, (state, action) => {
       state.offers = action.payload;
-      console.log(state.offers);
     });
 });
 

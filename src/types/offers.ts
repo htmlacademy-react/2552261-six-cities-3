@@ -52,10 +52,9 @@ export type OfferPreview = {
 }
 
 export type SortOffers = {
-[key: string]: Offers;
+[key: string]: OffersPreview;
 }
 
 
 export type Offers = Offer[];
 export type OffersPreview = OfferPreview[];
-export type SetOffers = Set<Offer>;

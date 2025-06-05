@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 
 type SortingOptionsProps = {
   clickPlacesOptionHandler: () => void;
   mousePlacesOptionHandler: () => void;
   changeSortHandler: (evt: React.MouseEvent<HTMLUListElement>) => void;
   currentSortType: string | null;
+  ulRef: RefObject<HTMLUListElement>;
 }
 
 export function SortingOptions({
   clickPlacesOptionHandler,
   mousePlacesOptionHandler,
   changeSortHandler,
-  currentSortType
+  currentSortType,
+  ulRef
 }: SortingOptionsProps): JSX.Element {
   return (
     <form className="places__sorting" action="#" method="get" onClick={clickPlacesOptionHandler}
@@ -25,7 +27,7 @@ export function SortingOptions({
         </svg>
       </span>
       <ul className="places__options places__options--custom" onClick={changeSortHandler}
-        onMouseLeave={mousePlacesOptionHandler}
+        onMouseLeave={mousePlacesOptionHandler} ref={ulRef}
       >
         <li className="places__option places__option--active" tabIndex={0}>Popular</li>
         <li className="places__option" tabIndex={0}>Price: low to high</li>

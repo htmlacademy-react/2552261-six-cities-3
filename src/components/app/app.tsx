@@ -9,38 +9,45 @@ import PrivateRoute from '../private-route/private-route.tsx';
 import {User} from '../../types/user.ts';
 import {useAppDispatch} from '../../hooks';
 import {offers} from '../../mocks/offers.ts';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {fetchOffersAction} from '../../store/api-actions.ts';
+import {Loader} from '../loader/loader.tsx';
 
 type AppScreenProps = {
   user: User;
 }
 
 function App({user}: AppScreenProps): JSX.Element {
+
+  const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchOffersAction());
+    dispatch(fetchOffersAction(setLoading));
   }, []);
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={AppRoute.Root}>
-          <Route index element={<MainScreen user={user}/>}/>
-          <Route path={AppRoute.Login} element={<LoginScreen/>}/>
-          <Route path={AppRoute.Favorites} element={
-            <PrivateRoute
-              authorizationStatus={AuthorizationStatus.Auth}
-            ><FavoritesScreen user={user}/>
-            </PrivateRoute>
-          }
-          />
-          <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offers={offers} user={user}/>}/>
-        </Route>
-        <Route path='*' element={<NotFoundScreen/>}/>
-      </Routes>
-    </BrowserRouter>);
+  if (loading) {
+    return (<Loader/>);
+  } else {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path={AppRoute.Root}>
+            <Route index element={<MainScreen user={user}/>}/>
+            <Route path={AppRoute.Login} element={<LoginScreen/>}/>
+            <Route path={AppRoute.Favorites} element={
+              <PrivateRoute
+                authorizationStatus={AuthorizationStatus.Auth}
+              ><FavoritesScreen user={user}/>
+              </PrivateRoute>
+            }
+            />
+            <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offers={offers} user={user}/>}/>
+          </Route>
+          <Route path='*' element={<NotFoundScreen/>}/>
+        </Routes>
+      </BrowserRouter>);
+  }
 }
 
 export default App;

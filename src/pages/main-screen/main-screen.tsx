@@ -2,7 +2,7 @@ import {OfferPreview} from '../../types/offers.ts';
 import {OffersList} from '../../components/offers-list/offers-list.tsx';
 import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {User} from '../../types/user.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
@@ -16,11 +16,12 @@ type MainScreenProps = {
 }
 
 function MainScreen({user}: MainScreenProps): JSX.Element {
+  const ulCardRef = useRef(null);
   const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
   const currentCity = useAppSelector((state) => state.city);
   const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
-  let sortedOffers = [...currentOffers ];
+  let sortedOffers = [...currentOffers];
   const dispatch = useAppDispatch();
 
   switch (activeSort) {
@@ -40,14 +41,14 @@ function MainScreen({user}: MainScreenProps): JSX.Element {
   }
 
   const clickPlacesOptionHandler = () => {
-    const ulElement = document.querySelector('.places__options');
+    const ulElement = ulCardRef.current as HTMLLIElement | null;
     if (ulElement) {
       ulElement.classList.toggle('places__options--opened');
     }
   };
 
   const mousePlacesOptionHandler = () => {
-    const ulElement = document.querySelector('.places__options');
+    const ulElement = ulCardRef.current as HTMLLIElement | null;
     if (ulElement?.classList.contains('places__options--opened')) {
       ulElement.classList.remove('places__options--opened');
     }
@@ -58,7 +59,7 @@ function MainScreen({user}: MainScreenProps): JSX.Element {
     if (target.tagName === 'SPAN' || target.tagName === 'A') {
       const newLocation = CITY_LOCATIONS.find((city) => city.name === target.textContent);
       setActiveSort(SortType.Popular);
-      const ul = document.querySelector('.places__options');
+      const ul = ulCardRef.current as HTMLLIElement | null;
       if (ul) {
         Array.from(ul.children).forEach((child) => {
           if (child.textContent === SortType.Popular) {
@@ -100,7 +101,7 @@ function MainScreen({user}: MainScreenProps): JSX.Element {
               <b className="places__found">{`${currentOffers.length} places to stay in ${currentCity?.name}`}</b>
               <SortingOptions clickPlacesOptionHandler={clickPlacesOptionHandler}
                 mousePlacesOptionHandler={mousePlacesOptionHandler} changeSortHandler={changeSortHandler}
-                currentSortType={activeSort}
+                currentSortType={activeSort} ulRef={ulCardRef}
               />
               <OffersList activeCard={activeCard} setActiveCard={setActiveCard} currentOffers={sortedOffers}/>
             </section>
