@@ -4,7 +4,6 @@ import {Offers} from '../types/offers.ts';
 import {City} from '../types/city.ts';
 import {CITY_LOCATIONS} from '../const.ts';
 
-
 type InitialState = {
   city: City | undefined;
   offers: Offers;

@@ -3,11 +3,13 @@ import {OffersList} from '../../components/offers-list/offers-list.tsx';
 import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
 import React, {useState} from 'react';
-import {CITY_LOCATIONS} from '../../const.ts';
+import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {User} from '../../types/user.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeCity} from '../../store/action.ts';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
+import {SortingOptions} from '../../components/sorting-options/sorting-options.tsx';
+import {sortByHighPrice, sortByHighRated, sortByLowPrice} from '../../util.ts';
 
 type MainScreenProps = {
   user: User;
@@ -15,9 +17,27 @@ type MainScreenProps = {
 
 function MainScreen({user}: MainScreenProps): JSX.Element {
   const [activeCard, setActiveCard] = useState<Offer | null>(null);
+  const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
   const currentCity = useAppSelector((state) => state.city);
   const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
+  let sortedOffers = [...currentOffers ];
   const dispatch = useAppDispatch();
+
+  switch (activeSort) {
+    case SortType.PriceHigh:
+      sortedOffers.sort(sortByHighPrice);
+      break;
+    case SortType.PriceLow: {
+      sortedOffers.sort(sortByLowPrice);
+      break;
+    }
+    case SortType.Rated: {
+      sortedOffers.sort(sortByHighRated);
+      break;
+    }
+    default:
+      sortedOffers = [...currentOffers];
+  }
 
   const clickPlacesOptionHandler = () => {
     const ulElement = document.querySelector('.places__options');
@@ -37,8 +57,30 @@ function MainScreen({user}: MainScreenProps): JSX.Element {
     const target = evt.target as HTMLElement;
     if (target.tagName === 'SPAN' || target.tagName === 'A') {
       const newLocation = CITY_LOCATIONS.find((city) => city.name === target.textContent);
+      setActiveSort(SortType.Popular);
+      const ul = document.querySelector('.places__options');
+      if (ul) {
+        Array.from(ul.children).forEach((child) => {
+          if (child.textContent === SortType.Popular) {
+            child.classList.add('places__option--active');
+          } else {
+            child.classList.remove('places__option--active');
+          }
+        });
+      }
       dispatch(changeCity(newLocation));
     }
+  };
+
+  const changeSortHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
+    const target = evt.target as HTMLLIElement;
+    const sortType = target.textContent;
+    const ul = evt.currentTarget;
+    setActiveSort(sortType);
+    Array.from(ul.children).forEach((child) => {
+      child.classList.remove('places__option--active');
+    });
+    target.classList.add('places__option--active');
   };
 
   return (
@@ -56,22 +98,11 @@ function MainScreen({user}: MainScreenProps): JSX.Element {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{`${currentOffers.length} places to stay in ${currentCity?.name}`}</b>
-              <form className="places__sorting" action="#" method="get" onClick={clickPlacesOptionHandler} onMouseLeave={mousePlacesOptionHandler}>
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width="7" height="4">
-                    <use xlinkHref="#icon-arrow-select"></use>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom" onMouseLeave={mousePlacesOptionHandler}>
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
-                </ul>
-              </form>
-              <OffersList activeCard={activeCard} setActiveCard={setActiveCard} currentOffers={currentOffers} />
+              <SortingOptions clickPlacesOptionHandler={clickPlacesOptionHandler}
+                mousePlacesOptionHandler={mousePlacesOptionHandler} changeSortHandler={changeSortHandler}
+                currentSortType={activeSort}
+              />
+              <OffersList activeCard={activeCard} setActiveCard={setActiveCard} currentOffers={sortedOffers}/>
             </section>
             <div className="cities__right-section">
               <Map city={currentCity} points={currentOffers} activeCard={activeCard} className={'cities__map'}/>

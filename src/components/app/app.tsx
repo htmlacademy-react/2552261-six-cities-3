@@ -10,6 +10,7 @@ import {User} from '../../types/user.ts';
 import {useAppDispatch} from '../../hooks';
 import {fillOffersList} from '../../store/action.ts';
 import {offers} from '../../mocks/offers.ts';
+import {useEffect} from 'react';
 
 type AppScreenProps = {
   user: User;
@@ -17,7 +18,10 @@ type AppScreenProps = {
 
 function App({user}: AppScreenProps): JSX.Element {
   const dispatch = useAppDispatch();
-  dispatch(fillOffersList(offers));
+  useEffect(() => {
+    dispatch(fillOffersList(offers));
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
