@@ -8,9 +8,9 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {User} from '../../types/user.ts';
 import {useAppDispatch} from '../../hooks';
-import {fillOffersList} from '../../store/action.ts';
 import {offers} from '../../mocks/offers.ts';
 import {useEffect} from 'react';
+import {fetchOffersAction} from '../../store/api-actions.ts';
 
 type AppScreenProps = {
   user: User;
@@ -18,8 +18,9 @@ type AppScreenProps = {
 
 function App({user}: AppScreenProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   useEffect(() => {
-    dispatch(fillOffersList(offers));
+    dispatch(fetchOffersAction());
   }, []);
 
   return (

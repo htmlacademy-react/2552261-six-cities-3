@@ -1,4 +1,4 @@
-import {Offer} from '../../types/offers.ts';
+import {OfferPreview} from '../../types/offers.ts';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
@@ -7,12 +7,12 @@ import {useAppDispatch} from '../../hooks';
 import {changeFavoriteStatus} from '../../store/action.ts';
 
 type CardScreenProps = {
-  offer: Offer;
+  offer: OfferPreview;
   isFavorite?: boolean;
   isOtherPlacesSection?: boolean;
   isActive?: boolean;
-  setCurrentOffer?: Dispatch<SetStateAction<Offer | undefined>>;
-  setActiveCard?: Dispatch<SetStateAction<Offer | null>>;
+  setCurrentOffer?: Dispatch<SetStateAction<OfferPreview | undefined>>;
+  setActiveCard?: Dispatch<SetStateAction<OfferPreview | null>>;
 }
 
 function Card({
@@ -69,7 +69,7 @@ function Card({
         'place-card__image-wrapper')}
       >
         <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>
-          <img className="place-card__image" src={`${offer.images[0]}`} width={isFavorite ? '150' : '260'}
+          <img className="place-card__image" src={`${offer.previewImage}`} width={isFavorite ? '150' : '260'}
             height={isFavorite ? '110' : '200'}
             alt="Place image"
           />

@@ -1,12 +1,12 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, changeFavoriteStatus, fillOffersList, resetCity} from './action.ts';
-import {Offers} from '../types/offers.ts';
+import {changeCity, changeFavoriteStatus, fillOffersList, loadOffers, resetCity} from './action.ts';
+import {OffersPreview} from '../types/offers.ts';
 import {City} from '../types/city.ts';
 import {CITY_LOCATIONS} from '../const.ts';
 
 type InitialState = {
   city: City | undefined;
-  offers: Offers;
+  offers: OffersPreview;
 }
 const initialState: InitialState = {
   city: {
@@ -41,6 +41,9 @@ const reducer = createReducer(initialState, (builder) => {
           zoom: 8
         },
       };
+    }).addCase(loadOffers, (state, action) => {
+      state.offers = action.payload;
+      console.log(state.offers);
     });
 });
 

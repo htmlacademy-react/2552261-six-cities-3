@@ -1,4 +1,4 @@
-import {Offer, Offers} from './types/offers.ts';
+import {OfferPreview, Offers} from './types/offers.ts';
 
 export function getRandomInteger(a: number, b: number){
   const lower = Math.ceil(Math.min(a, b));
@@ -11,14 +11,14 @@ export function getRandomArrayElement(arrays: Offers) {
   return arrays[getRandomInteger(0, arrays.length - 1)];
 }
 
-export function sortByLowPrice(offerOne: Offer, offerTwo: Offer): number{
+export function sortByLowPrice(offerOne: OfferPreview, offerTwo: OfferPreview): number{
   return offerOne.price - offerTwo.price;
 }
 
-export function sortByHighPrice(offerOne: Offer, offerTwo: Offer): number{
+export function sortByHighPrice(offerOne: OfferPreview, offerTwo: OfferPreview): number{
   return offerTwo.price - offerOne.price;
 }
 
-export function sortByHighRated(offerOne: Offer, offerTwo: Offer): number{
+export function sortByHighRated(offerOne: OfferPreview, offerTwo: OfferPreview): number{
   return offerTwo.rating - offerOne.rating;
 }

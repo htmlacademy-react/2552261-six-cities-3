@@ -1,4 +1,4 @@
-import {Offer} from '../../types/offers.ts';
+import {OfferPreview} from '../../types/offers.ts';
 import {OffersList} from '../../components/offers-list/offers-list.tsx';
 import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
@@ -16,7 +16,7 @@ type MainScreenProps = {
 }
 
 function MainScreen({user}: MainScreenProps): JSX.Element {
-  const [activeCard, setActiveCard] = useState<Offer | null>(null);
+  const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
   const currentCity = useAppSelector((state) => state.city);
   const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
