@@ -1,14 +1,14 @@
-import {Offer, Offers} from '../../types/offers.ts';
+import {OfferPreview, OffersPreview} from '../../types/offers.ts';
 import Card from '../card/card.tsx';
 
 type FavoritesItemProps = {
   city: string;
-  offers: Offers;
+  offers: OffersPreview;
 }
 
 export function FavoritesItem({city, offers}: FavoritesItemProps): JSX.Element {
 
-  const itemsList = offers.map((offer: Offer) => <Card key={offer.id} offer={offer} isFavorite />);
+  const itemsList = offers.map((offer: OfferPreview) => <Card key={offer.id} offer={offer} isFavorite />);
 
   return (
     <li className="favorites__locations-items">

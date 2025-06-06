@@ -1,13 +1,13 @@
-import {Offer, Offers, SortOffers} from '../../types/offers.ts';
+import {OfferPreview, OffersPreview, SortOffers} from '../../types/offers.ts';
 import {FavoritesItem} from '../favorites-item/favorites-item.tsx';
 import {useAppSelector} from '../../hooks';
 
 export function FavoritesList(): JSX.Element {
   const offers = useAppSelector((state) => state.offers);
-  const favoritesOffers: Offers = offers.filter((offer: Offer) => offer.isFavorite);
+  const favoritesOffers: OffersPreview = offers.filter((offer: OfferPreview) => offer.isFavorite);
   const sortFavoritesOffers: SortOffers = {};
 
-  favoritesOffers.forEach((offer: Offer) => {
+  favoritesOffers.forEach((offer: OfferPreview) => {
     if (offer.city.name in sortFavoritesOffers) {
       sortFavoritesOffers[offer.city.name].push(offer);
     } else {

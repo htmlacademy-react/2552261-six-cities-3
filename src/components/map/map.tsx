@@ -1,15 +1,15 @@
-import {useRef, useEffect} from 'react';
-import {Icon, Marker, layerGroup} from 'leaflet';
+import {useEffect, useRef} from 'react';
+import {Icon, layerGroup, Marker} from 'leaflet';
 import useMap from '../../hooks/use-map';
 import {City} from '../../types/city.ts';
 import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../const.ts';
-import {Offer, Offers} from '../../types/offers.ts';
+import {Offer, OfferPreview, Offers, OffersPreview} from '../../types/offers.ts';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
   city: City | undefined;
-  points: Offers;
-  activeCard: Offer | undefined | null;
+  points: OffersPreview | Offers;
+  activeCard: OfferPreview | Offer | undefined | null;
   className: string;
 };
 

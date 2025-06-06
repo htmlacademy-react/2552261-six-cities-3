@@ -1,17 +1,17 @@
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {Offer, Offers} from '../../types/offers.ts';
+import {OfferPreview, OffersPreview} from '../../types/offers.ts';
 import {User} from '../../types/user.ts';
 import {useAppDispatch} from '../../hooks';
 import {resetCity} from '../../store/action.ts';
 
 type HeaderProps = {
   user?: User;
-  currentOffers?: Offers;
+  currentOffers?: OffersPreview;
 }
 
 export function Header({user, currentOffers}: HeaderProps): JSX.Element {
-  const favoritesCount = currentOffers?.filter((offer: Offer) => offer.isFavorite);
+  const favoritesCount = currentOffers?.filter((offer: OfferPreview) => offer.isFavorite);
   const dispatch = useAppDispatch();
   return (
     <header className="header">
