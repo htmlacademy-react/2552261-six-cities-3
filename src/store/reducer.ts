@@ -7,6 +7,7 @@ import {CITY_LOCATIONS} from '../const.ts';
 type InitialState = {
   city: City | undefined;
   offers: OffersPreview;
+  authorizationStatus: boolean;
 }
 const initialState: InitialState = {
   city: {
@@ -18,6 +19,7 @@ const initialState: InitialState = {
     },
   },
   offers: [],
+  authorizationStatus: false,
 };
 
 const reducer = createReducer(initialState, (builder) => {
