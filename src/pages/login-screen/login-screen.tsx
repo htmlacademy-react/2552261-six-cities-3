@@ -1,7 +1,31 @@
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
+import {FormEvent, useRef} from 'react';
+import {AuthData} from '../../types/auth-data.ts';
+import {useAppDispatch} from '../../hooks';
+import {loginAction} from '../../store/api-actions.ts';
 
 function LoginScreen(): JSX.Element {
+  const loginRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const onSubmit = (authData: AuthData) => {
+    dispatch(loginAction(authData));
+  };
+
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    if(loginRef.current !== null && passwordRef.current !== null) {
+      onSubmit({
+        email: loginRef.current.value,
+        password: passwordRef.current.value,
+        navigate
+      });
+    }
+  };
+
   return (
     <div className="page page--gray page--login">
       <header className="header">
@@ -20,14 +44,14 @@ function LoginScreen(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post">
+            <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input className="login__input form__input" type="email" name="email" placeholder="Email" required/>
+                <input className="login__input form__input" type="email" name="email" placeholder="Email" ref={loginRef} required/>
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
-                <input className="login__input form__input" type="password" name="password" placeholder="Password"
+                <input className="login__input form__input" type="password" name="password" placeholder="Password" ref={passwordRef}
                   required
                 />
               </div>
