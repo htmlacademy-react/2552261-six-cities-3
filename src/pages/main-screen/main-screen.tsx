@@ -4,18 +4,13 @@ import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
 import React, {useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
-import {User} from '../../types/user.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeCity} from '../../store/action.ts';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
 import {SortingOptions} from '../../components/sorting-options/sorting-options.tsx';
 import {sortByHighPrice, sortByHighRated, sortByLowPrice} from '../../util.ts';
 
-type MainScreenProps = {
-  user: User;
-}
-
-function MainScreen({user}: MainScreenProps): JSX.Element {
+function MainScreen(): JSX.Element {
   const ulCardRef = useRef(null);
   const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
@@ -86,7 +81,7 @@ function MainScreen({user}: MainScreenProps): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header user={user} currentOffers={currentOffers}/>
+      <Header currentOffers={currentOffers}/>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

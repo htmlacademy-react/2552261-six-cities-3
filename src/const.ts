@@ -88,6 +88,18 @@ export const DEFAULT_COMMENT: NewComment = {
   comment: '',
 };
 
+export const DEFAULT_USER = {
+  name: '',
+  avatarUrl: '',
+  isPro: false,
+  email: '',
+  token: ''
+};
+
+export const DEFAULT_MIN_LENGTH = 50;
+
+export const SIGN_OUT_TEXT = 'Sign out';
+
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';
 

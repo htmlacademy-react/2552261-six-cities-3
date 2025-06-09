@@ -3,18 +3,20 @@ import {
   changeCity,
   changeFavoriteStatus,
   fillOffersList,
-  loadOffers,
+  loadOffers, loadUser,
   requireAuthorization,
   resetCity
 } from './action.ts';
 import {OffersPreview} from '../types/offers.ts';
 import {City} from '../types/city.ts';
-import {AuthorizationStatus, CITY_LOCATIONS} from '../const.ts';
+import {AuthorizationStatus, CITY_LOCATIONS, DEFAULT_USER} from '../const.ts';
+import {User} from '../types/user.ts';
 
 type InitialState = {
   city: City | undefined;
   offers: OffersPreview;
   authorizationStatus: AuthorizationStatus;
+  user: User;
 }
 const initialState: InitialState = {
   city: {
@@ -27,6 +29,7 @@ const initialState: InitialState = {
   },
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknown,
+  user: DEFAULT_USER
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -54,6 +57,8 @@ const reducer = createReducer(initialState, (builder) => {
       state.offers = action.payload;
     }).addCase(requireAuthorization, (state, action) => {
       state.authorizationStatus = action.payload;
+    }).addCase(loadUser, (state, action) => {
+      state.user = action.payload;
     });
 });
 

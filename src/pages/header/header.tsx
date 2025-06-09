@@ -1,25 +1,24 @@
 import {Link} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const.ts';
+import {AppRoute, AuthorizationStatus, SIGN_OUT_TEXT} from '../../const.ts';
 import {OfferPreview, OffersPreview} from '../../types/offers.ts';
-import {User} from '../../types/user.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {resetCity} from '../../store/action.ts';
 import classNames from 'classnames';
 import {logoutAction} from '../../store/api-actions.ts';
 
 type HeaderProps = {
-  user?: User;
   currentOffers?: OffersPreview;
 }
 
-export function Header({user, currentOffers}: HeaderProps): JSX.Element {
+export function Header({currentOffers}: HeaderProps): JSX.Element {
   const favoritesCount = currentOffers?.filter((offer: OfferPreview) => offer.isFavorite);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const user = useAppSelector((state) => state.user);
 
   const clickLoginHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
     const target = evt.target as HTMLUListElement;
-    if(target.textContent === 'Sign out') {
+    if(target.textContent === SIGN_OUT_TEXT) {
       dispatch(logoutAction());
     }
   };

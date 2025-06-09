@@ -1,6 +1,6 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {NewComment, Comments} from '../../types/comments.ts';
-import {AuthorizationStatus, DEFAULT_COMMENT, RatingStar} from '../../const.ts';
+import {Comments, NewComment} from '../../types/comments.ts';
+import {AuthorizationStatus, DEFAULT_COMMENT, DEFAULT_MIN_LENGTH, RatingStar} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
 import classNames from 'classnames';
 import {postComment} from '../../services/api.ts';
@@ -21,13 +21,16 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
   const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
 
 
-  async function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
+  function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const newArr = [...currentReviews];
-    const newComment = await postComment(currentOffer.id, newReview);
-    newArr.push(newComment);
-    setNewReview(DEFAULT_COMMENT);
-    setReviewsState(newArr);
+    const fetchPostComment = async () => {
+      const newComment = await postComment(currentOffer.id, newReview);
+      newArr.push(newComment);
+      setNewReview(DEFAULT_COMMENT);
+      setReviewsState(newArr);
+    };
+    fetchPostComment();
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
@@ -63,7 +66,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
         ))}
       </div>
       <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
-        value={newReview.comment}
+        value={newReview.comment} minLength={DEFAULT_MIN_LENGTH}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>

@@ -8,7 +8,6 @@ import {CommentForm} from '../../components/comment-form/comment-form.tsx';
 import {useEffect, useState} from 'react';
 import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
-import {User} from '../../types/user.ts';
 import {nanoid} from 'nanoid';
 import {useAppSelector} from '../../hooks';
 import {getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
@@ -17,11 +16,7 @@ import {NeighbourOffersList} from '../../components/other-places-list/neighbour-
 import classNames from 'classnames';
 import {AuthorizationStatus} from '../../const.ts';
 
-type OfferScreenProps = {
-  user: User;
-}
-
-function OfferScreen({user}: OfferScreenProps): JSX.Element {
+function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
   const currentCity = useAppSelector((state) => state.city);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -63,7 +58,7 @@ function OfferScreen({user}: OfferScreenProps): JSX.Element {
 
   return (
     <div className="page">
-      <Header user={user} currentOffers={currentOffers}/>
+      <Header currentOffers={currentOffers}/>
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
