@@ -1,12 +1,14 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import {Reviews} from '../../types/reviews.ts';
 import {nanoid} from 'nanoid';
-import {RatingStar} from '../../const.ts';
+import {AuthorizationStatus, RatingStar} from '../../const.ts';
 import dayjs from 'dayjs';
 import {User} from '../../types/user.ts';
+import {useAppSelector} from '../../hooks';
+import classNames from 'classnames';
 
 type ReviewsListProps = {
-  setReviewsState: Dispatch<SetStateAction<Reviews>>;
+  setReviewsState: Dispatch<SetStateAction<Reviews | null>>;
   currentReviews: Reviews;
   user: User;
 }
@@ -15,6 +17,7 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
   const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
     typeof value === 'number'
   );
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
   const [newReview, setNewReview] = useState({
     rating: 0,
@@ -45,7 +48,9 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
   }
 
   return (
-    <form onSubmit={submitHandler} className="reviews__form form" action="#" method="post">
+    <form onSubmit={submitHandler} className={classNames('reviews__form form',
+      {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})} action="#" method="post"
+    >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         {ratingEntries.map(([key, value]) => (
