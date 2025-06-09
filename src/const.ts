@@ -1,4 +1,5 @@
 import {Cities} from './types/city.ts';
+import {NewComment} from './types/comments.ts';
 
 export enum AppRoute {
   Root = '/',
@@ -82,7 +83,10 @@ export enum SortType {
   Popular = 'Popular',
 }
 
-export const OTHER_PLACES_LIST_LENGTH = 3;
+export const DEFAULT_COMMENT: NewComment = {
+  rating: 0,
+  comment: '',
+};
 
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';

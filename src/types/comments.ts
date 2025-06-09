@@ -1,4 +1,4 @@
-export type Review = {
+export type Comment = {
   id: string;
   date: string;
   user: {
@@ -10,4 +10,9 @@ export type Review = {
   rating: number;
 }
 
-export type Reviews = Review[];
+export type NewComment = {
+  comment: string;
+  rating: number;
+}
+
+export type Comments = Comment[];

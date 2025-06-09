@@ -1,35 +1,36 @@
 import {OfferHostComponent} from '../../components/offer-host-component/offer-host-component.tsx';
 import {useParams} from 'react-router-dom';
-import {Offer, Offers, OffersPreview} from '../../types/offers.ts';
+import {Offer, OfferPreview, OffersPreview} from '../../types/offers.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
-import {Reviews} from '../../types/reviews.ts';
-import {ReviewsForm} from '../../components/reviews-form/reviews-form.tsx';
+import {Comments} from '../../types/comments.ts';
+import {CommentForm} from '../../components/comment-form/comment-form.tsx';
 import {useEffect, useState} from 'react';
 import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
-import {neighbourOffers} from '../../mocks/neighbour-offers.ts';
 import {User} from '../../types/user.ts';
 import {nanoid} from 'nanoid';
 import {useAppSelector} from '../../hooks';
 import {getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
 import {Loader} from '../../components/loader/loader.tsx';
-import {NeighbourOffersList} from "../../components/other-places-list/neighbour-offers-list.tsx";
+import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
+import classNames from 'classnames';
+import {AuthorizationStatus} from '../../const.ts';
 
 type OfferScreenProps = {
-  offers: Offers;
   user: User;
 }
 
-function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
+function OfferScreen({user}: OfferScreenProps): JSX.Element {
   const {offerId} = useParams();
   const currentCity = useAppSelector((state) => state.city);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
-  const [activeCard, setActiveCard] = useState<Offer | null>(null);
+  const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
-  const [neighbourOffers, setNeighbourOffers] = useState<OffersPreview | undefined>(undefined);
-  const [reviewsState, setReviewsState] = useState<Reviews | null>(null);
+  const [neighbourOffers, setNeighbourOffers] = useState<OffersPreview>([]);
+  const [reviewsState, setReviewsState] = useState<Comments>([]);
   const [isNotFound, setIsNotFound] = useState(false);
 
   const bookMarkedHandler = () => {
@@ -49,7 +50,6 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
         setIsNotFound(true);
       }
     };
-
     fetchOffer();
   }, [offerId]);
 
@@ -84,7 +84,9 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
                   {currentOffer.title}
                 </h1>
                 <button onClick={bookMarkedHandler}
-                  className={`offer__bookmark-button button ${isBookMarked ? 'offer__bookmark-button--active' : ''}`}
+                  className={classNames('offer__bookmark-button', 'button',
+                    {'offer__bookmark-button--active': isBookMarked},
+                    {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
                   type="button"
                 >
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -124,8 +126,10 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
               </div>
               <OfferHostComponent currentOffer={currentOffer}/>
               <section className="offer__reviews reviews">
-                <ReviewsList reviews={reviewsState}/>
-                <ReviewsForm setReviewsState={setReviewsState} currentReviews={reviewsState} user={user}/>
+                <ReviewsList comments={reviewsState}/>
+                <CommentForm currentOffer={currentOffer} setReviewsState={setReviewsState}
+                  currentReviews={reviewsState}
+                />
               </section>
             </div>
           </div>
@@ -135,7 +139,9 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <NeighbourOffersList setCurrentOffer={setCurrentOffer} setActiveCard={setActiveCard} activeCard={activeCard}/>
+              <NeighbourOffersList neighbourOffers={neighbourOffers} setActiveCard={setActiveCard}
+                activeCard={activeCard}
+              />
             </div>
           </section>
         </div>
@@ -143,6 +149,5 @@ function OfferScreen({offers, user}: OfferScreenProps): JSX.Element {
     </div>
   );
 }
-
 
 export default OfferScreen;

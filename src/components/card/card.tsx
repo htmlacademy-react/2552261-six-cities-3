@@ -11,7 +11,6 @@ type CardScreenProps = {
   isFavorite?: boolean;
   isOtherPlacesSection?: boolean;
   isActive?: boolean;
-  setCurrentOffer?: Dispatch<SetStateAction<OfferPreview | undefined>>;
   setActiveCard?: Dispatch<SetStateAction<OfferPreview | null>>;
 }
 
@@ -20,7 +19,6 @@ function Card({
   isFavorite = false,
   isActive,
   isOtherPlacesSection = false,
-  setCurrentOffer,
   setActiveCard
 }: CardScreenProps): JSX.Element {
 
@@ -46,8 +44,7 @@ function Card({
   };
 
   const linkClickHandler = () => {
-    if (setCurrentOffer && isOtherPlacesSection) {
-      setCurrentOffer({...offer});
+    if (isOtherPlacesSection) {
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
   };

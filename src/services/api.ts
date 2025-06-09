@@ -2,7 +2,7 @@ import axios, {AxiosInstance, InternalAxiosRequestConfig} from 'axios';
 import {getToken} from './token.ts';
 import {Offer, OffersPreview} from '../types/offers.ts';
 import {AppRoute} from '../const.ts';
-import {Reviews} from "../types/reviews.ts";
+import {Comment, Comments, NewComment} from '../types/comments.ts';
 
 const BASE_URL = 'https://15.design.htmlacademy.pro/six-cities';
 const REQUEST_TIMEOUT = 5000;
@@ -34,12 +34,17 @@ export const getOfferById = async (id: string | undefined) => {
 };
 
 export const getComments = async (id: string | undefined) => {
-  const {data} = await api.get<Reviews>(`${AppRoute.Comments}/${id}`);
+  const {data} = await api.get<Comments>(`${AppRoute.Comments}/${id}`);
   return data;
 };
 
 export const getNearbyOffers = async (id: string | undefined) => {
   const {data} = await api.get<OffersPreview>(`${AppRoute.Offers}/${id}/nearby`);
+  return data;
+};
+
+export const postComment = async (id: string, comment: NewComment) => {
+  const {data} = await api.post<Comment>(`${AppRoute.Comments}/${id}`, comment);
   return data;
 };
 

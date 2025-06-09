@@ -1,45 +1,33 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {Reviews} from '../../types/reviews.ts';
-import {nanoid} from 'nanoid';
-import {AuthorizationStatus, RatingStar} from '../../const.ts';
-import dayjs from 'dayjs';
-import {User} from '../../types/user.ts';
+import {NewComment, Comments} from '../../types/comments.ts';
+import {AuthorizationStatus, DEFAULT_COMMENT, RatingStar} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
 import classNames from 'classnames';
+import {postComment} from '../../services/api.ts';
+import {Offer} from '../../types/offers.ts';
 
 type ReviewsListProps = {
-  setReviewsState: Dispatch<SetStateAction<Reviews | null>>;
-  currentReviews: Reviews;
-  user: User;
+  setReviewsState: Dispatch<SetStateAction<Comments>>;
+  currentReviews: Comments;
+  currentOffer: Offer;
 }
 
-export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsListProps): JSX.Element {
+export function CommentForm({currentOffer, setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
   const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
     typeof value === 'number'
   );
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
-  const [newReview, setNewReview] = useState({
-    rating: 0,
-    comment: '',
-    user: user,
-  });
+  const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
 
-  function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
+
+  async function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    const reviewWithId = {
-      ...newReview,
-      id: nanoid(),
-      date: dayjs(Date.now()).format('MMMM YYYY')
-    };
-    const newArr = Array.from(currentReviews.currentReviews);
-    newArr.push(reviewWithId);
-    setReviewsState({currentReviews: newArr});
-    setNewReview({
-      rating: 0,
-      comment: '',
-      user: user,
-    });
+    const newArr = [...currentReviews];
+    const newComment = await postComment(currentOffer.id, newReview);
+    newArr.push(newComment);
+    setNewReview(DEFAULT_COMMENT);
+    setReviewsState(newArr);
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {

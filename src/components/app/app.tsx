@@ -8,7 +8,6 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {User} from '../../types/user.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {offers} from '../../mocks/offers.ts';
 import {useEffect, useState} from 'react';
 import {fetchOffersAction} from '../../store/api-actions.ts';
 import {Loader} from '../loader/loader.tsx';
@@ -45,7 +44,7 @@ function App({user}: AppScreenProps): JSX.Element {
               </PrivateRoute>
             }
             />
-            <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen offers={offers} user={user}/>}/>
+            <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen user={user}/>}/>
           </Route>
           <Route path='*' element={<NotFoundScreen/>}/>
         </Routes>
