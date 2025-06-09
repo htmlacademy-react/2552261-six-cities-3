@@ -1,4 +1,4 @@
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {FormEvent, useRef} from 'react';
 import {AuthData} from '../../types/auth-data.ts';
@@ -9,7 +9,6 @@ function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const onSubmit = (authData: AuthData) => {
     dispatch(loginAction(authData));
@@ -20,8 +19,7 @@ function LoginScreen(): JSX.Element {
     if(loginRef.current !== null && passwordRef.current !== null) {
       onSubmit({
         email: loginRef.current.value,
-        password: passwordRef.current.value,
-        navigate
+        password: passwordRef.current.value
       });
     }
   };

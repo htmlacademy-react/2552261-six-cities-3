@@ -3,7 +3,7 @@ import type {State, AppDispatch} from '../types/state';
 import {AxiosInstance} from 'axios';
 import {OffersPreview} from '../types/offers.ts';
 import {AppRoute, AuthorizationStatus} from '../const.ts';
-import {loadOffers, requireAuthorization} from './action.ts';
+import {loadOffers, redirectToRoute, requireAuthorization} from './action.ts';
 import {Dispatch, SetStateAction} from 'react';
 import {AuthData} from '../types/auth-data.ts';
 import {User} from '../types/user.ts';
@@ -37,10 +37,10 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
-}>('user/login', async ({email, password, navigate}, {dispatch, extra: api}) => {
+}>('user/login', async ({email, password}, {dispatch, extra: api}) => {
   const {data: {token}} = await api.post<User>(AppRoute.Login, {email, password});
   setToken(token);
-  navigate(AppRoute.Root);
+  dispatch(redirectToRoute(AppRoute.Root));
   dispatch(requireAuthorization(AuthorizationStatus.Auth));
 });
 
@@ -50,5 +50,6 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   extra: AxiosInstance;
 }>('user/logout', async (_arg, {dispatch, extra: api}) => {
   await api.delete(AppRoute.Logout);
+  dispatch(redirectToRoute(AppRoute.Login));
   dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
 });

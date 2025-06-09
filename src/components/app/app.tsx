@@ -1,5 +1,5 @@
 import MainScreen from '../../pages/main-screen/main-screen.tsx';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen.tsx';
 import {AppRoute} from '../../const.ts';
 import LoginScreen from '../../pages/login-screen/login-screen.tsx';
@@ -12,6 +12,8 @@ import {offers} from '../../mocks/offers.ts';
 import {useEffect, useState} from 'react';
 import {fetchOffersAction} from '../../store/api-actions.ts';
 import {Loader} from '../loader/loader.tsx';
+import browserHistory from '../../browser-history.ts';
+import HistoryRouter from '../history-route/history-route.tsx';
 
 type AppScreenProps = {
   user: User;
@@ -31,7 +33,7 @@ function App({user}: AppScreenProps): JSX.Element {
     return (<Loader/>);
   } else {
     return (
-      <BrowserRouter>
+      <HistoryRouter history={browserHistory}>
         <Routes>
           <Route path={AppRoute.Root}>
             <Route index element={<MainScreen user={user}/>}/>
@@ -47,7 +49,7 @@ function App({user}: AppScreenProps): JSX.Element {
           </Route>
           <Route path='*' element={<NotFoundScreen/>}/>
         </Routes>
-      </BrowserRouter>);
+      </HistoryRouter>);
   }
 }
 
