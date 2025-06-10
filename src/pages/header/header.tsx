@@ -1,9 +1,11 @@
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const.ts';
+import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import {OfferPreview, OffersPreview} from '../../types/offers.ts';
 import {User} from '../../types/user.ts';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {resetCity} from '../../store/action.ts';
+import classNames from 'classnames';
+import {logoutAction} from '../../store/api-actions.ts';
 
 type HeaderProps = {
   user?: User;
@@ -13,28 +15,52 @@ type HeaderProps = {
 export function Header({user, currentOffers}: HeaderProps): JSX.Element {
   const favoritesCount = currentOffers?.filter((offer: OfferPreview) => offer.isFavorite);
   const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+
+  const clickLoginHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
+    const target = evt.target as HTMLUListElement;
+    if(target.textContent === 'Sign out') {
+      dispatch(logoutAction());
+    }
+  };
+
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            <Link to={AppRoute.Root} className="header__logo-link header__logo-link--active" onClick={() => dispatch(resetCity())}>
+            <Link to={AppRoute.Root} className="header__logo-link header__logo-link--active"
+              onClick={() => dispatch(resetCity())}
+            >
               <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41"/>
             </Link>
           </div>
           <nav className="header__nav">
-            <ul className="header__nav-list">
+            <ul className="header__nav-list" onClick={clickLoginHandler}>
               <li className="header__nav-item user">
                 <Link className="header__nav-link header__nav-link--profile" to="#">
-                  <div className="header__avatar-wrapper user__avatar-wrapper">
+                  <div className={classNames('header__avatar-wrapper', 'user__avatar-wrapper',
+                    {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
+                  >
                   </div>
-                  <span className="header__user-name user__name">{user?.email}</span>
-                  <span className="header__favorite-count">{favoritesCount ? favoritesCount.length : 0}</span>
+                  <span
+                    className={classNames('header__user-name', 'user__name',
+                      {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
+                  >{user?.email}
+                  </span>
+                  <span className={classNames('header__favorite-count', {
+                    'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth
+                  })}
+                  >{favoritesCount ? favoritesCount.length : 0}
+                  </span>
                 </Link>
               </li>
               <li className="header__nav-item">
-                <Link className="header__nav-link" to="#">
-                  <span className="header__signout">Sign out</span>
+                <Link className="header__nav-link" to={authorizationStatus === AuthorizationStatus.NoAuth ? AppRoute.Login : AppRoute.Root}>
+                  <span
+                    className="header__signout"
+                  >{authorizationStatus === AuthorizationStatus.Auth ? 'Sign out' : 'Sign in'}
+                  </span>
                 </Link>
               </li>
             </ul>

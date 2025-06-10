@@ -3,6 +3,7 @@ import {Cities} from './types/city.ts';
 export enum AppRoute {
   Root = '/',
   Login = '/login',
+  Logout = '/logout',
   Favorites = '/favorites',
   Offer = 'offer',
   Offers = 'offers'

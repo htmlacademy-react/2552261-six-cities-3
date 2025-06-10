@@ -1,9 +1,9 @@
 import {OfferPreview} from '../../types/offers.ts';
 import {Dispatch, SetStateAction, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const.ts';
+import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import classNames from 'classnames';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeFavoriteStatus} from '../../store/action.ts';
 
 type CardScreenProps = {
@@ -25,6 +25,7 @@ function Card({
 }: CardScreenProps): JSX.Element {
 
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isFavorite);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const dispatch = useAppDispatch();
 
   const mouseEnterHandler = () => {
@@ -83,7 +84,9 @@ function Card({
           </div>
           <button
             onClick={bookMarkedHandler}
-            className={classNames('place-card__bookmark-button', 'button', {'place-card__bookmark-button--active': isBookMarked})}
+            className={classNames('place-card__bookmark-button', 'button',
+              {'place-card__bookmark-button--active': isBookMarked},
+              {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
             type="button"
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">

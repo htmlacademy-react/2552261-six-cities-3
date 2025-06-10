@@ -1,12 +1,20 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, changeFavoriteStatus, fillOffersList, loadOffers, resetCity} from './action.ts';
+import {
+  changeCity,
+  changeFavoriteStatus,
+  fillOffersList,
+  loadOffers,
+  requireAuthorization,
+  resetCity
+} from './action.ts';
 import {OffersPreview} from '../types/offers.ts';
 import {City} from '../types/city.ts';
-import {CITY_LOCATIONS} from '../const.ts';
+import {AuthorizationStatus, CITY_LOCATIONS} from '../const.ts';
 
 type InitialState = {
   city: City | undefined;
   offers: OffersPreview;
+  authorizationStatus: AuthorizationStatus;
 }
 const initialState: InitialState = {
   city: {
@@ -18,6 +26,7 @@ const initialState: InitialState = {
     },
   },
   offers: [],
+  authorizationStatus: AuthorizationStatus.Unknown,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -43,6 +52,8 @@ const reducer = createReducer(initialState, (builder) => {
       };
     }).addCase(loadOffers, (state, action) => {
       state.offers = action.payload;
+    }).addCase(requireAuthorization, (state, action) => {
+      state.authorizationStatus = action.payload;
     });
 });
 
