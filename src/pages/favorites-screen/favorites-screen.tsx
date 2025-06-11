@@ -3,10 +3,12 @@ import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
+import {getCurrentCity} from '../../store/city-process/selectors.ts';
+import {getOffers} from '../../store/offers-process/selectors.ts';
 
 function FavoritesScreen(): JSX.Element {
-  const currentCity = useAppSelector((state) => state.city);
-  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
+  const currentCity = useAppSelector(getCurrentCity);
+  const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
   return (
     <div className="page">
       <Header currentOffers={currentOffers}/>

@@ -1,10 +1,11 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import {Comments, NewComment} from '../../types/comments.ts';
-import {AuthorizationStatus, DEFAULT_COMMENT, DEFAULT_MIN_LENGTH, RatingStar} from '../../const.ts';
+import {AuthorizationStatus, DEFAULT_COMMENT, DEFAULT_COMMENT_MIN_LENGTH, RatingStar} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
 import classNames from 'classnames';
 import {postComment} from '../../services/api.ts';
 import {Offer} from '../../types/offers.ts';
+import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
 
 type ReviewsListProps = {
   setReviewsState: Dispatch<SetStateAction<Comments>>;
@@ -16,7 +17,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
   const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
     typeof value === 'number'
   );
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
 
@@ -66,7 +67,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
         ))}
       </div>
       <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
-        value={newReview.comment} minLength={DEFAULT_MIN_LENGTH}
+        value={newReview.comment} minLength={DEFAULT_COMMENT_MIN_LENGTH}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
