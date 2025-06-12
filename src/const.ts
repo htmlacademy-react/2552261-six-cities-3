@@ -1,9 +1,11 @@
 import {Cities} from './types/city.ts';
+import {NewComment} from './types/comments.ts';
 
 export enum AppRoute {
   Root = '/',
   Login = '/login',
   Logout = '/logout',
+  Comments = '/comments',
   Favorites = '/favorites',
   Offer = 'offer',
   Offers = 'offers'
@@ -81,7 +83,22 @@ export enum SortType {
   Popular = 'Popular',
 }
 
-export const OTHER_PLACES_LIST_LENGTH = 3;
+export const DEFAULT_COMMENT: NewComment = {
+  rating: 0,
+  comment: '',
+};
+
+export const DEFAULT_USER = {
+  name: '',
+  avatarUrl: '',
+  isPro: false,
+  email: '',
+  token: ''
+};
+
+export const DEFAULT_MIN_LENGTH = 50;
+
+export const SIGN_OUT_TEXT = 'Sign out';
 
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';

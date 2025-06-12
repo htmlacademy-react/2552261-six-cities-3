@@ -1,11 +1,11 @@
-import {Review} from '../../types/reviews.ts';
+import {Comment} from '../../types/comments.ts';
 import dayjs from 'dayjs';
 
 type ReviewsComponentProps = {
-  review: Review;
+  review: Comment;
 }
 
-export function ReviewsComponent({review}: ReviewsComponentProps): JSX.Element {
+export function CommentComponent({review}: ReviewsComponentProps): JSX.Element {
   return (
     <li className="reviews__item">
       <div className="reviews__user user">

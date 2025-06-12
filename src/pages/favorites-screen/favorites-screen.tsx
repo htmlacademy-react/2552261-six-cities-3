@@ -2,19 +2,14 @@ import {FavoritesList} from '../../components/favorites-list/favorites-list.tsx'
 import {Header} from '../header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {User} from '../../types/user.ts';
 import {useAppSelector} from '../../hooks';
 
-type FavoritesListScreenProps = {
-  user: User;
-}
-
-function FavoritesScreen({user}: FavoritesListScreenProps): JSX.Element {
+function FavoritesScreen(): JSX.Element {
   const currentCity = useAppSelector((state) => state.city);
   const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
   return (
     <div className="page">
-      <Header currentOffers={currentOffers} user={user}/>
+      <Header currentOffers={currentOffers}/>
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">

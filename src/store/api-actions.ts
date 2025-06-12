@@ -2,8 +2,8 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import type {State, AppDispatch} from '../types/state';
 import {AxiosInstance} from 'axios';
 import {OffersPreview} from '../types/offers.ts';
-import {AppRoute, AuthorizationStatus} from '../const.ts';
-import {loadOffers, redirectToRoute, requireAuthorization} from './action.ts';
+import {AppRoute, AuthorizationStatus, DEFAULT_USER} from '../const.ts';
+import {loadOffers, loadUser, redirectToRoute, requireAuthorization} from './action.ts';
 import {Dispatch, SetStateAction} from 'react';
 import {AuthData} from '../types/auth-data.ts';
 import {User} from '../types/user.ts';
@@ -38,9 +38,10 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   state: State;
   extra: AxiosInstance;
 }>('user/login', async ({email, password}, {dispatch, extra: api}) => {
-  const {data: {token}} = await api.post<User>(AppRoute.Login, {email, password});
-  setToken(token);
+  const {data} = await api.post<User>(AppRoute.Login, {email, password});
+  setToken(data.token);
   dispatch(redirectToRoute(AppRoute.Root));
+  dispatch(loadUser(data));
   dispatch(requireAuthorization(AuthorizationStatus.Auth));
 });
 
@@ -52,4 +53,5 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   await api.delete(AppRoute.Logout);
   dispatch(redirectToRoute(AppRoute.Login));
   dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+  dispatch(loadUser(DEFAULT_USER));
 });

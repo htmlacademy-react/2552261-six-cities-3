@@ -1,42 +1,36 @@
 import React, {Dispatch, SetStateAction, useState} from 'react';
-import {Reviews} from '../../types/reviews.ts';
-import {nanoid} from 'nanoid';
-import {RatingStar} from '../../const.ts';
-import dayjs from 'dayjs';
-import {User} from '../../types/user.ts';
+import {Comments, NewComment} from '../../types/comments.ts';
+import {AuthorizationStatus, DEFAULT_COMMENT, DEFAULT_MIN_LENGTH, RatingStar} from '../../const.ts';
+import {useAppSelector} from '../../hooks';
+import classNames from 'classnames';
+import {postComment} from '../../services/api.ts';
+import {Offer} from '../../types/offers.ts';
 
 type ReviewsListProps = {
-  setReviewsState: Dispatch<SetStateAction<Reviews>>;
-  currentReviews: Reviews;
-  user: User;
+  setReviewsState: Dispatch<SetStateAction<Comments>>;
+  currentReviews: Comments;
+  currentOffer: Offer;
 }
 
-export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsListProps): JSX.Element {
+export function CommentForm({currentOffer, setReviewsState, currentReviews}: ReviewsListProps): JSX.Element {
   const ratingEntries = Object.entries(RatingStar).filter(([, value]) =>
     typeof value === 'number'
   );
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
-  const [newReview, setNewReview] = useState({
-    rating: 0,
-    comment: '',
-    user: user,
-  });
+  const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
+
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    const reviewWithId = {
-      ...newReview,
-      id: nanoid(),
-      date: dayjs(Date.now()).format('MMMM YYYY')
+    const newArr = [...currentReviews];
+    const fetchPostComment = async () => {
+      const newComment = await postComment(currentOffer.id, newReview);
+      newArr.push(newComment);
+      setNewReview(DEFAULT_COMMENT);
+      setReviewsState(newArr);
     };
-    const newArr = Array.from(currentReviews.currentReviews);
-    newArr.push(reviewWithId);
-    setReviewsState({currentReviews: newArr});
-    setNewReview({
-      rating: 0,
-      comment: '',
-      user: user,
-    });
+    fetchPostComment();
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
@@ -45,7 +39,9 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
   }
 
   return (
-    <form onSubmit={submitHandler} className="reviews__form form" action="#" method="post">
+    <form onSubmit={submitHandler} className={classNames('reviews__form form',
+      {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})} action="#" method="post"
+    >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         {ratingEntries.map(([key, value]) => (
@@ -70,7 +66,7 @@ export function ReviewsForm({setReviewsState, currentReviews, user}: ReviewsList
         ))}
       </div>
       <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
-        value={newReview.comment}
+        value={newReview.comment} minLength={DEFAULT_MIN_LENGTH}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
