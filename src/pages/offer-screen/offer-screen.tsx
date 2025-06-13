@@ -15,12 +15,15 @@ import {Loader} from '../../components/loader/loader.tsx';
 import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import classNames from 'classnames';
 import {AuthorizationStatus} from '../../const.ts';
+import {getCurrentCity} from '../../store/city-process/selectors.ts';
+import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {getOffers} from '../../store/offers-process/selectors.ts';
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
-  const currentCity = useAppSelector((state) => state.city);
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
+  const currentCity = useAppSelector(getCurrentCity);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
   const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);

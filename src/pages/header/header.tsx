@@ -2,9 +2,10 @@ import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, SIGN_OUT_TEXT} from '../../const.ts';
 import {OfferPreview, OffersPreview} from '../../types/offers.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {resetCity} from '../../store/action.ts';
 import classNames from 'classnames';
 import {logoutAction} from '../../store/api-actions.ts';
+import {resetCity} from '../../store/city-process/city-process.ts';
+import {getAuthorizationStatus, gettUser} from '../../store/user-process/selectors.ts';
 
 type HeaderProps = {
   currentOffers?: OffersPreview;
@@ -13,8 +14,8 @@ type HeaderProps = {
 export function Header({currentOffers}: HeaderProps): JSX.Element {
   const favoritesCount = currentOffers?.filter((offer: OfferPreview) => offer.isFavorite);
   const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const user = useAppSelector((state) => state.user);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const user = useAppSelector(gettUser);
 
   const clickLoginHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
     const target = evt.target as HTMLUListElement;

@@ -5,17 +5,19 @@ import Map from '../../components/map/map.tsx';
 import React, {useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {changeCity} from '../../store/action.ts';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
 import {SortingOptions} from '../../components/sorting-options/sorting-options.tsx';
 import {sortByHighPrice, sortByHighRated, sortByLowPrice} from '../../util.ts';
+import {changeCity} from '../../store/city-process/city-process.ts';
+import {getCurrentCity} from '../../store/city-process/selectors.ts';
+import {getOffers} from '../../store/offers-process/selectors.ts';
 
 function MainScreen(): JSX.Element {
   const ulCardRef = useRef(null);
   const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
-  const currentCity = useAppSelector((state) => state.city);
-  const currentOffers = useAppSelector((state) => state.offers).filter((offer) => offer.city.name === currentCity?.name);
+  const currentCity = useAppSelector(getCurrentCity);
+  const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
   let sortedOffers = [...currentOffers];
   const dispatch = useAppDispatch();
 

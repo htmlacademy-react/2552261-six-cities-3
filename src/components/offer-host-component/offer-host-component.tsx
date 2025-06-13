@@ -7,7 +7,6 @@ type OfferHostProps = {
 
 export function OfferHostComponent({currentOffer}: OfferHostProps): JSX.Element {
 
-
   return (
     <div className="offer__host">
       <h2 className="offer__host-title">{currentOffer.title}</h2>

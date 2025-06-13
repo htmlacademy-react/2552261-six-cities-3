@@ -1,9 +1,10 @@
 import {OfferPreview, OffersPreview, SortOffers} from '../../types/offers.ts';
 import {FavoritesItem} from '../favorites-item/favorites-item.tsx';
 import {useAppSelector} from '../../hooks';
+import {getOffers} from '../../store/offers-process/selectors.ts';
 
 export function FavoritesList(): JSX.Element {
-  const offers = useAppSelector((state) => state.offers);
+  const offers = useAppSelector(getOffers);
   const favoritesOffers: OffersPreview = offers.filter((offer: OfferPreview) => offer.isFavorite);
   const sortFavoritesOffers: SortOffers = {};
 
