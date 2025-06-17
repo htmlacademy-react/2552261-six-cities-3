@@ -9,8 +9,8 @@ import {useEffect, useState} from 'react';
 import {Header} from '../header/header.tsx';
 import Map from '../../components/map/map.tsx';
 import {nanoid} from 'nanoid';
-import {useAppSelector} from '../../hooks';
-import {getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {changeFavoriteStatus, getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
 import {Loader} from '../../components/loader/loader.tsx';
 import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import classNames from 'classnames';
@@ -18,6 +18,7 @@ import {AuthorizationStatus} from '../../const.ts';
 import {getCurrentCity} from '../../store/city-process/selectors.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
+import {fetchOffersAction} from "../../store/api-actions.ts";
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
@@ -30,9 +31,16 @@ function OfferScreen(): JSX.Element {
   const [neighbourOffers, setNeighbourOffers] = useState<OffersPreview>([]);
   const [reviewsState, setReviewsState] = useState<Comments>([]);
   const [isNotFound, setIsNotFound] = useState(false);
+  const dispatch = useAppDispatch();
 
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
+    const changeStatus = async () => {
+      await  changeFavoriteStatus(offerId, +!currentOffer?.isFavorite);
+      setCurrentOffer({...currentOffer!, isFavorite: isBookMarked!});
+      dispatch(fetchOffersAction());
+    }
+    changeStatus();
   };
 
   useEffect(() => {
@@ -83,7 +91,7 @@ function OfferScreen(): JSX.Element {
                 </h1>
                 <button onClick={bookMarkedHandler}
                   className={classNames('offer__bookmark-button', 'button',
-                    {'offer__bookmark-button--active': isBookMarked},
+                    {'offer__bookmark-button--active': currentOffer.isFavorite},
                     {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
                   type="button"
                 >

@@ -3,8 +3,10 @@ import {Dispatch, SetStateAction, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import classNames from 'classnames';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {changeFavoriteStatus} from "../../services/api.ts";
+import {fetchOffersAction} from "../../store/api-actions.ts";
 
 type CardScreenProps = {
   offer: OfferPreview;
@@ -24,6 +26,7 @@ function Card({
 
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isFavorite);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
 
   const mouseEnterHandler = () => {
     if (setActiveCard) {
@@ -39,6 +42,12 @@ function Card({
 
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
+    const changeStatus = async () => {
+      await  changeFavoriteStatus(offer.id, +!offer.isFavorite);
+      dispatch(fetchOffersAction());
+    }
+   changeStatus();
+
   };
 
   const linkClickHandler = () => {

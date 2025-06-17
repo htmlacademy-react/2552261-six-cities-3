@@ -9,13 +9,15 @@ import {AuthData} from '../types/auth-data.ts';
 import {User} from '../types/user.ts';
 import {setToken} from '../services/token.ts';
 
-export const fetchOffersAction = createAsyncThunk<OffersPreview, Dispatch<SetStateAction<boolean>>, {
+export const fetchOffersAction = createAsyncThunk<OffersPreview, Dispatch<SetStateAction<boolean>> | undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>('data/Offers', async (setLoading, {extra: api}) => {
   const {data} = await api.get<OffersPreview>(AppRoute.Offers);
-  setLoading(false);
+  if(setLoading) {
+    setLoading(false);
+  }
   return data;
 });
 
@@ -47,3 +49,4 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   await api.delete(AppRoute.Logout);
   dispatch(redirectToRoute(AppRoute.Login));
 });
+
