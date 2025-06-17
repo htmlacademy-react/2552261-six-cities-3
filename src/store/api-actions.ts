@@ -22,12 +22,13 @@ export const fetchOffersAction = createAsyncThunk<OffersPreview, Dispatch<SetSta
 });
 
 
-export const checkAuthorization = createAsyncThunk<void, undefined, {
+export const checkAuthorization = createAsyncThunk<User, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>('user/checkAuthorization', async (_arg, {extra: api}) => {
-  await api.get(AppRoute.Login);
+  const {data} = await api.get<User>(AppRoute.Login);
+  return data;
 });
 
 export const loginAction = createAsyncThunk<User, AuthData, {

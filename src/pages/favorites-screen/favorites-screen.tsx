@@ -1,23 +1,26 @@
 import {FavoritesList} from '../../components/favorites-list/favorites-list.tsx';
-import {Header} from '../header/header.tsx';
+import {Header} from '../../components/header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
-import {getCurrentCity} from '../../store/city-process/selectors.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
+import {OfferPreview, OffersPreview} from '../../types/offers.ts';
+import classNames from 'classnames';
 
 function FavoritesScreen(): JSX.Element {
-  const currentCity = useAppSelector(getCurrentCity);
-  const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
+  const offers = useAppSelector(getOffers);
+  const favoritesOffers: OffersPreview = offers.filter((offer: OfferPreview) => offer.isFavorite);
+
   return (
-    <div className="page">
-      <Header currentOffers={currentOffers}/>
-      <main className="page__main page__main--favorites">
+    <div className={classNames('page', {'page--favorites-empty': favoritesOffers.length === 0})}>
+      <Header/>
+      <main className={classNames('page__main',
+        'page__main--favorites',
+        {'page__main--favorites-empty': favoritesOffers.length === 0}
+      )}
+      >
         <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
-            <FavoritesList/>
-          </section>
+          <FavoritesList favoritesOffers={favoritesOffers}/>
         </div>
       </main>
       <footer className="footer container">

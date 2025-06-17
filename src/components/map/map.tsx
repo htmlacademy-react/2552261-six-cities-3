@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
   city: City | undefined;
-  points: OffersPreview | Offers;
+  points: OffersPreview | Offers | undefined;
   activeCard: OfferPreview | Offer | undefined | null;
   className: string;
 };
@@ -30,7 +30,7 @@ function Map(props: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   useEffect(() => {
-    if (map) {
+    if (map && points) {
       const markerLayer = layerGroup().addTo(map);
       points.forEach((point) => {
         const marker = new Marker({

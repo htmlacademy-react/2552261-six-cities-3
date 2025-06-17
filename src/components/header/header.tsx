@@ -1,18 +1,16 @@
 import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus, SIGN_OUT_TEXT} from '../../const.ts';
-import {OfferPreview, OffersPreview} from '../../types/offers.ts';
+import {OfferPreview} from '../../types/offers.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import classNames from 'classnames';
 import {logoutAction} from '../../store/api-actions.ts';
 import {resetCity} from '../../store/city-process/city-process.ts';
 import {getAuthorizationStatus, gettUser} from '../../store/user-process/selectors.ts';
+import {getOffers} from '../../store/offers-process/selectors.ts';
 
-type HeaderProps = {
-  currentOffers?: OffersPreview;
-}
-
-export function Header({currentOffers}: HeaderProps): JSX.Element {
-  const favoritesCount = currentOffers?.filter((offer: OfferPreview) => offer.isFavorite);
+export function Header(): JSX.Element {
+  const offers = useAppSelector(getOffers);
+  const favoritesCount = offers?.filter((offer: OfferPreview) => offer.isFavorite);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(gettUser);

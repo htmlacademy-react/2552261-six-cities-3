@@ -49,6 +49,6 @@ export const postComment = async (id: string, comment: NewComment) => {
 };
 
 export const changeFavoriteStatus = async (id: string | undefined, status: number) => {
- await api.post<Offer>(`${AppRoute.Favorites}/${id}/${status}`);  
-}
+  await api.post<Offer>(`${AppRoute.Favorites}/${id}/${status}`);
+};
 

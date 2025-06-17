@@ -5,8 +5,8 @@ import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import classNames from 'classnames';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
-import {changeFavoriteStatus} from "../../services/api.ts";
-import {fetchOffersAction} from "../../store/api-actions.ts";
+import {changeFavoriteStatus} from '../../services/api.ts';
+import {fetchOffersAction} from '../../store/api-actions.ts';
 
 type CardScreenProps = {
   offer: OfferPreview;
@@ -43,10 +43,10 @@ function Card({
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
     const changeStatus = async () => {
-      await  changeFavoriteStatus(offer.id, +!offer.isFavorite);
+      await changeFavoriteStatus(offer.id, +!offer.isFavorite);
       dispatch(fetchOffersAction());
-    }
-   changeStatus();
+    };
+    changeStatus();
 
   };
 
@@ -73,7 +73,7 @@ function Card({
         {'near-places__image-wrapper': isOtherPlacesSection},
         'place-card__image-wrapper')}
       >
-        <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>
+        <Link onClick={linkClickHandler} to={`${!isOtherPlacesSection ? `${AppRoute.Offer}/${offer.id}` : ''}`}>
           <img className="place-card__image" src={`${offer.previewImage}`} width={isFavorite ? '150' : '260'}
             height={isFavorite ? '110' : '200'}
             alt="Place image"
@@ -106,7 +106,7 @@ function Card({
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>{offer.title}</Link>
+          <Link onClick={linkClickHandler} to={`${!isOtherPlacesSection ? `${AppRoute.Offer}/${offer.id}` : ''}`}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>

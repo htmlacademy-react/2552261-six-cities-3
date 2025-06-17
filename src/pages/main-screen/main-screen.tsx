@@ -1,20 +1,23 @@
-import {OfferPreview} from '../../types/offers.ts';
-import {OffersList} from '../../components/offers-list/offers-list.tsx';
-import {Header} from '../header/header.tsx';
-import Map from '../../components/map/map.tsx';
-import React, {useRef, useState} from 'react';
+import {Header} from '../../components/header/header.tsx';
+import React, {Dispatch, SetStateAction, useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
-import {SortingOptions} from '../../components/sorting-options/sorting-options.tsx';
 import {sortByHighPrice, sortByHighRated, sortByLowPrice} from '../../util.ts';
 import {changeCity} from '../../store/city-process/city-process.ts';
 import {getCurrentCity} from '../../store/city-process/selectors.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
+import classNames from 'classnames';
+import {CitiesPlacesContainer} from '../../components/cities-places-container/cities-places-container.tsx';
+import {OfferPreview} from '../../types/offers.ts';
 
-function MainScreen(): JSX.Element {
+type MainScreenProps = {
+  activeCard: OfferPreview | null;
+  setActiveCard: Dispatch<SetStateAction<OfferPreview | null>>;
+}
+
+function MainScreen({activeCard, setActiveCard}: MainScreenProps): JSX.Element {
   const ulCardRef = useRef(null);
-  const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
   const currentCity = useAppSelector(getCurrentCity);
   const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
@@ -83,8 +86,10 @@ function MainScreen(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header currentOffers={currentOffers}/>
-      <main className="page__main page__main--index">
+      <Header/>
+      <main
+        className={classNames('page__main', 'page__main--index', {'page__main--index-empty': currentOffers.length === 0})}
+      >
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -92,20 +97,10 @@ function MainScreen(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{`${currentOffers.length} places to stay in ${currentCity?.name}`}</b>
-              <SortingOptions clickPlacesOptionHandler={clickPlacesOptionHandler}
-                mousePlacesOptionHandler={mousePlacesOptionHandler} changeSortHandler={changeSortHandler}
-                currentSortType={activeSort} ulRef={ulCardRef}
-              />
-              <OffersList activeCard={activeCard} setActiveCard={setActiveCard} currentOffers={sortedOffers}/>
-            </section>
-            <div className="cities__right-section">
-              <Map city={currentCity} points={currentOffers} activeCard={activeCard} className={'cities__map'}/>
-            </div>
-          </div>
+          <CitiesPlacesContainer activeSort={activeSort} clickPlacesOptionHandler={clickPlacesOptionHandler}
+            mousePlacesOptionHandler={mousePlacesOptionHandler} changeSortHandler={changeSortHandler}
+            sortedOffers={sortedOffers} ulCardRef={ulCardRef} activeCard={activeCard} setActiveCard={setActiveCard}
+          />
         </div>
       </main>
     </div>

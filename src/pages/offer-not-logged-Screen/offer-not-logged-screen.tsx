@@ -1,4 +1,4 @@
-import {Header} from '../header/header.tsx';
+import {Header} from '../../components/header/header.tsx';
 import {Link} from 'react-router-dom';
 
 function OfferNotLoggedScreen(): JSX.Element {

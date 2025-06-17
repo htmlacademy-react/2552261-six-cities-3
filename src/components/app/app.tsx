@@ -12,11 +12,13 @@ import {fetchOffersAction} from '../../store/api-actions.ts';
 import {Loader} from '../loader/loader.tsx';
 import browserHistory from '../../browser-history.ts';
 import HistoryRouter from '../history-route/history-route.tsx';
+import {OfferPreview} from '../../types/offers.ts';
 
 function App(): JSX.Element {
 
   const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
+  const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
 
   useEffect(() => {
     dispatch(fetchOffersAction(setLoading));
@@ -29,13 +31,13 @@ function App(): JSX.Element {
       <HistoryRouter history={browserHistory}>
         <Routes>
           <Route path={AppRoute.Root}>
-            <Route index element={<MainScreen/>}/>
+            <Route index element={<MainScreen activeCard={activeCard} setActiveCard={setActiveCard}/>}/>
             <Route path={AppRoute.Login} element={<LoginScreen/>}/>
             <Route path={AppRoute.Favorites} element={
               <PrivateRoute><FavoritesScreen/></PrivateRoute>
             }
             />
-            <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen/>}/>
+            <Route path={`${AppRoute.Offer}/:offerId`} element={<OfferScreen activeCard={activeCard}/>}/>
           </Route>
           <Route path='*' element={<NotFoundScreen/>}/>
         </Routes>
