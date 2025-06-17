@@ -15,8 +15,8 @@ type CityPlacesProps = {
   changeSortHandler: (evt: React.MouseEvent<HTMLUListElement>) => void;
   sortedOffers: OffersPreview;
   ulCardRef: RefObject<HTMLUListElement>;
-  activeCard: OfferPreview | null;
-  setActiveCard: Dispatch<SetStateAction<OfferPreview | null>>;
+  activeCard: OfferPreview | undefined;
+  setActiveCard: Dispatch<SetStateAction<OfferPreview | undefined>>;
 }
 
 export function CitiesPlacesContainer({

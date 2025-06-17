@@ -1,6 +1,6 @@
 import {OfferHostComponent} from '../../components/offer-host-component/offer-host-component.tsx';
-import {useParams} from 'react-router-dom';
-import {Offer, OfferPreview, OffersPreview} from '../../types/offers.ts';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Offer, OffersPreview} from '../../types/offers.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Comments} from '../../types/comments.ts';
@@ -14,16 +14,14 @@ import {changeFavoriteStatus, getComments, getNearbyOffers, getOfferById} from '
 import {Loader} from '../../components/loader/loader.tsx';
 import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import classNames from 'classnames';
-import {AuthorizationStatus} from '../../const.ts';
+import {AppRoute, AuthorizationStatus, MAX_NEIGHBOURS_OFFERS_LIMIT} from '../../const.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
 import {fetchOffersAction} from '../../store/api-actions.ts';
+import {getOffers} from '../../store/offers-process/selectors.ts';
 
-type OffersScreenProps = {
-  activeCard: OfferPreview | null;
-}
-
-function OfferScreen({activeCard}: OffersScreenProps): JSX.Element {
+function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
+  const activeCard = useAppSelector(getOffers).find((offer) => offer.id === offerId);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
@@ -31,24 +29,27 @@ function OfferScreen({activeCard}: OffersScreenProps): JSX.Element {
   const [reviewsState, setReviewsState] = useState<Comments>([]);
   const [isNotFound, setIsNotFound] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   let neighbourOffersWithCurrentOffer: OffersPreview = [];
 
-  if(activeCard !== null){
-    neighbourOffersWithCurrentOffer = [activeCard, ...neighbourOffers.slice(0, 3)];
+  if (activeCard !== undefined) {
+    neighbourOffersWithCurrentOffer = [activeCard, ...neighbourOffers.slice(0, MAX_NEIGHBOURS_OFFERS_LIMIT)];
   }
 
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
-    const changeStatus = async () => {
+    if (authorizationStatus === AuthorizationStatus.NoAuth) {
+      navigate(AppRoute.Login);
+    }
+    (async () => {
       await changeFavoriteStatus(offerId, +!currentOffer?.isFavorite);
       setCurrentOffer({...currentOffer!, isFavorite: isBookMarked!});
       dispatch(fetchOffersAction());
-    };
-    changeStatus();
+    })();
   };
 
   useEffect(() => {
-    const fetchOffer = async () => {
+    (async () => {
       try {
         const offer = await getOfferById(offerId);
         const reviews = await getComments(offerId);
@@ -59,8 +60,7 @@ function OfferScreen({activeCard}: OffersScreenProps): JSX.Element {
       } catch (error) {
         setIsNotFound(true);
       }
-    };
-    fetchOffer();
+    })();
   }, [offerId]);
 
   if (isNotFound) {
@@ -95,8 +95,7 @@ function OfferScreen({activeCard}: OffersScreenProps): JSX.Element {
                 </h1>
                 <button onClick={bookMarkedHandler}
                   className={classNames('offer__bookmark-button', 'button',
-                    {'offer__bookmark-button--active': currentOffer.isFavorite},
-                    {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
+                    {'offer__bookmark-button--active': currentOffer.isFavorite && authorizationStatus === AuthorizationStatus.Auth})}
                   type="button"
                 >
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -143,7 +142,9 @@ function OfferScreen({activeCard}: OffersScreenProps): JSX.Element {
               </section>
             </div>
           </div>
-          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={activeCard} className={'offer__map'}/>
+          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={activeCard}
+            className={'offer__map'}
+          />
         </section>
         <div className="container">
           <section className="near-places places">

@@ -1,5 +1,5 @@
 import {Header} from '../../components/header/header.tsx';
-import React, {Dispatch, SetStateAction, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
@@ -11,13 +11,9 @@ import classNames from 'classnames';
 import {CitiesPlacesContainer} from '../../components/cities-places-container/cities-places-container.tsx';
 import {OfferPreview} from '../../types/offers.ts';
 
-type MainScreenProps = {
-  activeCard: OfferPreview | null;
-  setActiveCard: Dispatch<SetStateAction<OfferPreview | null>>;
-}
-
-function MainScreen({activeCard, setActiveCard}: MainScreenProps): JSX.Element {
+function MainScreen(): JSX.Element {
   const ulCardRef = useRef(null);
+  const [activeCard, setActiveCard] = useState<OfferPreview | undefined>(undefined);
   const [activeSort, setActiveSort] = useState<string | null>(SortType.Popular);
   const currentCity = useAppSelector(getCurrentCity);
   const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);

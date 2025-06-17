@@ -3,8 +3,8 @@ import Card from '../card/card.tsx';
 import {Dispatch, SetStateAction} from 'react';
 
 type OffersListItemProps = {
-  activeCard: OfferPreview | null;
-  setActiveCard: Dispatch<SetStateAction<OfferPreview | null>>;
+  activeCard: OfferPreview | undefined;
+  setActiveCard: Dispatch<SetStateAction<OfferPreview | undefined>>;
   currentOffers: OffersPreview;
 }
 
