@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {postComment} from '../../services/api.ts';
 import {Offer} from '../../types/offers.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
-import {changeFormState} from '../../util.ts';
+import {changeFormState} from '../../utils/util.ts';
 
 type ReviewsListProps = {
   setReviewsState: Dispatch<SetStateAction<Comments>>;

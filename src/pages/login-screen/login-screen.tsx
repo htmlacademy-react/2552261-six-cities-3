@@ -4,7 +4,7 @@ import {FormEvent, useRef} from 'react';
 import {AuthData} from '../../types/auth-data.ts';
 import {useAppDispatch} from '../../hooks';
 import {loginAction} from '../../store/api-actions.ts';
-import {changeFormState} from '../../util.ts';
+import {changeFormState} from '../../utils/util.ts';
 
 function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement>(null);

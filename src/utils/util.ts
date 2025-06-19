@@ -1,4 +1,4 @@
-import {OfferPreview} from './types/offers.ts';
+import {OfferPreview} from '../types/offers.ts';
 import {RefObject} from 'react';
 
 export function sortByLowPrice(offerOne: OfferPreview, offerTwo: OfferPreview): number{

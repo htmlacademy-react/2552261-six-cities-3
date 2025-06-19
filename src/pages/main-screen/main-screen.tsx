@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
-import {sortByHighPrice, sortByHighRated, sortByLowPrice} from '../../util.ts';
+import {sortByHighPrice, sortByHighRated, sortByLowPrice} from '../../utils/util.ts';
 import {changeCity} from '../../store/city-process/city-process.ts';
 import {getCurrentCity} from '../../store/city-process/selectors.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
