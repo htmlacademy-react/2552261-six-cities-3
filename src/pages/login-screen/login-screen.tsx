@@ -4,14 +4,18 @@ import {FormEvent, useRef} from 'react';
 import {AuthData} from '../../types/auth-data.ts';
 import {useAppDispatch} from '../../hooks';
 import {loginAction} from '../../store/api-actions.ts';
+import {changeFormState} from '../../util.ts';
 
 function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 
   const onSubmit = (authData: AuthData) => {
+    changeFormState(true, formRef);
     dispatch(loginAction(authData));
+    changeFormState(false, formRef);
   };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
@@ -42,7 +46,7 @@ function LoginScreen(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
+            <form className="login__form form" action="#" method="post" onSubmit={handleSubmit} ref={formRef}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input className="login__input form__input" type="email" name="email" placeholder="Email" ref={loginRef} required/>

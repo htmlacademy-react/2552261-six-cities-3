@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {Dispatch, SetStateAction, useRef, useState} from 'react';
 import {Comments, NewComment} from '../../types/comments.ts';
 import {AuthorizationStatus, DEFAULT_COMMENT, DEFAULT_COMMENT_MIN_LENGTH, RatingStar} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import {postComment} from '../../services/api.ts';
 import {Offer} from '../../types/offers.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {changeFormState} from '../../util.ts';
 
 type ReviewsListProps = {
   setReviewsState: Dispatch<SetStateAction<Comments>>;
@@ -18,20 +19,20 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
     typeof value === 'number'
   );
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-
+  const formRef = useRef<HTMLFormElement>(null);
   const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
-
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const newArr = [...currentReviews];
-    const fetchPostComment = async () => {
+    changeFormState(true, formRef);
+    (async () => {
       const newComment = await postComment(currentOffer.id, newReview);
       newArr.push(newComment);
       setNewReview(DEFAULT_COMMENT);
       setReviewsState(newArr);
-    };
-    fetchPostComment();
+      changeFormState(false, formRef);
+    })();
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
@@ -42,6 +43,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
   return (
     <form onSubmit={submitHandler} className={classNames('reviews__form form',
       {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})} action="#" method="post"
+    ref={formRef}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
