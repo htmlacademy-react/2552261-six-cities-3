@@ -1,17 +1,19 @@
 import {OfferPreview} from '../../types/offers.ts';
 import {Dispatch, SetStateAction, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import classNames from 'classnames';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {changeFavoriteStatus} from '../../services/api.ts';
+import {fetchOffersAction} from '../../store/api-actions.ts';
 
 type CardScreenProps = {
   offer: OfferPreview;
   isFavorite?: boolean;
   isOtherPlacesSection?: boolean;
   isActive?: boolean;
-  setActiveCard?: Dispatch<SetStateAction<OfferPreview | null>>;
+  setActiveCard?: Dispatch<SetStateAction<OfferPreview | undefined>>;
 }
 
 function Card({
@@ -24,6 +26,8 @@ function Card({
 
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isFavorite);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const mouseEnterHandler = () => {
     if (setActiveCard) {
@@ -33,12 +37,21 @@ function Card({
   };
   const mouseLeaveHandler = () => {
     if (setActiveCard) {
-      setActiveCard(null);
+      setActiveCard(undefined);
     }
   };
 
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
+    if (authorizationStatus === AuthorizationStatus.NoAuth) {
+      navigate(AppRoute.Login);
+    }
+    (async () => {
+      await changeFavoriteStatus(offer.id, +!offer.isFavorite);
+      dispatch(fetchOffersAction());
+    })();
+
+
   };
 
   const linkClickHandler = () => {
@@ -64,7 +77,7 @@ function Card({
         {'near-places__image-wrapper': isOtherPlacesSection},
         'place-card__image-wrapper')}
       >
-        <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>
+        <Link onClick={linkClickHandler} to={`${!isOtherPlacesSection ? `${AppRoute.Offer}/${offer.id}` : ''}`}>
           <img className="place-card__image" src={`${offer.previewImage}`} width={isFavorite ? '150' : '260'}
             height={isFavorite ? '110' : '200'}
             alt="Place image"
@@ -80,8 +93,7 @@ function Card({
           <button
             onClick={bookMarkedHandler}
             className={classNames('place-card__bookmark-button', 'button',
-              {'place-card__bookmark-button--active': isBookMarked},
-              {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
+              {'place-card__bookmark-button--active': isBookMarked && authorizationStatus === AuthorizationStatus.Auth})}
             type="button"
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
@@ -97,7 +109,7 @@ function Card({
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link onClick={linkClickHandler} to={`/${AppRoute.Offer}/${offer.id}`}>{offer.title}</Link>
+          <Link onClick={linkClickHandler} to={`${!isOtherPlacesSection ? `${AppRoute.Offer}/${offer.id}` : ''}`}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>

@@ -9,23 +9,26 @@ import {AuthData} from '../types/auth-data.ts';
 import {User} from '../types/user.ts';
 import {setToken} from '../services/token.ts';
 
-export const fetchOffersAction = createAsyncThunk<OffersPreview, Dispatch<SetStateAction<boolean>>, {
+export const fetchOffersAction = createAsyncThunk<OffersPreview, Dispatch<SetStateAction<boolean>> | undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>('data/Offers', async (setLoading, {extra: api}) => {
   const {data} = await api.get<OffersPreview>(AppRoute.Offers);
-  setLoading(false);
+  if(setLoading) {
+    setLoading(false);
+  }
   return data;
 });
 
 
-export const checkAuthorization = createAsyncThunk<void, undefined, {
+export const checkAuthorization = createAsyncThunk<User, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>('user/checkAuthorization', async (_arg, {extra: api}) => {
-  await api.get(AppRoute.Login);
+  const {data} = await api.get<User>(AppRoute.Login);
+  return data;
 });
 
 export const loginAction = createAsyncThunk<User, AuthData, {
@@ -47,3 +50,4 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   await api.delete(AppRoute.Logout);
   dispatch(redirectToRoute(AppRoute.Login));
 });
+

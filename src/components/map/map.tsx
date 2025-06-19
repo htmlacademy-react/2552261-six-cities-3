@@ -3,13 +3,13 @@ import {Icon, layerGroup, Marker} from 'leaflet';
 import useMap from '../../hooks/use-map';
 import {City} from '../../types/city.ts';
 import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../const.ts';
-import {Offer, OfferPreview, Offers, OffersPreview} from '../../types/offers.ts';
+import {OfferPreview, OffersPreview} from '../../types/offers.ts';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
   city: City | undefined;
-  points: OffersPreview | Offers;
-  activeCard: OfferPreview | Offer | undefined | null;
+  points: OffersPreview;
+  activeCard: OfferPreview | undefined;
   className: string;
 };
 
@@ -30,7 +30,7 @@ function Map(props: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   useEffect(() => {
-    if (map) {
+    if (map && points) {
       const markerLayer = layerGroup().addTo(map);
       points.forEach((point) => {
         const marker = new Marker({

@@ -1,12 +1,17 @@
 import {OfferPreview, OffersPreview, SortOffers} from '../../types/offers.ts';
 import {FavoritesItem} from '../favorites-item/favorites-item.tsx';
-import {useAppSelector} from '../../hooks';
-import {getOffers} from '../../store/offers-process/selectors.ts';
+import {FavoritesEmpty} from '../favorites-emty/favorites-empty.tsx';
 
-export function FavoritesList(): JSX.Element {
-  const offers = useAppSelector(getOffers);
-  const favoritesOffers: OffersPreview = offers.filter((offer: OfferPreview) => offer.isFavorite);
+type FavoritesListProps = {
+  favoritesOffers: OffersPreview;
+}
+
+export function FavoritesList({favoritesOffers}: FavoritesListProps): JSX.Element {
   const sortFavoritesOffers: SortOffers = {};
+
+  if (favoritesOffers.length === 0) {
+    return (<FavoritesEmpty/>);
+  }
 
   favoritesOffers.forEach((offer: OfferPreview) => {
     if (offer.city.name in sortFavoritesOffers) {
@@ -22,6 +27,9 @@ export function FavoritesList(): JSX.Element {
     }
   });
   return (
-    <ul className="favorites__list">{listItems}</ul>
+    <section className="favorites">
+      <h1 className="favorites__title">Saved listing</h1>
+      <ul className="favorites__list">{listItems}</ul>
+    </section>
   );
 }

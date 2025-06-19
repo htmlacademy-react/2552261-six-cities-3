@@ -6,7 +6,7 @@ export enum AppRoute {
   Login = '/login',
   Logout = '/logout',
   Comments = '/comments',
-  Favorites = '/favorites',
+  Favorites = '/favorite',
   Offer = 'offer',
   Offers = 'offers'
 }
@@ -108,6 +108,8 @@ export enum NameSpace {
   Offers = 'OFFERS',
   User = 'USER',
 }
+
+export const MAX_NEIGHBOURS_OFFERS_LIMIT = 3;
 
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';

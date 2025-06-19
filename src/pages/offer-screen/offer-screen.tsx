@@ -1,42 +1,55 @@
 import {OfferHostComponent} from '../../components/offer-host-component/offer-host-component.tsx';
-import {useParams} from 'react-router-dom';
-import {Offer, OfferPreview, OffersPreview} from '../../types/offers.ts';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Offer, OffersPreview} from '../../types/offers.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Comments} from '../../types/comments.ts';
 import {CommentForm} from '../../components/comment-form/comment-form.tsx';
 import {useEffect, useState} from 'react';
-import {Header} from '../header/header.tsx';
+import {Header} from '../../components/header/header.tsx';
 import Map from '../../components/map/map.tsx';
 import {nanoid} from 'nanoid';
-import {useAppSelector} from '../../hooks';
-import {getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {changeFavoriteStatus, getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
 import {Loader} from '../../components/loader/loader.tsx';
 import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import classNames from 'classnames';
-import {AuthorizationStatus} from '../../const.ts';
-import {getCurrentCity} from '../../store/city-process/selectors.ts';
+import {AppRoute, AuthorizationStatus, MAX_NEIGHBOURS_OFFERS_LIMIT} from '../../const.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {fetchOffersAction} from '../../store/api-actions.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
-  const currentCity = useAppSelector(getCurrentCity);
+  const activeCard = useAppSelector(getOffers).find((offer) => offer.id === offerId);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
-  const [activeCard, setActiveCard] = useState<OfferPreview | null>(null);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
   const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
   const [neighbourOffers, setNeighbourOffers] = useState<OffersPreview>([]);
   const [reviewsState, setReviewsState] = useState<Comments>([]);
   const [isNotFound, setIsNotFound] = useState(false);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let neighbourOffersWithCurrentOffer: OffersPreview = [];
+
+  if (activeCard !== undefined) {
+    neighbourOffersWithCurrentOffer = [activeCard, ...neighbourOffers.slice(0, MAX_NEIGHBOURS_OFFERS_LIMIT)];
+  }
 
   const bookMarkedHandler = () => {
     setBookMarked(!isBookMarked);
+    if (authorizationStatus === AuthorizationStatus.NoAuth) {
+      navigate(AppRoute.Login);
+    }
+    (async () => {
+      await changeFavoriteStatus(offerId, +!currentOffer?.isFavorite);
+      setCurrentOffer({...currentOffer!, isFavorite: isBookMarked!});
+      dispatch(fetchOffersAction());
+    })();
   };
 
   useEffect(() => {
-    const fetchOffer = async () => {
+    (async () => {
       try {
         const offer = await getOfferById(offerId);
         const reviews = await getComments(offerId);
@@ -47,8 +60,7 @@ function OfferScreen(): JSX.Element {
       } catch (error) {
         setIsNotFound(true);
       }
-    };
-    fetchOffer();
+    })();
   }, [offerId]);
 
   if (isNotFound) {
@@ -61,7 +73,7 @@ function OfferScreen(): JSX.Element {
 
   return (
     <div className="page">
-      <Header currentOffers={currentOffers}/>
+      <Header/>
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
@@ -83,8 +95,7 @@ function OfferScreen(): JSX.Element {
                 </h1>
                 <button onClick={bookMarkedHandler}
                   className={classNames('offer__bookmark-button', 'button',
-                    {'offer__bookmark-button--active': isBookMarked},
-                    {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
+                    {'offer__bookmark-button--active': currentOffer.isFavorite && authorizationStatus === AuthorizationStatus.Auth})}
                   type="button"
                 >
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -131,15 +142,15 @@ function OfferScreen(): JSX.Element {
               </section>
             </div>
           </div>
-          <Map city={currentOffer.city} points={neighbourOffers} activeCard={activeCard} className={'offer__map'}/>
+          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={activeCard}
+            className={'offer__map'}
+          />
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <NeighbourOffersList neighbourOffers={neighbourOffers} setActiveCard={setActiveCard}
-                activeCard={activeCard}
-              />
+              <NeighbourOffersList neighbourOffers={neighbourOffers}/>
             </div>
           </section>
         </div>
