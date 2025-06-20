@@ -1,6 +1,10 @@
 import {OffersPreview} from '../types/offers.ts';
 import {internet, name} from 'faker';
 import {User} from '../types/user.ts';
+import { ThunkDispatch } from 'redux-thunk';
+import {State} from '../types/state.ts';
+import {createAPI} from '../services/api.ts';
+import {Action} from 'redux';
 
 export const makeOffers = (): OffersPreview => [{
   id: '1',
@@ -34,3 +38,6 @@ export const makeUser = (): User => ({
   token: '1GtR56JdbVcЗu',
 });
 
+export type AppThunkDispatch = ThunkDispatch<State, ReturnType<typeof createAPI>, Action>;
+
+export const extractActionsTypes = (actions: Action<string>[]) => actions.map(({ type }) => type);
