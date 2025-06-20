@@ -5,7 +5,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import classNames from 'classnames';
 import {logoutAction} from '../../store/api-actions.ts';
 import {resetCity} from '../../store/city-process/city-process.ts';
-import {getAuthorizationStatus, gettUser} from '../../store/user-process/selectors.ts';
+import {getAuthorizationStatus, getUser} from '../../store/user-process/selectors.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
 
 export function Header(): JSX.Element {
@@ -13,7 +13,7 @@ export function Header(): JSX.Element {
   const favoritesCount = offers?.filter((offer: OfferPreview) => offer.isFavorite);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const user = useAppSelector(gettUser);
+  const user = useAppSelector(getUser);
 
   const clickLoginHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
     const target = evt.target as HTMLUListElement;

@@ -1,4 +1,6 @@
 import {OffersPreview} from '../types/offers.ts';
+import {internet, name} from 'faker';
+import {User} from '../types/user.ts';
 
 export const makeOffers = (): OffersPreview => [{
   id: '1',
@@ -23,3 +25,12 @@ export const makeOffers = (): OffersPreview => [{
   rating: 1,
   previewImage: 'img/apartment-01.jpg'
 }];
+
+export const makeUser = (): User => ({
+  name: name.firstName(),
+  avatarUrl: internet.avatar(),
+  isPro: true,
+  email: internet.email(),
+  token: '1GtR56JdbVcЗu',
+});
+
