@@ -3,13 +3,13 @@ import {Icon, layerGroup, Marker} from 'leaflet';
 import useMap from '../../hooks/use-map';
 import {City} from '../../types/city.ts';
 import {URL_MARKER_CURRENT, URL_MARKER_DEFAULT} from '../../const.ts';
-import {OfferPreview, OffersPreview} from '../../types/offers.ts';
+import {Offer, OfferPreview, OffersPreview} from '../../types/offers.ts';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
   city: City | undefined;
   points: OffersPreview;
-  activeCard: OfferPreview | undefined;
+  activeCard: OfferPreview | Offer | undefined;
   className: string;
 };
 

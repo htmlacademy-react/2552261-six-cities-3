@@ -22,9 +22,7 @@ export function OfferHostComponent({currentOffer}: OfferHostProps): JSX.Element 
         <span className="offer__user-name">
           {currentOffer.host.name}
         </span>
-        <span className="offer__user-status">
-          {currentOffer.host.isPro ? 'Pro' : ''}
-        </span>
+        {currentOffer.host.isPro && <span className="offer__user-status">Pro</span>}
       </div>
       <div className="offer__description">
         <p className="offer__text">

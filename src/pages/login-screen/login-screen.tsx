@@ -60,7 +60,7 @@ function LoginScreen(): JSX.Element {
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input className="login__input form__input" type="password" name="password" placeholder="Password" ref={passwordRef}
-                  pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[a-z]).+$"
+                  pattern="^(?=.*[A-Za-z])(?=.*\d).+$"
                   title="Пароль должен содержать хотя бы одну прописную букву, одну строчную букву и одну цифру" required
                 />
               </div>

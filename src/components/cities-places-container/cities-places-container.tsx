@@ -55,7 +55,7 @@ export function CitiesPlacesContainer({
     >
       <section className="cities__places places">
         <h2 className="visually-hidden">Places</h2>
-        <b className="places__found">{`${currentOffers.length} places to stay in ${currentCity?.name}`}</b>
+        <b className="places__found">{`${currentOffers.length} ${currentOffers.length === 1 ? 'place' : 'places'} to stay in ${currentCity?.name}`}</b>
         <SortingOptions clickPlacesOptionHandler={clickPlacesOptionHandler}
           mousePlacesOptionHandler={mousePlacesOptionHandler} changeSortHandler={changeSortHandler}
           currentSortType={activeSort} ulRef={ulCardRef}

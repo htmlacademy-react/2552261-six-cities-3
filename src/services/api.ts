@@ -52,8 +52,8 @@ export const postComment = async (id: string, comment: NewComment) => {
 //   await api.post<Offer>(`${AppRoute.Favorite}/${id}/${status}`);
 // };
 
-export const getFavorites = async () => {
-  const {data} = await api.get<OffersPreview>(AppRoute.Favorite);
-  return data;
-};
+// export const getFavorites = async () => {
+//   const {data} = await api.get<OffersPreview>(AppRoute.Favorite);
+//   return data;
+// };
 

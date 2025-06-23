@@ -1,7 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import type {AppDispatch, State} from '../types/state';
 import {AxiosInstance} from 'axios';
-import {Offer, OffersPreview} from '../types/offers.ts';
+import {OfferPreview, OffersPreview} from '../types/offers.ts';
 import {AppRoute} from '../const.ts';
 import {redirectToRoute} from './action.ts';
 import {Dispatch, SetStateAction} from 'react';
@@ -60,14 +60,12 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   removeToken();
 });
 
-export const changeFavoriteStatus = createAsyncThunk<OffersPreview, {id: string | undefined; status: number}, {
+export const changeFavoriteStatus = createAsyncThunk<OfferPreview, {id: string | undefined; status: number}, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }> ('data/offers/changeStatus' ,async ({id, status}, {extra: api}) => {
-   console.log(status);
-  await api.post<Offer>(`${AppRoute.Favorite}/${id}/${status}`);
-  const {data} = await api.get<OffersPreview>(AppRoute.Favorite);
+  const {data} = await api.post<OfferPreview>(`${AppRoute.Favorite}/${id}/${status}`);
   return data;
 });
 

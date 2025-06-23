@@ -5,7 +5,7 @@ import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import classNames from 'classnames';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
-import {changeFavoriteStatus, fetchOffersAction} from '../../store/api-actions.ts';
+import {changeFavoriteStatus} from '../../store/api-actions.ts';
 
 type CardScreenProps = {
   offer: OfferPreview;
@@ -27,6 +27,7 @@ function Card({
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const mouseEnterHandler = () => {
     if (setActiveCard) {
@@ -41,12 +42,16 @@ function Card({
   };
 
   const bookMarkedHandler = () => {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
     setBookMarked(!isBookMarked);
     if (authorizationStatus === AuthorizationStatus.NoAuth) {
       navigate(AppRoute.Login);
     }
     dispatch(changeFavoriteStatus({id: offer.id, status: +!isBookMarked}));
-    dispatch(fetchOffersAction());
+    setIsLoading(false);
   };
 
   const linkClickHandler = () => {
@@ -64,9 +69,8 @@ function Card({
       'place-card')}
     onMouseEnter={mouseEnterHandler} onMouseLeave={mouseLeaveHandler}
     >
-      <div className={classNames('place-card__mark', {'visually-hidden': !offer.isPremium})}>
-        <span>Premium</span>
-      </div>
+      {offer.isPremium && <div className={classNames('place-card__mark')}><span>Premium</span></div>}
+
       <div className={classNames({'cities__image-wrapper': !isFavorite && !isOtherPlacesSection},
         {'favorites__image-wrapper': isFavorite},
         {'near-places__image-wrapper': isOtherPlacesSection},
@@ -99,12 +103,15 @@ function Card({
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${offer.rating * 20}%`}}></span>
+            <span style={{width: `${Math.round(offer.rating) * 20}%`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link onClick={linkClickHandler} to={`${!isOtherPlacesSection ? `${AppRoute.Offer}/${offer.id}` : ''}`}>{offer.title}</Link>
+          <Link onClick={linkClickHandler}
+            to={`${!isOtherPlacesSection ? `${AppRoute.Offer}/${offer.id}` : ''}`}
+          >{offer.title}
+          </Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>
