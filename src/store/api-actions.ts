@@ -7,7 +7,7 @@ import {redirectToRoute} from './action.ts';
 import {Dispatch, SetStateAction} from 'react';
 import {AuthData} from '../types/auth-data.ts';
 import {User} from '../types/user.ts';
-import {setToken} from '../services/token.ts';
+import {removeToken, setToken} from '../services/token.ts';
 
 export const fetchOffersAction = createAsyncThunk<OffersPreview, Dispatch<SetStateAction<boolean>> | undefined, {
   dispatch: AppDispatch;
@@ -46,8 +46,8 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
-}>('user/logout', async (_arg, {dispatch, extra: api}) => {
+}>('user/logout', async (_arg, {extra: api}) => {
   await api.delete(AppRoute.Logout);
-  dispatch(redirectToRoute(AppRoute.Login));
+  removeToken();
 });
 

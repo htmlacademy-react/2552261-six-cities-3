@@ -7,7 +7,10 @@ import {State} from '../types/state.ts';
 import {Action} from 'redux';
 import {AppThunkDispatch, extractActionsTypes, makeOffers} from '../utils/mocks.ts';
 import {AppRoute, NameSpace} from '../const.ts';
-import {checkAuthorization, fetchOffersAction} from './api-actions.ts';
+import {checkAuthorization, fetchOffersAction, loginAction, logoutAction} from './api-actions.ts';
+import {AuthData} from '../types/auth-data.ts';
+import * as tokenStorage from '../services/token';
+import {redirectToRoute} from './action.ts';
 
 describe('Async actions', () => {
   const axios = createAPI();
@@ -69,4 +72,52 @@ describe('Async actions', () => {
     });
   });
 
+  describe('loginAction', () => {
+    it('should dispatch "loginAction.pending", "redirectToRoute", "loginAction.fulfilled" when server response 200', async () => {
+      const fakeUser: AuthData = {
+        email: 'test@test.ru',
+        password: 'Test1'};
+      const fakeResponse = { token: 'secret' };
+      mockAxiosAdapter.onPost(AppRoute.Login).reply(200, fakeResponse);
+
+      await store.dispatch(loginAction(fakeUser));
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([loginAction.pending.type, redirectToRoute.type, loginAction.fulfilled.type]);
+    });
+
+    it('should call "setToken" once with the received token', async () => {
+      const fakeUser: AuthData = {
+        email: 'test@test.ru',
+        password: 'Test1'};
+      const fakeResponse = { token: 'secret' };
+      mockAxiosAdapter.onPost(AppRoute.Login).reply(200, fakeResponse);
+      const mockSetToken = vi.spyOn(tokenStorage, 'setToken');
+
+      await store.dispatch(loginAction(fakeUser));
+
+      expect(mockSetToken).toBeCalledTimes(1);
+      expect(mockSetToken).toBeCalledWith(fakeResponse.token);
+    });
+  });
+
+  describe('logoutAction', () => {
+    it('should dispatch "logoutAction.pending", "logoutAction.fulfilled" when server response 204', async () => {
+      mockAxiosAdapter.onDelete(AppRoute.Logout).reply(204);
+
+      await store.dispatch(logoutAction());
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([logoutAction.pending.type, logoutAction.fulfilled.type]);
+    });
+  });
+
+  it('should call "removeToken" once with "logoutAction"', async () => {
+    mockAxiosAdapter.onDelete(AppRoute.Logout).reply(204);
+    const mockRemoveToken = vi.spyOn(tokenStorage, 'removeToken');
+
+    await store.dispatch(logoutAction());
+
+    expect(mockRemoveToken).toBeCalledTimes(1);
+  });
 });
