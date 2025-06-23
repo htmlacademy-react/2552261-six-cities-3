@@ -2,14 +2,20 @@ import {FavoritesList} from '../../components/favorites-list/favorites-list.tsx'
 import {Header} from '../../components/header/header.tsx';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {useAppSelector} from '../../hooks';
-import {getOffers} from '../../store/offers-process/selectors.ts';
-import {OfferPreview, OffersPreview} from '../../types/offers.ts';
 import classNames from 'classnames';
+import {Loader} from '../../components/loader/loader.tsx';
+import {useAppSelector} from '../../hooks';
+import {getFavoriteOffers} from '../../store/offers-process/selectors.ts';
 
 function FavoritesScreen(): JSX.Element {
-  const offers = useAppSelector(getOffers);
-  const favoritesOffers: OffersPreview = offers.filter((offer: OfferPreview) => offer.isFavorite);
+
+  const favoritesOffers = useAppSelector(getFavoriteOffers);
+
+  if (favoritesOffers === undefined) {
+    return (
+      <Loader/>
+    );
+  }
 
   return (
     <div className={classNames('page', {'page--favorites-empty': favoritesOffers.length === 0})}>

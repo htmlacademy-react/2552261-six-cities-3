@@ -5,8 +5,7 @@ import {AppRoute, AuthorizationStatus} from '../../const.ts';
 import classNames from 'classnames';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
-import {changeFavoriteStatus} from '../../services/api.ts';
-import {fetchOffersAction} from '../../store/api-actions.ts';
+import {changeFavoriteStatus, fetchOffersAction} from '../../store/api-actions.ts';
 
 type CardScreenProps = {
   offer: OfferPreview;
@@ -21,7 +20,7 @@ function Card({
   isFavorite = false,
   isActive,
   isOtherPlacesSection = false,
-  setActiveCard
+  setActiveCard,
 }: CardScreenProps): JSX.Element {
 
   const [isBookMarked, setBookMarked] = useState<boolean>(offer.isFavorite);
@@ -46,12 +45,8 @@ function Card({
     if (authorizationStatus === AuthorizationStatus.NoAuth) {
       navigate(AppRoute.Login);
     }
-    (async () => {
-      await changeFavoriteStatus(offer.id, +!offer.isFavorite);
-      dispatch(fetchOffersAction());
-    })();
-
-
+    dispatch(changeFavoriteStatus({id: offer.id, status: +!isBookMarked}));
+    dispatch(fetchOffersAction());
   };
 
   const linkClickHandler = () => {

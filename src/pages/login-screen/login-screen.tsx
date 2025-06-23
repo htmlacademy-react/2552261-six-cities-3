@@ -1,16 +1,18 @@
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const.ts';
+import {AppRoute, CITY_LOCATIONS} from '../../const.ts';
 import {FormEvent, useRef} from 'react';
 import {AuthData} from '../../types/auth-data.ts';
 import {useAppDispatch} from '../../hooks';
 import {loginAction} from '../../store/api-actions.ts';
-import {changeFormState} from '../../utils/util.ts';
+import {changeFormState, getRandomElement} from '../../utils/util.ts';
+import {changeCity} from '../../store/city-process/city-process.ts';
 
 function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
+  const randomCity = getRandomElement(CITY_LOCATIONS);
 
   const onSubmit = (authData: AuthData) => {
     changeFormState(true, formRef);
@@ -26,6 +28,10 @@ function LoginScreen(): JSX.Element {
         password: passwordRef.current.value
       });
     }
+  };
+
+  const itemLinkHandler = () => {
+    dispatch(changeCity(randomCity));
   };
 
   return (
@@ -63,8 +69,8 @@ function LoginScreen(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to="#">
-                <span>Amsterdam</span>
+              <Link onClick={itemLinkHandler} className="locations__item-link" to={AppRoute.Root}>
+                <span>{randomCity?.name}</span>
               </Link>
             </div>
           </section>

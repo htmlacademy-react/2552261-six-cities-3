@@ -10,13 +10,13 @@ import {Header} from '../../components/header/header.tsx';
 import Map from '../../components/map/map.tsx';
 import {nanoid} from 'nanoid';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {changeFavoriteStatus, getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
+import {getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
 import {Loader} from '../../components/loader/loader.tsx';
 import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import classNames from 'classnames';
 import {AppRoute, AuthorizationStatus, MAX_NEIGHBOURS_OFFERS_LIMIT} from '../../const.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
-import {fetchOffersAction} from '../../store/api-actions.ts';
+import {changeFavoriteStatus, fetchOffersAction} from '../../store/api-actions.ts';
 import {getOffers} from '../../store/offers-process/selectors.ts';
 
 function OfferScreen(): JSX.Element {
@@ -41,11 +41,9 @@ function OfferScreen(): JSX.Element {
     if (authorizationStatus === AuthorizationStatus.NoAuth) {
       navigate(AppRoute.Login);
     }
-    (async () => {
-      await changeFavoriteStatus(offerId, +!currentOffer?.isFavorite);
-      setCurrentOffer({...currentOffer!, isFavorite: isBookMarked!});
-      dispatch(fetchOffersAction());
-    })();
+    dispatch(changeFavoriteStatus({id: offerId, status: +!isBookMarked}));
+    setCurrentOffer({...currentOffer!, isFavorite: isBookMarked!});
+    dispatch(fetchOffersAction());
   };
 
   useEffect(() => {

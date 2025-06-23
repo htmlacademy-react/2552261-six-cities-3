@@ -23,7 +23,7 @@ export function FavoritesList({favoritesOffers}: FavoritesListProps): JSX.Elemen
 
   const listItems = Object.entries(sortFavoritesOffers).map(([city, offersByCity]) => {
     if(offersByCity.length > 0) {
-      return <FavoritesItem key={city} city={city} offers={offersByCity}/>;
+      return <FavoritesItem key={city} city={city} offers={offersByCity} />;
     }
   });
   return (

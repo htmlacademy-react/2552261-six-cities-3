@@ -8,7 +8,7 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
 import {useAppDispatch} from '../../hooks';
 import {useEffect, useState} from 'react';
-import {fetchOffersAction} from '../../store/api-actions.ts';
+import {fetchFavoritesOffersAction, fetchOffersAction} from '../../store/api-actions.ts';
 import {Loader} from '../loader/loader.tsx';
 import browserHistory from '../../browser-history.ts';
 import HistoryRouter from '../history-route/history-route.tsx';
@@ -20,6 +20,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction(setLoading));
+    dispatch(fetchFavoritesOffersAction());
   }, []);
 
   if (loading) {

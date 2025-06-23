@@ -10,9 +10,9 @@ type citiesListProps = {
 
 export function CitiesList({currentCity, clickLocationHandler}: citiesListProps) {
   return(
-    <ul className="locations__list tabs__list" onClick={clickLocationHandler}>
+    <ul className="locations__list tabs__list" onClick={clickLocationHandler} data-testid="cities-list">
       {CITY_LOCATIONS.map((city: City) =>
-        (<li key={city.name} className="locations__item"><Link className={classNames('locations__item-link', 'tabs__item', {'tabs__item--active': city.name === currentCity?.name})} to="#"><span>{city.name}</span></Link></li>))}
+        (<li key={city.name} className="locations__item" data-testid='cities-item'><Link className={classNames('locations__item-link', 'tabs__item', {'tabs__item--active': city.name === currentCity?.name})} to="#"><span>{city.name}</span></Link></li>))}
     </ul>
   );
 }
