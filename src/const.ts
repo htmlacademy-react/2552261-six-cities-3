@@ -26,6 +26,14 @@ export enum RatingStar {
   One = 1,
 }
 
+export enum RatingStarTitle {
+  Five = 'perfect',
+  Four = 'good',
+  Three = 'not bad',
+  Two = 'badly',
+  One = 'terribly',
+}
+
 export const CITY_LOCATIONS: Cities = [
   {
     name: 'Paris',
@@ -100,7 +108,10 @@ export const DEFAULT_CITY = {
 
 export const DEFAULT_USER = undefined;
 
-export const DEFAULT_COMMENT_MIN_LENGTH = 50;
+export const COMMENT_MIN_LENGTH = 50;
+export const COMMENT_MAX_LENGTH = 300;
+
+export const COMMENT_MAX_TITLE = 10;
 
 export const SIGN_OUT_TEXT = 'Sign out';
 

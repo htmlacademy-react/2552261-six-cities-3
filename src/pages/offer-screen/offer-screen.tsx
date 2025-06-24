@@ -16,12 +16,11 @@ import classNames from 'classnames';
 import {AppRoute, AuthorizationStatus, MAX_NEIGHBOURS_OFFERS_LIMIT} from '../../const.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
 import {changeFavoriteStatus} from '../../store/api-actions.ts';
-import {getOffers} from '../../store/offers-process/selectors.ts';
 import {nanoid} from 'nanoid';
+import {offerAdapter} from '../../utils/util.ts';
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
-  const activeCard = useAppSelector(getOffers).find((offer) => offer.id === offerId);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
   const [neighbourOffers, setNeighbourOffers] = useState<OffersPreview>([]);
@@ -32,8 +31,8 @@ function OfferScreen(): JSX.Element {
   const navigate = useNavigate();
   let neighbourOffersWithCurrentOffer: OffersPreview = [];
 
-  if (activeCard !== undefined) {
-    neighbourOffersWithCurrentOffer = [activeCard, ...neighbourOffers.slice(0, MAX_NEIGHBOURS_OFFERS_LIMIT)];
+  if (currentOffer !== undefined) {
+    neighbourOffersWithCurrentOffer = [offerAdapter(currentOffer), ...neighbourOffers.slice(0, MAX_NEIGHBOURS_OFFERS_LIMIT)];
   }
 
   const bookMarkedHandler = () => {
@@ -75,7 +74,7 @@ function OfferScreen(): JSX.Element {
 
   return (
     <div className="page">
-      <Header/>
+      <Header isPrivatePage={false}/>
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
@@ -143,7 +142,7 @@ function OfferScreen(): JSX.Element {
               </section>
             </div>
           </div>
-          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={activeCard}
+          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={currentOffer}
             className={'offer__map'}
           />
         </section>

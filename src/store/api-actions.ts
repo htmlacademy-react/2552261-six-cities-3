@@ -35,8 +35,9 @@ export const checkAuthorization = createAsyncThunk<User, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
-}>('user/checkAuthorization', async (_arg, {extra: api}) => {
+}>('user/checkAuthorization', async (_arg, {dispatch, extra: api}) => {
   const {data} = await api.get<User>(AppRoute.Login);
+  dispatch(fetchFavoritesOffersAction());
   return data;
 });
 

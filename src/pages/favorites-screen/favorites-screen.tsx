@@ -19,7 +19,7 @@ function FavoritesScreen(): JSX.Element {
 
   return (
     <div className={classNames('page', {'page--favorites-empty': favoritesOffers.length === 0})}>
-      <Header/>
+      <Header isPrivatePage/>
       <main className={classNames('page__main',
         'page__main--favorites',
         {'page__main--favorites-empty': favoritesOffers.length === 0}

@@ -8,7 +8,11 @@ import {getAuthorizationStatus, getUser} from '../../store/user-process/selector
 import {getFavoriteOffers} from '../../store/offers-process/selectors.ts';
 import React from 'react';
 
-export function Header(): JSX.Element {
+type HeaderProps = {
+  isPrivatePage: boolean;
+}
+
+export function Header({isPrivatePage}: HeaderProps): JSX.Element {
   const offers = useAppSelector(getFavoriteOffers);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -21,8 +25,6 @@ export function Header(): JSX.Element {
       dispatch(logoutAction());
     } else if (target.classList.contains('user__name')) {
       navigate(AppRoute.Favorites);
-    } else if (target.classList.contains('user__avatar-wrapper')) {
-      navigate(AppRoute.Login);
     }
   };
 
@@ -40,30 +42,21 @@ export function Header(): JSX.Element {
           <nav className="header__nav">
             <ul className="header__nav-list" onClick={clickLoginHandler}>
               <li className="header__nav-item user">
-                <Link className="header__nav-link header__nav-link--profile" to="#">
+                <Link className="header__nav-link header__nav-link--profile" to={authorizationStatus !== AuthorizationStatus.Auth ? AppRoute.Login : '#'}>
                   <div className={classNames('header__avatar-wrapper', 'user__avatar-wrapper')}>
                   </div>
-                  <span
-                    className={classNames('header__user-name', 'user__name',
-                      {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})}
-                  >{user?.email}
-                  </span>
-                  <span className={classNames('header__favorite-count', {
-                    'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth
-                  })}
-                  >{offers ? offers.length : 0}
-                  </span>
+                  {authorizationStatus === AuthorizationStatus.Auth && <span className='header__user-name user__name'>{user?.email}</span>}
+                  {authorizationStatus === AuthorizationStatus.Auth && <span className='header__favorite-count'>{offers ? offers.length : 0}</span>}
+                  {authorizationStatus !== AuthorizationStatus.Auth && <span className='header__login'>Sign in</span>}
                 </Link>
               </li>
-              <li className="header__nav-item">
-                <Link className="header__nav-link" to={authorizationStatus === AuthorizationStatus.NoAuth ? AppRoute.Login : AppRoute.Root}>
-                  <span
-                    className={classNames({'header__signout' : authorizationStatus === AuthorizationStatus.Auth},
-                      {'header__login': authorizationStatus !== AuthorizationStatus.Auth},)}
-                  >{authorizationStatus === AuthorizationStatus.Auth ? 'Sign out' : 'Sign in'}
-                  </span>
-                </Link>
-              </li>
+              {authorizationStatus === AuthorizationStatus.Auth &&
+                <li className="header__nav-item">
+                  <Link className="header__nav-link" to={isPrivatePage ? AppRoute.Login : '#'}>
+                    <span className='header__signout'>Sign out
+                    </span>
+                  </Link>
+                </li>}
             </ul>
           </nav>
         </div>

@@ -82,7 +82,7 @@ function MainScreen(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header/>
+      <Header isPrivatePage={false}/>
       <main
         className={classNames('page__main', 'page__main--index', {'page__main--index-empty': currentOffers.length === 0})}
       >
