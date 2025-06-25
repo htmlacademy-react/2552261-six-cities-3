@@ -18,6 +18,7 @@ import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
 import {changeFavoriteStatus} from '../../store/api-actions.ts';
 import {nanoid} from 'nanoid';
 import {offerAdapter} from '../../utils/util.ts';
+import {changePageStatus} from "../../store/pages-process/page-process.ts";
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
@@ -62,6 +63,7 @@ function OfferScreen(): JSX.Element {
         setIsNotFound(true);
       }
     })();
+    dispatch(changePageStatus(false));
   }, []);
 
   if (isNotFound) {
@@ -74,7 +76,7 @@ function OfferScreen(): JSX.Element {
 
   return (
     <div className="page">
-      <Header isPrivatePage={false}/>
+      <Header/>
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">

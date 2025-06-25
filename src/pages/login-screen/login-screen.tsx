@@ -1,11 +1,13 @@
-import {Link} from 'react-router-dom';
-import {AppRoute, CITY_LOCATIONS} from '../../const.ts';
-import {FormEvent, useRef} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {AppRoute, AuthorizationStatus, CITY_LOCATIONS} from '../../const.ts';
+import {FormEvent, useEffect, useRef} from 'react';
 import {AuthData} from '../../types/auth-data.ts';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loginAction} from '../../store/api-actions.ts';
 import {changeFormState, getRandomElement} from '../../utils/util.ts';
 import {changeCity} from '../../store/city-process/city-process.ts';
+import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {getPageStatus} from '../../store/pages-process/selectors.ts';
 
 function LoginScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement>(null);
@@ -13,6 +15,15 @@ function LoginScreen(): JSX.Element {
   const passwordRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const randomCity = getRandomElement(CITY_LOCATIONS);
+  const auth = useAppSelector(getAuthorizationStatus);
+  const isPrivatePage = useAppSelector(getPageStatus);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(auth === AuthorizationStatus.Auth && !isPrivatePage) {
+      navigate(AppRoute.Root);
+    }
+  });
 
   const onSubmit = (authData: AuthData) => {
     changeFormState(true, formRef);

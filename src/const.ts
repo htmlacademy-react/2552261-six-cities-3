@@ -119,6 +119,7 @@ export enum NameSpace {
   City = 'CITY',
   Offers = 'OFFERS',
   User = 'USER',
+  Page = 'PAGE',
 }
 
 export const MAX_NEIGHBOURS_OFFERS_LIMIT = 3;

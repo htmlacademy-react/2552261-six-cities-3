@@ -4,12 +4,19 @@ import {Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import classNames from 'classnames';
 import {Loader} from '../../components/loader/loader.tsx';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getFavoriteOffers} from '../../store/offers-process/selectors.ts';
+import {useEffect} from 'react';
+import {changePageStatus} from '../../store/pages-process/page-process.ts';
 
 function FavoritesScreen(): JSX.Element {
 
   const favoritesOffers = useAppSelector(getFavoriteOffers);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(changePageStatus(true));
+  }, []);
 
   if (favoritesOffers === undefined) {
     return (
@@ -17,9 +24,10 @@ function FavoritesScreen(): JSX.Element {
     );
   }
 
+
   return (
     <div className={classNames('page', {'page--favorites-empty': favoritesOffers.length === 0})}>
-      <Header isPrivatePage/>
+      <Header />
       <main className={classNames('page__main',
         'page__main--favorites',
         {'page__main--favorites-empty': favoritesOffers.length === 0}

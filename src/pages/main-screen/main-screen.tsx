@@ -1,5 +1,5 @@
 import {Header} from '../../components/header/header.tsx';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {CITY_LOCATIONS, SortType} from '../../const.ts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {CitiesList} from '../../components/cities-list/cities-list.tsx';
@@ -10,6 +10,7 @@ import {getOffers} from '../../store/offers-process/selectors.ts';
 import classNames from 'classnames';
 import {CitiesPlacesContainer} from '../../components/cities-places-container/cities-places-container.tsx';
 import {OfferPreview} from '../../types/offers.ts';
+import {changePageStatus} from "../../store/pages-process/page-process.ts";
 
 function MainScreen(): JSX.Element {
   const ulCardRef = useRef(null);
@@ -19,6 +20,10 @@ function MainScreen(): JSX.Element {
   const currentOffers = useAppSelector(getOffers).filter((offer) => offer.city.name === currentCity?.name);
   let sortedOffers = [...currentOffers];
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(changePageStatus(false));
+  }, []);
 
   switch (activeSort) {
     case SortType.PriceHigh:
@@ -82,7 +87,7 @@ function MainScreen(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header isPrivatePage={false}/>
+      <Header />
       <main
         className={classNames('page__main', 'page__main--index', {'page__main--index-empty': currentOffers.length === 0})}
       >

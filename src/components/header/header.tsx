@@ -7,17 +7,15 @@ import {resetCity} from '../../store/city-process/city-process.ts';
 import {getAuthorizationStatus, getUser} from '../../store/user-process/selectors.ts';
 import {getFavoriteOffers} from '../../store/offers-process/selectors.ts';
 import React from 'react';
+import {getPageStatus} from '../../store/pages-process/selectors.ts';
 
-type HeaderProps = {
-  isPrivatePage: boolean;
-}
-
-export function Header({isPrivatePage}: HeaderProps): JSX.Element {
+export function Header(): JSX.Element {
   const offers = useAppSelector(getFavoriteOffers);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const user = useAppSelector(getUser);
   const navigate = useNavigate();
+  const isPrivatePage = useAppSelector(getPageStatus);
 
   const clickLoginHandler = (evt: React.MouseEvent<HTMLUListElement>) => {
     const target = evt.target as HTMLUListElement;
