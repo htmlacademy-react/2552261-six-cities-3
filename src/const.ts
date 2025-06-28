@@ -131,6 +131,5 @@ export const MAX_NEIGHBOURS_OFFERS_LIMIT = 3;
 
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';
-
 export const URL_MARKER_CURRENT =
   'markup/img/pin-active.svg';
