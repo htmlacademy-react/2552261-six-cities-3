@@ -5,10 +5,16 @@ export enum AppRoute {
   Root = '/',
   Login = '/login',
   Logout = '/logout',
-  Comments = '/comments',
-  Favorites = '/favorite',
+  Favorites = '/favorites',
   Offer = 'offer',
-  Offers = 'offers'
+}
+
+export enum APIRoute {
+  Login = '/login',
+  Logout = '/logout',
+  Comments = '/comments',
+  Favorite = '/favorite',
+  Offers = 'offers',
 }
 
 export enum AuthorizationStatus {
@@ -23,6 +29,14 @@ export enum RatingStar {
   Three = 3,
   Two = 2,
   One = 1,
+}
+
+export enum RatingStarTitle {
+  Five = 'perfect',
+  Four = 'good',
+  Three = 'not bad',
+  Two = 'badly',
+  One = 'terribly',
 }
 
 export const CITY_LOCATIONS: Cities = [
@@ -99,7 +113,10 @@ export const DEFAULT_CITY = {
 
 export const DEFAULT_USER = undefined;
 
-export const DEFAULT_COMMENT_MIN_LENGTH = 50;
+export const COMMENT_MIN_LENGTH = 50;
+export const COMMENT_MAX_LENGTH = 300;
+
+export const COMMENT_MAX_TITLE = 10;
 
 export const SIGN_OUT_TEXT = 'Sign out';
 
@@ -107,12 +124,11 @@ export enum NameSpace {
   City = 'CITY',
   Offers = 'OFFERS',
   User = 'USER',
+  Page = 'PAGE',
 }
 
 export const MAX_NEIGHBOURS_OFFERS_LIMIT = 3;
-
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';
-
 export const URL_MARKER_CURRENT =
   'markup/img/pin-active.svg';

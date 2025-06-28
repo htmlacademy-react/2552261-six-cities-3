@@ -8,44 +8,46 @@ import {CommentForm} from '../../components/comment-form/comment-form.tsx';
 import {useEffect, useState} from 'react';
 import {Header} from '../../components/header/header.tsx';
 import Map from '../../components/map/map.tsx';
-import {nanoid} from 'nanoid';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {changeFavoriteStatus, getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
+import {getComments, getNearbyOffers, getOfferById} from '../../services/api.ts';
 import {Loader} from '../../components/loader/loader.tsx';
 import {NeighbourOffersList} from '../../components/other-places-list/neighbour-offers-list.tsx';
 import classNames from 'classnames';
 import {AppRoute, AuthorizationStatus, MAX_NEIGHBOURS_OFFERS_LIMIT} from '../../const.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
-import {fetchOffersAction} from '../../store/api-actions.ts';
-import {getOffers} from '../../store/offers-process/selectors.ts';
+import {changeFavoriteStatus} from '../../store/api-actions.ts';
+import {nanoid} from 'nanoid';
+import {offerAdapter} from '../../utils/util.ts';
+import {changePageStatus} from '../../store/pages-process/page-process.ts';
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
-  const activeCard = useAppSelector(getOffers).find((offer) => offer.id === offerId);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const [currentOffer, setCurrentOffer] = useState<Offer | undefined>(undefined);
-  const [isBookMarked, setBookMarked] = useState<boolean | undefined>(currentOffer?.isFavorite);
   const [neighbourOffers, setNeighbourOffers] = useState<OffersPreview>([]);
   const [reviewsState, setReviewsState] = useState<Comments>([]);
   const [isNotFound, setIsNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   let neighbourOffersWithCurrentOffer: OffersPreview = [];
 
-  if (activeCard !== undefined) {
-    neighbourOffersWithCurrentOffer = [activeCard, ...neighbourOffers.slice(0, MAX_NEIGHBOURS_OFFERS_LIMIT)];
+  if (currentOffer !== undefined) {
+    neighbourOffersWithCurrentOffer = [offerAdapter(currentOffer), ...neighbourOffers.slice(0, MAX_NEIGHBOURS_OFFERS_LIMIT)];
   }
 
   const bookMarkedHandler = () => {
-    setBookMarked(!isBookMarked);
+    if (isLoading) {
+      return;
+    }
+    setCurrentOffer({...currentOffer!, isFavorite: !currentOffer!.isFavorite});
+    setIsLoading(true);
     if (authorizationStatus === AuthorizationStatus.NoAuth) {
       navigate(AppRoute.Login);
+      setIsLoading(false);
     }
-    (async () => {
-      await changeFavoriteStatus(offerId, +!currentOffer?.isFavorite);
-      setCurrentOffer({...currentOffer!, isFavorite: isBookMarked!});
-      dispatch(fetchOffersAction());
-    })();
+    dispatch(changeFavoriteStatus({id: offerId, status: +!currentOffer?.isFavorite}));
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -61,7 +63,8 @@ function OfferScreen(): JSX.Element {
         setIsNotFound(true);
       }
     })();
-  }, [offerId]);
+    dispatch(changePageStatus(false));
+  }, []);
 
   if (isNotFound) {
     return <NotFoundScreen/>;
@@ -76,9 +79,10 @@ function OfferScreen(): JSX.Element {
       <Header/>
       <main className="page__main page__main--offer">
         <section className="offer">
-          <div className="offer__gallery-container container">
+          <div className="offer__gallery-container container" data-testid="offer-gallery">
             <div className="offer__gallery">
-              {currentOffer.images.map((image) => (
+              {currentOffer.images.map((image, index) => (
+                index !== 6 &&
                 <div key={nanoid()} className="offer__image-wrapper">
                   <img className="offer__image" src={image} alt="Photo studio"/>
                 </div>))}
@@ -86,9 +90,7 @@ function OfferScreen(): JSX.Element {
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              <div className={`offer__mark ${currentOffer.isPremium ? '' : 'visually-hidden'}`}>
-                <span>Premium</span>
-              </div>
+              {currentOffer.isPremium && <div className="offer__mark"><span>Premium</span></div>}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
                   {currentOffer.title}
@@ -106,7 +108,7 @@ function OfferScreen(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: `${currentOffer.rating * 20}%`}}></span>
+                  <span style={{width: `${Math.round(currentOffer.rating) * 20}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{currentOffer.rating}</span>
@@ -116,10 +118,10 @@ function OfferScreen(): JSX.Element {
                   {currentOffer.type}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {`${currentOffer.bedRooms} Bedrooms`}
+                  {`${currentOffer.bedrooms} ${currentOffer.bedrooms > 1 ? 'Bedrooms' : 'Bedroom'}`}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  {`Max ${currentOffer.maxAdults} adults`}
+                  {`Max ${currentOffer.maxAdults} ${currentOffer.maxAdults > 1 ? 'adults' : 'adult'}`}
                 </li>
               </ul>
               <div className="offer__price">
@@ -142,7 +144,7 @@ function OfferScreen(): JSX.Element {
               </section>
             </div>
           </div>
-          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={activeCard}
+          <Map city={currentOffer.city} points={neighbourOffersWithCurrentOffer} activeCard={currentOffer}
             className={'offer__map'}
           />
         </section>

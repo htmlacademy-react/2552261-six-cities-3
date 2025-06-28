@@ -1,11 +1,18 @@
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {Dispatch, SetStateAction, useRef, useState} from 'react';
 import {Comments, NewComment} from '../../types/comments.ts';
-import {AuthorizationStatus, DEFAULT_COMMENT, DEFAULT_COMMENT_MIN_LENGTH, RatingStar} from '../../const.ts';
+import {
+  AuthorizationStatus,
+  DEFAULT_COMMENT,
+  COMMENT_MIN_LENGTH,
+  RatingStar,
+  RatingStarTitle, COMMENT_MAX_LENGTH
+} from '../../const.ts';
 import {useAppSelector} from '../../hooks';
 import classNames from 'classnames';
 import {postComment} from '../../services/api.ts';
 import {Offer} from '../../types/offers.ts';
 import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
+import {changeFormState} from '../../utils/util.ts';
 
 type ReviewsListProps = {
   setReviewsState: Dispatch<SetStateAction<Comments>>;
@@ -18,20 +25,28 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
     typeof value === 'number'
   );
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-
+  const formRef = useRef<HTMLFormElement>(null);
   const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
-
 
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const newArr = [...currentReviews];
-    const fetchPostComment = async () => {
-      const newComment = await postComment(currentOffer.id, newReview);
-      newArr.push(newComment);
+    changeFormState(true, formRef);
+    (async () => {
+      let newComment;
+      try {
+        newComment = await postComment(currentOffer.id, newReview);
+      } catch (error) {
+        changeFormState(false, formRef);
+        return;
+      }
+
+      newArr.unshift(newComment);
       setNewReview(DEFAULT_COMMENT);
       setReviewsState(newArr);
-    };
-    fetchPostComment();
+      changeFormState(false, formRef);
+      postComment(currentOffer.id, newComment);
+    })();
   }
 
   function inputHandler(evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
@@ -42,6 +57,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
   return (
     <form onSubmit={submitHandler} className={classNames('reviews__form form',
       {'visually-hidden': authorizationStatus === AuthorizationStatus.NoAuth})} action="#" method="post"
+    ref={formRef}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
@@ -57,7 +73,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
               checked={newReview.rating === Number(value)}
             />
             <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label"
-              title={key.toLowerCase()}
+              title={RatingStarTitle[key as keyof typeof RatingStarTitle]}
             >
               <svg className="form__star-image" width="37" height="33">
                 <use xlinkHref="#icon-star"/>
@@ -67,7 +83,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
         ))}
       </div>
       <textarea onChange={inputHandler} className="reviews__textarea form__textarea" id="review" name="review"
-        value={newReview.comment} minLength={DEFAULT_COMMENT_MIN_LENGTH}
+        value={newReview.comment} minLength={COMMENT_MIN_LENGTH}
         placeholder="Tell how was your stay, what you like and what can be improved"
       >
       </textarea>
@@ -76,7 +92,9 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
           To submit review please make sure to set <span className="reviews__star">rating</span> and
           describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={false}>Submit
+        <button className="reviews__submit form__submit button" type="submit"
+          disabled={newReview.rating === 0 || newReview.comment.length < COMMENT_MIN_LENGTH || newReview.comment.length > COMMENT_MAX_LENGTH}
+        >Submit
         </button>
       </div>
     </form>

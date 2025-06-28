@@ -13,7 +13,7 @@ export function FavoritesItem({city, offers}: FavoritesItemProps): JSX.Element {
   return (
     <li className="favorites__locations-items">
       <div className="favorites__locations locations locations--current">
-        <div className="locations__item">
+        <div className="locations__item" >
           <a className="locations__item-link" href="#">
             <span>{city}</span>
           </a>

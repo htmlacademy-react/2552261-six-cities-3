@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom/client';
 import App from './components/app/app.tsx';
 import {store} from './store';
 import {Provider} from 'react-redux';
-import {checkAuthorization} from './store/api-actions.ts';
+import {checkAuthorization, fetchOffersAction} from './store/api-actions.ts';
+import browserHistory from './browser-history.ts';
+import HistoryRouter from './components/history-route/history-route.tsx';
 
 store.dispatch(checkAuthorization());
+store.dispatch(fetchOffersAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,7 +17,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App/>
+      <HistoryRouter history={browserHistory}>
+        <App/>
+      </HistoryRouter>
     </Provider>
   </React.StrictMode>
 );
