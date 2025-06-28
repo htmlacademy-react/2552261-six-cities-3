@@ -66,13 +66,13 @@ function LoginScreen(): JSX.Element {
             <form className="login__form form" action="#" method="post" onSubmit={handleSubmit} ref={formRef}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
-                <input className="login__input form__input" type="email" name="email" placeholder="Email" ref={loginRef} required/>
+                <input className="login__input form__input" type="email" name="email" placeholder="Email" ref={loginRef} data-testid={'loginElement'} required/>
               </div>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Password</label>
                 <input className="login__input form__input" type="password" name="password" placeholder="Password" ref={passwordRef}
                   pattern="^(?=.*[A-Za-z])(?=.*\d).+$"
-                  title="Пароль должен содержать хотя бы одну прописную букву, одну строчную букву и одну цифру" required
+                  title="Пароль должен содержать хотя бы одну прописную букву, одну строчную букву и одну цифру" data-testid={'passwordElement'} required
                 />
               </div>
               <button className="login__submit form__submit button" type="submit">Sign in</button>

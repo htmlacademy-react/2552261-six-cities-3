@@ -18,7 +18,7 @@ import {getAuthorizationStatus} from '../../store/user-process/selectors.ts';
 import {changeFavoriteStatus} from '../../store/api-actions.ts';
 import {nanoid} from 'nanoid';
 import {offerAdapter} from '../../utils/util.ts';
-import {changePageStatus} from "../../store/pages-process/page-process.ts";
+import {changePageStatus} from '../../store/pages-process/page-process.ts';
 
 function OfferScreen(): JSX.Element {
   const {offerId} = useParams();
@@ -79,7 +79,7 @@ function OfferScreen(): JSX.Element {
       <Header/>
       <main className="page__main page__main--offer">
         <section className="offer">
-          <div className="offer__gallery-container container">
+          <div className="offer__gallery-container container" data-testid="offer-gallery">
             <div className="offer__gallery">
               {currentOffer.images.map((image, index) => (
                 index !== 6 &&
@@ -118,10 +118,10 @@ function OfferScreen(): JSX.Element {
                   {currentOffer.type}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {`${currentOffer.bedrooms} Bedrooms`}
+                  {`${currentOffer.bedrooms} ${currentOffer.bedrooms > 1 ? 'Bedrooms' : 'Bedroom'}`}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  {`Max ${currentOffer.maxAdults} adults`}
+                  {`Max ${currentOffer.maxAdults} ${currentOffer.maxAdults > 1 ? 'adults' : 'adult'}`}
                 </li>
               </ul>
               <div className="offer__price">

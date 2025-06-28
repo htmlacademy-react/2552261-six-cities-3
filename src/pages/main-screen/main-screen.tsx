@@ -10,7 +10,7 @@ import {getOffers} from '../../store/offers-process/selectors.ts';
 import classNames from 'classnames';
 import {CitiesPlacesContainer} from '../../components/cities-places-container/cities-places-container.tsx';
 import {OfferPreview} from '../../types/offers.ts';
-import {changePageStatus} from "../../store/pages-process/page-process.ts";
+import {changePageStatus} from '../../store/pages-process/page-process.ts';
 
 function MainScreen(): JSX.Element {
   const ulCardRef = useRef(null);

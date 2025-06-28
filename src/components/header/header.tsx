@@ -50,7 +50,7 @@ export function Header(): JSX.Element {
               </li>
               {authorizationStatus === AuthorizationStatus.Auth &&
                 <li className="header__nav-item">
-                  <Link className="header__nav-link" to={isPrivatePage ? AppRoute.Login : '#'}>
+                  <Link data-testid={'header-nav-link'} className="header__nav-link" to={isPrivatePage ? AppRoute.Login : '#'}>
                     <span className='header__signout'>Sign out
                     </span>
                   </Link>

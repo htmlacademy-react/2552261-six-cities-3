@@ -6,8 +6,14 @@ import {configureMockStore} from '@jedmao/redux-mock-store';
 import {State} from '../types/state.ts';
 import {Action} from 'redux';
 import {AppThunkDispatch, extractActionsTypes, makeOffers} from '../utils/mocks.ts';
-import {AppRoute, NameSpace} from '../const.ts';
-import {checkAuthorization, fetchOffersAction, loginAction, logoutAction} from './api-actions.ts';
+import {APIRoute, AppRoute, NameSpace} from '../const.ts';
+import {
+  checkAuthorization,
+  fetchFavoritesOffersAction,
+  fetchOffersAction,
+  loginAction,
+  logoutAction
+} from './api-actions.ts';
 import {AuthData} from '../types/auth-data.ts';
 import * as tokenStorage from '../services/token';
 import {redirectToRoute} from './action.ts';
@@ -31,7 +37,7 @@ describe('Async actions', () => {
       await store.dispatch(checkAuthorization());
       const actions = extractActionsTypes(store.getActions());
 
-      expect(actions).toEqual([checkAuthorization.pending.type, checkAuthorization.fulfilled.type]);
+      expect(actions).toEqual([checkAuthorization.pending.type, fetchFavoritesOffersAction.pending.type, checkAuthorization.fulfilled.type]);
     });
 
     it('should dispatch "checkAuthorization.pending" and "checkAuthorization.rejected" when server response 400', async () => {
@@ -47,7 +53,7 @@ describe('Async actions', () => {
   describe('fetchOffersAction', () => {
     it('should dispatch "fetchOffersAction.pending" and "fetchOffersAction.fulfilled" when server response 200', async () => {
       const mockOffers = makeOffers();
-      mockAxiosAdapter.onGet(AppRoute.Offers).reply(200, mockOffers);
+      mockAxiosAdapter.onGet(APIRoute.Offers).reply(200, mockOffers);
 
       await store.dispatch(fetchOffersAction());
 
@@ -60,7 +66,7 @@ describe('Async actions', () => {
     });
 
     it('should disptach ""fetchOffersAction.pending" and "fetchOffersAction.rejected" when server response 400', async () => {
-      mockAxiosAdapter.onGet(AppRoute.Offers).reply(400, []);
+      mockAxiosAdapter.onGet(APIRoute.Offers).reply(400, []);
 
       await store.dispatch(fetchOffersAction());
 

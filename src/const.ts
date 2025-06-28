@@ -5,11 +5,16 @@ export enum AppRoute {
   Root = '/',
   Login = '/login',
   Logout = '/logout',
-  Comments = '/comments',
   Favorites = '/favorites',
-  Favorite = '/favorite',
   Offer = 'offer',
-  Offers = 'offers'
+}
+
+export enum APIRoute {
+  Login = '/login',
+  Logout = '/logout',
+  Comments = '/comments',
+  Favorite = '/favorite',
+  Offers = 'offers',
 }
 
 export enum AuthorizationStatus {
@@ -123,9 +128,7 @@ export enum NameSpace {
 }
 
 export const MAX_NEIGHBOURS_OFFERS_LIMIT = 3;
-
 export const URL_MARKER_DEFAULT =
   'markup/img/pin.svg';
-
 export const URL_MARKER_CURRENT =
   'markup/img/pin-active.svg';

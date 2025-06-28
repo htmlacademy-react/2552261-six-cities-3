@@ -1,7 +1,7 @@
 import axios, {AxiosInstance, InternalAxiosRequestConfig} from 'axios';
 import {getToken} from './token.ts';
 import {Offer, OffersPreview} from '../types/offers.ts';
-import {AppRoute} from '../const.ts';
+import {APIRoute} from '../const.ts';
 import {Comment, Comments, NewComment} from '../types/comments.ts';
 
 const BASE_URL = 'https://15.design.htmlacademy.pro/six-cities';
@@ -29,31 +29,23 @@ export const createAPI = (): AxiosInstance => {
 const api = createAPI();
 
 export const getOfferById = async (id: string | undefined) => {
-  const {data} = await api.get<Offer>(`${AppRoute.Offers}/${id}`);
+  const {data} = await api.get<Offer>(`${APIRoute.Offers}/${id}`);
   return data;
 };
 
 export const getComments = async (id: string | undefined) => {
-  const {data} = await api.get<Comments>(`${AppRoute.Comments}/${id}`);
+  const {data} = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
   return data;
 };
 
 export const getNearbyOffers = async (id: string | undefined) => {
-  const {data} = await api.get<OffersPreview>(`${AppRoute.Offers}/${id}/nearby`);
+  const {data} = await api.get<OffersPreview>(`${APIRoute.Offers}/${id}/nearby`);
   return data;
 };
 
 export const postComment = async (id: string, comment: NewComment) => {
-  const {data} = await api.post<Comment>(`${AppRoute.Comments}/${id}`, comment);
+  const {data} = await api.post<Comment>(`${APIRoute.Comments}/${id}`, comment);
   return data;
 };
 
-// export const changeFavoriteStatus = async (id: string | undefined, status: number) => {
-//   await api.post<Offer>(`${AppRoute.Favorite}/${id}/${status}`);
-// };
-
-// export const getFavorites = async () => {
-//   const {data} = await api.get<OffersPreview>(AppRoute.Favorite);
-//   return data;
-// };
 
