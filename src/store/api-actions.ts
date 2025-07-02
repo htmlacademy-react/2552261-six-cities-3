@@ -12,10 +12,11 @@ export const fetchOffersAction = createAsyncThunk<OffersPreview, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
-}>('data/Offers', async (_arg, {extra: api}) => {
-  const {data} = await api.get<OffersPreview>(APIRoute.Offers);
+}>('data/Offers', async (_arg, { extra: api }) => {
+  const { data } = await api.get<OffersPreview>(APIRoute.Offers);
   return data;
-});
+}
+);
 
 export const fetchFavoritesOffersAction = createAsyncThunk<OffersPreview, undefined, {
   dispatch: AppDispatch;

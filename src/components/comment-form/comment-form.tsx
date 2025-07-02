@@ -28,6 +28,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
   const formRef = useRef<HTMLFormElement>(null);
   const [newReview, setNewReview] = useState<NewComment>(DEFAULT_COMMENT);
 
+
   function submitHandler(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     const newArr = [...currentReviews];
@@ -37,6 +38,7 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
       try {
         newComment = await postComment(currentOffer.id, newReview);
       } catch (error) {
+
         changeFormState(false, formRef);
         return;
       }
@@ -45,7 +47,6 @@ export function CommentForm({currentOffer, setReviewsState, currentReviews}: Rev
       setNewReview(DEFAULT_COMMENT);
       setReviewsState(newArr);
       changeFormState(false, formRef);
-      postComment(currentOffer.id, newComment);
     })();
   }
 

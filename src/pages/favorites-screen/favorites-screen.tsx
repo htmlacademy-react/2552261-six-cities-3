@@ -5,18 +5,26 @@ import {AppRoute} from '../../const.ts';
 import classNames from 'classnames';
 import {Loader} from '../../components/loader/loader.tsx';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getFavoriteOffers} from '../../store/offers-process/selectors.ts';
+import {getErrorStatus, getFavoriteOffers} from '../../store/offers-process/selectors.ts';
 import {useEffect} from 'react';
 import {changePageStatus} from '../../store/pages-process/page-process.ts';
+import {ErrorFavoritesScreen} from '../error-favorite-screen/error-favorites-screen.tsx';
 
 function FavoritesScreen(): JSX.Element {
 
   const favoritesOffers = useAppSelector(getFavoriteOffers);
+  const hasError = useAppSelector(getErrorStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(changePageStatus(true));
   }, []);
+
+  if(hasError.favorites) {
+    return (
+      <ErrorFavoritesScreen/>
+    );
+  }
 
   if (favoritesOffers === undefined) {
     return (
