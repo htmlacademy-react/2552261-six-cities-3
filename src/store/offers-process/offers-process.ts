@@ -7,7 +7,11 @@ import {changeFavoriteStatus, fetchFavoritesOffersAction, fetchOffersAction} fro
 const initialState: OffersProcess = {
   offers: [],
   offersFavorites: [],
-  isOffersLoading: false
+  isOffersLoading: false,
+  hasError: {
+    offers: false,
+    favorites: false
+  },
 };
 
 export const offerProcess = createSlice({
@@ -17,27 +21,32 @@ export const offerProcess = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchOffersAction.pending, (state) => {
       state.isOffersLoading = true;
-    })
-      .addCase(fetchOffersAction.fulfilled, (state, action: PayloadAction<OffersPreview>) => {
-        state.offers = action.payload;
-        state.isOffersLoading = false;
-      }).addCase(fetchOffersAction.rejected, (state) => {
-        state.isOffersLoading = false;
-      })
-      .addCase(fetchFavoritesOffersAction.fulfilled, (state, action: PayloadAction<OffersPreview>) => {
-        state.offersFavorites = action.payload;
-      }).addCase(changeFavoriteStatus.fulfilled, (state, action: PayloadAction<OfferPreview>) => {
-        if (action.payload.isFavorite) {
-          state.offersFavorites.push(action.payload);
-        } else {
-          state.offersFavorites = state.offersFavorites.filter((offer) => offer.id !== action.payload.id);
+      state.hasError.offers = false;
+    }).addCase(fetchOffersAction.fulfilled, (state, action: PayloadAction<OffersPreview>) => {
+      state.offers = action.payload;
+      state.isOffersLoading = false;
+    }).addCase(fetchOffersAction.rejected, (state) => {
+      state.isOffersLoading = false;
+      state.hasError.offers = true;
+    }).addCase(fetchFavoritesOffersAction.pending, (state) => {
+      state.hasError.favorites = false;
+    }).addCase(fetchFavoritesOffersAction.fulfilled, (state, action: PayloadAction<OffersPreview>) => {
+      state.offersFavorites = action.payload;
+      state.hasError.favorites = false;
+    }).addCase(fetchFavoritesOffersAction.rejected, (state) => {
+      state.hasError.favorites = true;
+    }).addCase(changeFavoriteStatus.fulfilled, (state, action: PayloadAction<OfferPreview>) => {
+      if (action.payload.isFavorite) {
+        state.offersFavorites.push(action.payload);
+      } else {
+        state.offersFavorites = state.offersFavorites.filter((offer) => offer.id !== action.payload.id);
+      }
+      state.offers.forEach((offer) => {
+        if(offer.id === action.payload.id) {
+          offer.isFavorite = action.payload.isFavorite;
         }
-        state.offers.forEach((offer) => {
-          if(offer.id === action.payload.id) {
-            offer.isFavorite = action.payload.isFavorite;
-          }
-        });
       });
+    });
   }
 });
 
