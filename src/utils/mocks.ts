@@ -46,7 +46,7 @@ export const makeFakeStoreLogin: Partial<State> = {PAGE: {isPrivatePage: false},
       latitude: 48.8534,
       longitude: 2.3488,
       zoom: 10},
-  }}, OFFERS: {offers: makeOffers(), offersFavorites: makeOffers(), isOffersLoading: false}};
+  }}, OFFERS: {offers: makeOffers(), offersFavorites: makeOffers(), isOffersLoading: false, hasError: {offers: false, favorites: false}}};
 
 export const makeFakeStoreNoLogin: Partial<State> = {PAGE: {isPrivatePage: false},
   USER: {authorizationStatus: AuthorizationStatus.NoAuth, user: undefined},
@@ -55,7 +55,7 @@ export const makeFakeStoreNoLogin: Partial<State> = {PAGE: {isPrivatePage: false
       latitude: 48.8534,
       longitude: 2.3488,
       zoom: 10},
-  }}, OFFERS: {offers: makeOffers(), offersFavorites: makeOffers(), isOffersLoading: false}};
+  }}, OFFERS: {offers: makeOffers(), offersFavorites: makeOffers(), isOffersLoading: false, hasError: {offers: false, favorites: false}}};
 
 export type AppThunkDispatch = ThunkDispatch<State, ReturnType<typeof createAPI>, Action>;
 
